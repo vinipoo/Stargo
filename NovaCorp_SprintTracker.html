@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NovaCorp · 5-Day Sprint Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --brand: #003DA5;
+    --brand-dark: #001F54;
+    --brand-tint: #E5EBF6;
+    --ai: #6D28D9;
+    --success: #16A34A;
+    --warning: #D97706;
+    --danger: #DC2626;
+    --bg-page: #F0F2F5;
+    --bg-surface: #FFFFFF;
+    --bg-subtle: #F8F9FB;
+    --bg-hover: #F3F4F7;
+    --text-primary: #0F172A;
+    --text-secondary: #475569;
+    --text-tertiary: #64748B;
+    --text-disabled: #94A3B8;
+    --border-subtle: #E5E7EB;
+    --border-default: #D1D5DB;
+    --r-sm: 4px; --r-md: 6px; --r-lg: 8px; --r-xl: 12px; --r-pill: 999px;
+    --shadow-sm: 0 1px 2px rgba(15,23,42,.06);
+    --shadow-md: 0 2px 6px rgba(15,23,42,.08), 0 1px 2px rgba(15,23,42,.04);
+    --shadow-lg: 0 8px 24px rgba(15,23,42,.10);
+    --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  }
+
+  /* Day theme colors */
+  .day-mon { --day-color: #003DA5; --day-tint: #E5EBF6; }
+  .day-tue { --day-color: #6D28D9; --day-tint: #F1ECFB; }
+  .day-wed { --day-color: #16A34A; --day-tint: #DCFCE7; }
+  .day-thu { --day-color: #D97706; --day-tint: #FEF3C7; }
+  .day-fri { --day-color: #DC2626; --day-tint: #FEE2E2; }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg-page);
+    color: var(--text-primary);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .app {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 32px 24px 64px;
+  }
+
+  /* ---------- Top bar ---------- */
+  .topbar {
+    background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand) 100%);
+    color: #fff;
+    border-radius: var(--r-xl);
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 24px;
+  }
+  .topbar h1 { margin: 0 0 6px; font-size: 28px; font-weight: 700; letter-spacing: -.02em; }
+  .topbar p { margin: 0; opacity: .9; font-size: 14px; }
+  .topbar .pill { display: inline-block; background: rgba(255,255,255,.16); padding: 3px 10px; border-radius: var(--r-pill); font-size: 11px; font-weight: 500; margin-bottom: 8px; letter-spacing: .04em; text-transform: uppercase; }
+
+  .progress-ring {
+    width: 120px; height: 120px;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .progress-ring svg { transform: rotate(-90deg); }
+  .progress-ring__track { fill: none; stroke: rgba(255,255,255,.18); stroke-width: 10; }
+  .progress-ring__fill { fill: none; stroke: #fff; stroke-width: 10; stroke-linecap: round; transition: stroke-dasharray .4s cubic-bezier(.2,.8,.2,1); }
+  .progress-ring__inner {
+    position: absolute; inset: 0; display: grid; place-items: center;
+    color: #fff; font-family: var(--font-mono);
+  }
+  .progress-ring__num { font-size: 26px; font-weight: 600; line-height: 1; }
+  .progress-ring__label { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; opacity: .8; margin-top: 4px; }
+
+  /* ---------- Stats row ---------- */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .stat {
+    background: #fff;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--r-lg);
+    padding: 16px 18px;
+  }
+  .stat__label { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-tertiary); font-weight: 500; }
+  .stat__value { font-family: var(--font-mono); font-size: 22px; font-weight: 600; color: var(--text-primary); margin-top: 4px; }
+  .stat__sub { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+
+  /* ---------- Section headers ---------- */
+  h2.section {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 32px 0 12px;
+    color: var(--text-primary);
+    letter-spacing: -.01em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h2.section::before {
+    content: '';
+    display: inline-block;
+    width: 4px; height: 18px;
+    background: var(--brand);
+    border-radius: 2px;
+  }
+
+  /* ---------- Gantt ---------- */
+  .gantt {
+    background: #fff;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--r-lg);
+    padding: 18px 20px 22px;
+    overflow-x: auto;
+  }
+  .gantt__head {
+    display: grid;
+    grid-template-columns: 140px repeat(5, 1fr);
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+  .gantt__head-label { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--text-tertiary); padding: 4px 6px; }
+  .gantt__head-day {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    padding: 4px 6px;
+    background: var(--bg-subtle);
+    border-radius: var(--r-sm);
+  }
+  .gantt__row {
+    display: grid;
+    grid-template-columns: 140px repeat(5, 1fr);
+    gap: 4px;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .gantt__row:last-child { border-bottom: 0; }
+  .gantt__row-label { font-size: 12px; color: var(--text-secondary); padding: 0 6px; }
+  .gantt__row-label strong { color: var(--text-primary); display: block; font-weight: 600; font-size: 12px; }
+  .gantt__row-label span { font-size: 10px; color: var(--text-tertiary); }
+  .gantt__cell { height: 22px; position: relative; }
+  .gantt__bar {
+    position: absolute;
+    inset: 4px 2px;
+    background: var(--day-color);
+    border-radius: 4px;
+    opacity: .85;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    transition: opacity .15s ease;
+  }
+  .gantt__bar:hover { opacity: 1; }
+  .gantt__bar.done {
+    background: var(--day-color);
+    opacity: 1;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.2);
+  }
+  .gantt__bar.done::after {
+    content: '✓';
+    position: absolute;
+    right: 6px;
+    color: #fff;
+  }
+  .gantt__bar.partial {
+    background: linear-gradient(90deg, var(--day-color) var(--pct, 0%), var(--day-tint) var(--pct, 0%));
+    color: var(--day-color);
+    font-weight: 700;
+  }
+
+  /* ---------- Day card ---------- */
+  .day-grid { display: flex; flex-direction: column; gap: 16px; }
+  .day {
+    background: #fff;
+    border: 1px solid var(--border-subtle);
+    border-left: 4px solid var(--day-color);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    transition: box-shadow .15s ease;
+  }
+  .day:hover { box-shadow: var(--shadow-md); }
+  .day__head {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: var(--day-tint);
+    cursor: pointer;
+    user-select: none;
+  }
+  .day__title-wrap { display: flex; flex-direction: column; gap: 2px; }
+  .day__pill {
+    display: inline-block;
+    background: var(--day-color);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: var(--r-pill);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    width: fit-content;
+    margin-bottom: 4px;
+  }
+  .day__title { font-size: 18px; font-weight: 700; color: var(--text-primary); }
+  .day__intent { font-size: 12px; color: var(--text-secondary); font-style: italic; max-width: 560px; }
+  .day__meta { display: flex; align-items: center; gap: 12px; }
+  .day__count {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--day-color);
+    font-weight: 600;
+    background: #fff;
+    padding: 4px 10px;
+    border-radius: var(--r-pill);
+    border: 1px solid var(--day-color);
+  }
+  .day__chevron {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid var(--border-default);
+    display: grid;
+    place-items: center;
+    color: var(--text-secondary);
+    font-size: 12px;
+    transition: transform .2s cubic-bezier(.2,.8,.2,1);
+  }
+  .day.collapsed .day__chevron { transform: rotate(-90deg); }
+  .day__body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border-subtle);
+  }
+  .day.collapsed .day__body { display: none; }
+  .col {
+    background: #fff;
+    padding: 18px 20px;
+    min-height: 100px;
+  }
+  .col__title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--text-tertiary);
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .col__title .icon { font-size: 14px; }
+
+  .col--watchout {
+    background: #FFF8F8;
+    grid-column: 1 / -1;
+    border-top: 1px dashed var(--border-default);
+  }
+  .col--watchout .col__title { color: var(--danger); }
+  .col--watchout ul { color: var(--text-secondary); }
+
+  /* ---------- Tasks (checkboxes) ---------- */
+  .task-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+  .task {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 8px;
+    border-radius: var(--r-md);
+    cursor: pointer;
+    transition: background .12s ease;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+  .task:hover { background: var(--bg-hover); }
+  .task input[type="checkbox"] {
+    width: 16px; height: 16px;
+    margin: 2px 0 0;
+    accent-color: var(--day-color);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .task label { cursor: pointer; flex: 1; color: var(--text-primary); }
+  .task.done label { text-decoration: line-through; color: var(--text-disabled); }
+
+  ul.plain { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+  ul.plain li {
+    padding: 4px 8px 4px 22px;
+    position: relative;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  ul.plain li::before {
+    content: '!';
+    position: absolute;
+    left: 6px;
+    top: 4px;
+    width: 14px; height: 14px;
+    background: var(--danger);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 9px;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-mono);
+  }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,.16);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,.2);
+    padding: 8px 14px;
+    border-radius: var(--r-md);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background .12s ease;
+  }
+  .btn:hover { background: rgba(255,255,255,.24); }
+  .btn--ghost {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-default);
+  }
+  .btn--ghost:hover { background: var(--bg-hover); color: var(--text-primary); }
+
+  .topbar__actions { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+
+  /* ---------- Submission row ---------- */
+  .footer-note {
+    margin-top: 32px;
+    text-align: center;
+    color: var(--text-tertiary);
+    font-size: 12px;
+  }
+  .footer-note a { color: var(--brand); text-decoration: none; }
+
+  @media (max-width: 760px) {
+    .topbar { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .day__body { grid-template-columns: 1fr; }
+    .gantt__head, .gantt__row { grid-template-columns: 110px repeat(5, 1fr); }
+  }
+
+  /* Confetti when complete */
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+  }
+  .complete .progress-ring { animation: pulse 1.6s ease-in-out infinite; }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <!-- Top bar -->
+  <header class="topbar">
+    <div>
+      <span class="pill">Designer Home Assignment · Week of May 4</span>
+      <h1>NovaCorp · 5-Day Sprint Tracker</h1>
+      <p>Check off tasks as you go. Progress saves automatically to this device.</p>
+    </div>
+    <div style="display:flex; gap:24px; align-items:center;">
+      <div class="progress-ring" id="progressRing">
+        <svg width="120" height="120" viewBox="0 0 120 120">
+          <circle class="progress-ring__track" cx="60" cy="60" r="50" />
+          <circle class="progress-ring__fill" id="progressFill" cx="60" cy="60" r="50" stroke-dasharray="0 314" />
+        </svg>
+        <div class="progress-ring__inner">
+          <div class="progress-ring__num" id="progressNum">0%</div>
+          <div class="progress-ring__label" id="progressLabel">0 / 0</div>
+        </div>
+      </div>
+      <div class="topbar__actions">
+        <button class="btn" onclick="expandAll()">Expand all</button>
+        <button class="btn" onclick="collapseAll()">Collapse all</button>
+        <button class="btn" onclick="resetAll()">Reset</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat__label">Total tasks</div>
+      <div class="stat__value" id="statTotal">0</div>
+      <div class="stat__sub">across 5 days</div>
+    </div>
+    <div class="stat">
+      <div class="stat__label">Completed</div>
+      <div class="stat__value" id="statDone" style="color:var(--success)">0</div>
+      <div class="stat__sub" id="statDoneSub">— of —</div>
+    </div>
+    <div class="stat">
+      <div class="stat__label">Remaining</div>
+      <div class="stat__value" id="statRemaining">0</div>
+      <div class="stat__sub" id="statRemainingSub">days left: 5</div>
+    </div>
+    <div class="stat">
+      <div class="stat__label">Today's focus</div>
+      <div class="stat__value" id="statToday" style="font-size:14px; line-height:1.3; padding-top:4px">Research &amp; IA</div>
+      <div class="stat__sub">Day 1 · Monday</div>
+    </div>
+  </div>
+
+  <!-- Gantt -->
+  <h2 class="section">Timeline</h2>
+  <div class="gantt" id="gantt"></div>
+
+  <!-- Day cards -->
+  <h2 class="section">Daily breakdown</h2>
+  <div class="day-grid" id="dayGrid"></div>
+
+  <div class="footer-note">
+    Plan baselined off <em>NovaCorp_SprintPlan.docx</em>. Progress is stored locally in your browser — open this file from the same browser to keep your state.
+  </div>
+</div>
+
+<script>
+// ---------- Data ----------
+const DAYS = [
+  {
+    key: 'mon',
+    label: 'Mon',
+    title: 'Day 1 · Research & Information Architecture',
+    intent: 'Understand the user, the domain, and the visual reference before drawing anything pixel-precise.',
+    morning: [
+      'Read the brief twice; mark every MUST and SHOULD.',
+      'Study ZoomInfo for 45 min — capture 8–10 reference screenshots into a moodboard.',
+      'Scan 2 competitors (AppZen, Vic.ai or Coupa) for 30 min.',
+      'Write 3 user stories per persona (Procurement, Finance, Ops Analyst).',
+      'List the top 5 jobs-to-be-done across all 3 personas.',
+    ],
+    afternoon: [
+      'Draft a 1-page sitemap covering Phase 1 / 2 / 3 + the 4 required screens.',
+      'Sketch lo-fi wireframes for all 4 screens — 20 min/screen.',
+      'Decide chart types: waterfall (S1), score gauge (S2), line-item table (S3), Pareto (S4).',
+      'Pick global filter set: Vendor / Date / Geography / Contract / Service Level.',
+      'Write down 3 differentiators you’ll lean into.',
+    ],
+    deliverables: [
+      'Moodboard saved (8–10 ZoomInfo refs).',
+      'User stories doc · 3 personas × 3 = 9 stories.',
+      'Sitemap PDF or screenshot.',
+      'Lo-fi sketches for all 4 screens.',
+    ],
+    watchouts: [
+      'Don’t start hi-fi yet — temptation to skip wireframes is the #1 risk.',
+      'Don’t research forever. Time-box ZoomInfo to 45 min.',
+      'Make sure every screen connects to the next via clear drill-down.',
+    ],
+  },
+  {
+    key: 'tue',
+    label: 'Tue',
+    title: 'Day 2 · Wireframes',
+    intent: 'Lock layout, hierarchy, and chart choices in mid-fi grayscale before committing to color and components.',
+    morning: [
+      'Convert lo-fi sketches into mid-fi wireframes in Figma using grey blocks only.',
+      'Screen 1: KPI row → waterfall + ranking → vendor table + filters.',
+      'Screen 2: before/after gauges → issue breakdown → ingestion log + agentic pipeline.',
+      'Add interaction notes (sticky comments) where hover/drill-down behavior matters.',
+    ],
+    afternoon: [
+      'Screen 3: invoice header band → tabs → exception cards + AI panel.',
+      'Screen 4: category cards grid → Pareto → AI insights → 4-quarter trend.',
+      'Self-review against the brief: do all MUSTs appear on the page?',
+      'Sketch one realistic edge case per screen.',
+      'End-of-day: walk through the 4 screens out loud as if presenting.',
+    ],
+    deliverables: [
+      'Mid-fi wireframes for all 4 screens.',
+      'Brief checklist annotated 100% complete.',
+      '1 edge case sketched per screen.',
+      'Verbal walkthrough captured (voice memo, 3–5 min).',
+    ],
+    watchouts: [
+      'Resist applying color or styling — wireframes stay grayscale.',
+      'If a screen feels empty, the IA is wrong. Fix it before tomorrow.',
+      'Avoid duplicating elements across screens.',
+    ],
+  },
+  {
+    key: 'wed',
+    label: 'Wed',
+    title: 'Day 3 · Hi-fi Sprint A (Screens 1 + 2)',
+    intent: 'Apply the design system. Build the dashboard tone-setter.',
+    morning: [
+      'Set up Figma styles from your design-system tokens (color, type, spacing, radius).',
+      'Build the dark sidebar component once — reuse on every screen.',
+      'Screen 1 hi-fi: KPI row, filter bar, waterfall, vendor ranking, vendor table, AI insight panel.',
+      'Show one filter applied state (chip + selected row).',
+    ],
+    afternoon: [
+      'Screen 2 hi-fi: before/after gauges (67 → 94), issue breakdown, agentic pipeline (with amber pause), ingestion log.',
+      'Component pass: extract reusable badge, chip, table-row, KPI card, AI panel.',
+      'Show the AI three-state pattern at least once (Flag / Suggest / Auto-resolve).',
+      'Self-critique: open both screens at 50% zoom — does hierarchy still read?',
+    ],
+    deliverables: [
+      'Screen 1 hi-fi at 1280px wide.',
+      'Screen 2 hi-fi at 1280px wide.',
+      'Reusable components extracted in Figma library.',
+      '1 hover state captured on each screen.',
+    ],
+    watchouts: [
+      'Don’t over-decorate — clarity over decoration.',
+      'If a chart is hard to read at 50%, simplify it.',
+      'Keep purple for AI only. Status colors only on badges/dots.',
+    ],
+  },
+  {
+    key: 'thu',
+    label: 'Thu',
+    title: 'Day 4 · Hi-fi Sprint B (Screens 3 + 4) + States',
+    intent: 'Finish the workflow loop. Add the states that show product-thinking maturity.',
+    morning: [
+      'Screen 3 hi-fi: invoice header band, line-item Invoiced-vs-Expected table, exception cards, AI batch-recovery panel.',
+      'Add audit trail at bottom + Prev/Next invoice navigation.',
+      'Highlight one specific edge case (currency mismatch with FX evidence).',
+    ],
+    afternoon: [
+      'Screen 4 hi-fi: category cards grid (8 categories), Pareto chart, AI pattern insights (3 types), trend line card.',
+      'Add Frequency vs Financial Impact toggle on the Pareto.',
+      'States pass: empty (Screen 1 no data), loading skeleton (Screen 2), error/partial (Screen 4).',
+      'End-of-day cross-screen QA: navigation, color usage, type, spacing rhythm.',
+    ],
+    deliverables: [
+      'Screen 3 hi-fi at 1280px wide.',
+      'Screen 4 hi-fi at 1280px wide.',
+      '3 states drawn (empty, loading, error).',
+      'Cross-screen consistency review checklist signed off.',
+    ],
+    watchouts: [
+      'Don’t add new components today — only use what’s in the system.',
+      'If you’re tight on time, drop polish but don’t drop states.',
+      'Keep the recommended action specific and dollar-anchored.',
+    ],
+  },
+  {
+    key: 'fri',
+    label: 'Fri',
+    title: 'Day 5 · Walkthrough & Submission',
+    intent: 'Show your thinking. The artifact is good; the walkthrough is what wins the interview.',
+    morning: [
+      'Refine the walkthrough doc — frame every decision around the guiding principle.',
+      'Tighten the design-system snippet (1 page: tokens + 6 hero components).',
+      'Export all 4 screens as PNG (2x) and PDF.',
+      'Build the 1-page submission doc that links Figma + walkthrough + system.',
+    ],
+    afternoon: [
+      'Record a 4-minute video walkthrough (Loom): goal → IA → screen-by-screen → AI thinking → close.',
+      'Final QA against the evaluation rubric.',
+      'Re-read the brief one last time — confirm every MUST is met.',
+      'Submit. Send the email. Take a breath.',
+    ],
+    deliverables: [
+      '1-page walkthrough doc finalized.',
+      'Design-system snippet exported.',
+      'All 4 screens exported (PNG 2x + PDF).',
+      'Loom recording (≤ 5 min).',
+      'Submission email sent.',
+    ],
+    watchouts: [
+      'Don’t redesign on Friday — only polish.',
+      'If your video runs over 5 minutes, cut. Brevity = confidence.',
+      'Test all links in the submission email before sending.',
+    ],
+  },
+];
+
+const STORAGE_KEY = 'novacorp_sprint_v1';
+
+// ---------- Storage ----------
+function loadState() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }
+  catch (e) { return {}; }
+}
+function saveState(state) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+let state = loadState();
+state.tasks = state.tasks || {};
+state.collapsed = state.collapsed || {};
+
+function taskId(dayKey, group, idx) { return `${dayKey}__${group}__${idx}`; }
+
+// ---------- Rendering ----------
+function renderGantt() {
+  const head = `
+    <div class="gantt__head">
+      <div class="gantt__head-label">Track</div>
+      ${DAYS.map(d => `<div class="gantt__head-day">${d.label}</div>`).join('')}
+    </div>`;
+
+  // Each track shown as a row spanning its day(s)
+  const tracks = [
+    { name: 'Research & IA', sub: 'Brief, refs, sitemap', span: [0, 0] },
+    { name: 'Wireframes', sub: 'Mid-fi grayscale', span: [1, 1] },
+    { name: 'Screens 1 & 2 hi-fi', sub: 'Dashboard + Data Quality', span: [2, 2] },
+    { name: 'Screens 3 & 4 hi-fi', sub: 'Invoice + Root Cause', span: [3, 3] },
+    { name: 'States + QA', sub: 'Empty/loading/error', span: [3, 3] },
+    { name: 'Walkthrough doc', sub: '1-page rationale', span: [4, 4] },
+    { name: 'Submission', sub: 'Export, record, send', span: [4, 4] },
+  ];
+
+  const rows = tracks.map(track => {
+    const cells = DAYS.map((d, di) => {
+      const inSpan = di >= track.span[0] && di <= track.span[1];
+      if (!inSpan) return `<div class="gantt__cell"></div>`;
+      // calc completion for this day
+      const dayObj = DAYS[di];
+      const total = dayObj.morning.length + dayObj.afternoon.length;
+      let done = 0;
+      ['morning', 'afternoon'].forEach(group => {
+        dayObj[group].forEach((_, idx) => {
+          if (state.tasks[taskId(dayObj.key, group, idx)]) done++;
+        });
+      });
+      const pct = total === 0 ? 0 : Math.round((done / total) * 100);
+      const cls = pct === 100 ? 'gantt__bar done' : pct > 0 ? 'gantt__bar partial' : 'gantt__bar';
+      return `<div class="gantt__cell day-${dayObj.key}"><div class="${cls}" style="--pct:${pct}%">${pct}%</div></div>`;
+    }).join('');
+    return `
+      <div class="gantt__row">
+        <div class="gantt__row-label"><strong>${track.name}</strong><span>${track.sub}</span></div>
+        ${cells}
+      </div>`;
+  }).join('');
+
+  document.getElementById('gantt').innerHTML = head + rows;
+}
+
+function renderDays() {
+  const html = DAYS.map(d => {
+    const allTasks = [...d.morning, ...d.afternoon, ...d.deliverables];
+    const allIds = [
+      ...d.morning.map((_, i) => taskId(d.key, 'morning', i)),
+      ...d.afternoon.map((_, i) => taskId(d.key, 'afternoon', i)),
+      ...d.deliverables.map((_, i) => taskId(d.key, 'deliverables', i)),
+    ];
+    const done = allIds.filter(id => state.tasks[id]).length;
+    const total = allIds.length;
+    const collapsed = state.collapsed[d.key];
+
+    const taskList = (group, items) => items.map((text, idx) => {
+      const id = taskId(d.key, group, idx);
+      const checked = state.tasks[id] ? 'checked' : '';
+      const doneCls = state.tasks[id] ? 'done' : '';
+      return `
+        <li class="task ${doneCls}" data-id="${id}">
+          <input type="checkbox" ${checked} onchange="toggleTask('${id}', this.checked)" />
+          <label>${escapeHtml(text)}</label>
+        </li>`;
+    }).join('');
+
+    return `
+      <div class="day day-${d.key} ${collapsed ? 'collapsed' : ''}" data-day="${d.key}">
+        <div class="day__head" onclick="toggleDay('${d.key}')">
+          <div class="day__title-wrap">
+            <span class="day__pill">${d.label}</span>
+            <div class="day__title">${escapeHtml(d.title)}</div>
+            <div class="day__intent">${escapeHtml(d.intent)}</div>
+          </div>
+          <div class="day__count">${done} / ${total}</div>
+          <div class="day__chevron">▾</div>
+        </div>
+        <div class="day__body">
+          <div class="col">
+            <div class="col__title"><span class="icon">☀</span>Morning · 4h</div>
+            <ul class="task-list">${taskList('morning', d.morning)}</ul>
+          </div>
+          <div class="col">
+            <div class="col__title"><span class="icon">🌙</span>Afternoon · 4h</div>
+            <ul class="task-list">${taskList('afternoon', d.afternoon)}</ul>
+          </div>
+          <div class="col">
+            <div class="col__title" style="color:var(--success)"><span class="icon">✓</span>Deliverables by EOD</div>
+            <ul class="task-list">${taskList('deliverables', d.deliverables)}</ul>
+          </div>
+          <div class="col col--watchout">
+            <div class="col__title"><span class="icon">⚠</span>Watch-outs</div>
+            <ul class="plain">${d.watchouts.map(w => `<li>${escapeHtml(w)}</li>`).join('')}</ul>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+  document.getElementById('dayGrid').innerHTML = html;
+}
+
+function renderProgress() {
+  let total = 0, done = 0;
+  DAYS.forEach(d => {
+    ['morning', 'afternoon', 'deliverables'].forEach(g => {
+      d[g].forEach((_, i) => {
+        total++;
+        if (state.tasks[taskId(d.key, g, i)]) done++;
+      });
+    });
+  });
+  const pct = total === 0 ? 0 : Math.round((done / total) * 100);
+  const circumference = 2 * Math.PI * 50;
+  const dash = (pct / 100) * circumference;
+  document.getElementById('progressFill').setAttribute('stroke-dasharray', `${dash} ${circumference}`);
+  document.getElementById('progressNum').textContent = pct + '%';
+  document.getElementById('progressLabel').textContent = `${done} / ${total}`;
+
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statDone').textContent = done;
+  document.getElementById('statDoneSub').textContent = total === 0 ? '—' : `${pct}% complete`;
+  document.getElementById('statRemaining').textContent = total - done;
+
+  // figure out today's focus by current day-of-week
+  const dayMap = { 1: 0, 2: 1, 3: 2, 4: 3, 5: 4 };
+  const dow = new Date().getDay();
+  const todayIdx = dayMap[dow];
+  if (todayIdx !== undefined) {
+    const today = DAYS[todayIdx];
+    document.getElementById('statToday').textContent = today.title.replace(/^Day \d+ · /, '');
+    document.getElementById('statRemainingSub').textContent = `today: ${today.label}`;
+  } else {
+    document.getElementById('statToday').textContent = 'Weekend';
+    document.getElementById('statRemainingSub').textContent = '— ';
+  }
+
+  document.body.classList.toggle('complete', pct === 100);
+}
+
+// ---------- Actions ----------
+function toggleTask(id, checked) {
+  if (checked) state.tasks[id] = true;
+  else delete state.tasks[id];
+  saveState(state);
+  // Update affected DOM minimally
+  const li = document.querySelector(`li.task[data-id="${id}"]`);
+  if (li) li.classList.toggle('done', !!checked);
+  // Update day count
+  const dayKey = id.split('__')[0];
+  updateDayCount(dayKey);
+  renderProgress();
+  renderGantt();
+}
+function updateDayCount(dayKey) {
+  const d = DAYS.find(x => x.key === dayKey);
+  if (!d) return;
+  let done = 0, total = 0;
+  ['morning', 'afternoon', 'deliverables'].forEach(g => {
+    d[g].forEach((_, i) => { total++; if (state.tasks[taskId(d.key, g, i)]) done++; });
+  });
+  const card = document.querySelector(`.day[data-day="${dayKey}"] .day__count`);
+  if (card) card.textContent = `${done} / ${total}`;
+}
+function toggleDay(key) {
+  state.collapsed[key] = !state.collapsed[key];
+  saveState(state);
+  document.querySelector(`.day[data-day="${key}"]`).classList.toggle('collapsed', state.collapsed[key]);
+}
+function expandAll() {
+  DAYS.forEach(d => state.collapsed[d.key] = false);
+  saveState(state);
+  document.querySelectorAll('.day').forEach(el => el.classList.remove('collapsed'));
+}
+function collapseAll() {
+  DAYS.forEach(d => state.collapsed[d.key] = true);
+  saveState(state);
+  document.querySelectorAll('.day').forEach(el => el.classList.add('collapsed'));
+}
+function resetAll() {
+  if (!confirm('Reset all checkboxes? This cannot be undone.')) return;
+  state.tasks = {};
+  saveState(state);
+  renderDays();
+  renderGantt();
+  renderProgress();
+}
+
+// ---------- Util ----------
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+// ---------- Boot ----------
+renderDays();
+renderGantt();
+renderProgress();
+</script>
+</body>
+</html>

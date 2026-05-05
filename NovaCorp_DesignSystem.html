@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NovaCorp Design System v1.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    /* ---------- Brand ---------- */
+    --brand-primary: #003DA5;
+    --brand-primary-hover: #002F80;
+    --brand-primary-active: #00245F;
+    --brand-primary-tint: #E5EBF6;
+
+    /* ---------- AI ---------- */
+    --ai-primary: #6D28D9;
+    --ai-hover: #5B21B6;
+    --ai-tint: #F1ECFB;
+
+    /* ---------- Status ---------- */
+    --status-success: #16A34A;
+    --status-success-tint: #DCFCE7;
+    --status-warning: #D97706;
+    --status-warning-tint: #FEF3C7;
+    --status-danger: #DC2626;
+    --status-danger-tint: #FEE2E2;
+    --status-info: #2563EB;
+    --status-info-tint: #DBEAFE;
+
+    /* ---------- Sidebar / Dark ---------- */
+    --sidebar-bg: #0D1117;
+    --sidebar-border: #1C232E;
+    --sidebar-text: #C9D1D9;
+    --sidebar-text-muted: #8B949E;
+    --sidebar-hover: #161B22;
+    --sidebar-active-bg: rgba(0, 61, 165, 0.18);
+    --sidebar-active-text: #FFFFFF;
+
+    /* ---------- Surfaces ---------- */
+    --bg-page: #F0F2F5;
+    --bg-surface: #FFFFFF;
+    --bg-subtle: #F8F9FB;
+    --bg-hover: #F3F4F7;
+
+    /* ---------- Borders ---------- */
+    --border-subtle: #E5E7EB;
+    --border-default: #D1D5DB;
+    --border-strong: #9CA3AF;
+
+    /* ---------- Text ---------- */
+    --text-primary: #0F172A;
+    --text-secondary: #475569;
+    --text-tertiary: #64748B;
+    --text-disabled: #94A3B8;
+    --text-on-brand: #FFFFFF;
+
+    /* ---------- Type ---------- */
+    --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+    /* ---------- Spacing (4-pt rhythm) ---------- */
+    --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
+    --sp-5: 20px; --sp-6: 24px; --sp-8: 32px; --sp-10: 40px; --sp-12: 48px;
+
+    /* ---------- Radius ---------- */
+    --r-sm: 4px; --r-md: 6px; --r-lg: 8px; --r-xl: 12px; --r-pill: 999px;
+
+    /* ---------- Elevation ---------- */
+    --shadow-sm: 0 1px 2px rgba(15,23,42,.06);
+    --shadow-md: 0 2px 6px rgba(15,23,42,.08), 0 1px 2px rgba(15,23,42,.04);
+    --shadow-lg: 0 8px 24px rgba(15,23,42,.10);
+
+    /* ---------- Motion ---------- */
+    --ease: cubic-bezier(.2,.8,.2,1);
+    --dur-fast: 120ms;
+    --dur-base: 180ms;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-sans);
+    color: var(--text-primary);
+    background: var(--bg-page);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- Doc Layout ---------- */
+  .doc {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: var(--sp-12) var(--sp-8) var(--sp-12);
+  }
+  .doc__hero {
+    background: linear-gradient(135deg, #001F54 0%, #003DA5 100%);
+    color: #fff;
+    border-radius: var(--r-xl);
+    padding: var(--sp-10);
+    margin-bottom: var(--sp-10);
+  }
+  .doc__hero h1 { font-size: 36px; font-weight: 700; margin: 0 0 var(--sp-2); letter-spacing: -.02em; }
+  .doc__hero p { font-size: 16px; opacity: .9; margin: 0; max-width: 720px; }
+  .doc__hero .pill { display: inline-block; background: rgba(255,255,255,.16); padding: 4px 10px; border-radius: var(--r-pill); font-size: 12px; font-weight: 500; margin-bottom: var(--sp-3); }
+
+  section.section { margin-bottom: var(--sp-12); }
+  section.section > h2 {
+    font-size: 24px; font-weight: 700; letter-spacing: -.01em;
+    margin: 0 0 var(--sp-2); color: var(--text-primary);
+    padding-bottom: var(--sp-3); border-bottom: 2px solid var(--brand-primary);
+    display: inline-block;
+  }
+  section.section > p.lead { color: var(--text-secondary); margin: var(--sp-2) 0 var(--sp-6); max-width: 760px; }
+
+  h3.sub {
+    font-size: 16px; font-weight: 600; margin: var(--sp-8) 0 var(--sp-3);
+    color: var(--text-primary);
+  }
+
+  /* ---------- Specimen card ---------- */
+  .specimen {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--r-lg);
+    padding: var(--sp-6);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--sp-4);
+  }
+  .specimen + .specimen { margin-top: 0; }
+  .spec-label {
+    font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary);
+    text-transform: uppercase; letter-spacing: .06em; margin-bottom: var(--sp-2);
+  }
+
+  /* ---------- Code block ---------- */
+  pre.code {
+    background: #0F172A; color: #E2E8F0; padding: var(--sp-3) var(--sp-4);
+    border-radius: var(--r-md); font-family: var(--font-mono); font-size: 12px;
+    overflow-x: auto; margin: var(--sp-3) 0 0;
+  }
+  code.inline { font-family: var(--font-mono); font-size: 12px; background: var(--bg-hover); padding: 2px 6px; border-radius: var(--r-sm); color: var(--text-primary); }
+
+  /* ---------- Color swatches ---------- */
+  .swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: var(--sp-3); }
+  .swatch { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--r-md); overflow: hidden; }
+  .swatch__chip { height: 72px; }
+  .swatch__meta { padding: var(--sp-3); font-size: 12px; }
+  .swatch__name { font-weight: 600; color: var(--text-primary); }
+  .swatch__token { font-family: var(--font-mono); color: var(--text-tertiary); font-size: 11px; }
+  .swatch__hex { font-family: var(--font-mono); color: var(--text-secondary); font-size: 11px; margin-top: 2px; }
+
+  /* ---------- Type specimens ---------- */
+  .type-row { display: flex; gap: var(--sp-6); padding: var(--sp-3) 0; border-bottom: 1px solid var(--border-subtle); align-items: baseline; }
+  .type-row:last-child { border-bottom: 0; }
+  .type-meta { font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); width: 180px; flex-shrink: 0; }
+
+  /* ---------- Spacing ---------- */
+  .space-row { display: flex; align-items: center; gap: var(--sp-4); margin-bottom: var(--sp-2); font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary); }
+  .space-bar { background: var(--brand-primary); height: 12px; border-radius: 2px; }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    display: inline-flex; align-items: center; gap: var(--sp-2);
+    border-radius: var(--r-md); font-family: var(--font-sans); font-weight: 500;
+    cursor: pointer; transition: background var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+    border: 1px solid transparent; padding: 8px 14px; font-size: 13px; line-height: 1;
+  }
+  .btn--md { padding: 9px 16px; font-size: 14px; }
+  .btn--lg { padding: 11px 20px; font-size: 14px; }
+  .btn--primary { background: var(--brand-primary); color: #fff; }
+  .btn--primary:hover { background: var(--brand-primary-hover); }
+  .btn--primary:active { background: var(--brand-primary-active); }
+  .btn--secondary { background: #fff; color: var(--brand-primary); border-color: var(--brand-primary); }
+  .btn--secondary:hover { background: var(--brand-primary-tint); }
+  .btn--ghost { background: transparent; color: var(--text-secondary); }
+  .btn--ghost:hover { background: var(--bg-hover); color: var(--text-primary); }
+  .btn--danger { background: var(--status-danger); color: #fff; }
+  .btn--danger:hover { background: #B91C1C; }
+  .btn--ai { background: var(--ai-primary); color: #fff; }
+  .btn--ai:hover { background: var(--ai-hover); }
+  .btn[disabled] { opacity: .5; pointer-events: none; }
+
+  /* ---------- Badges ---------- */
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 3px 8px; border-radius: var(--r-pill); font-size: 11px; font-weight: 600;
+    line-height: 1; letter-spacing: .02em;
+  }
+  .badge .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .badge--success { background: var(--status-success-tint); color: #065F46; }
+  .badge--success .dot { background: var(--status-success); }
+  .badge--warning { background: var(--status-warning-tint); color: #92400E; }
+  .badge--warning .dot { background: var(--status-warning); }
+  .badge--danger  { background: var(--status-danger-tint); color: #991B1B; }
+  .badge--danger .dot { background: var(--status-danger); }
+  .badge--info    { background: var(--status-info-tint); color: #1E40AF; }
+  .badge--info .dot { background: var(--status-info); }
+  .badge--ai { background: var(--ai-tint); color: var(--ai-primary); }
+  .badge--ai .dot { background: var(--ai-primary); }
+  .badge--neutral { background: var(--bg-hover); color: var(--text-secondary); }
+  .badge--neutral .dot { background: var(--text-tertiary); }
+
+  /* ---------- Inputs ---------- */
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field__label { font-size: 12px; font-weight: 500; color: var(--text-secondary); }
+  .input, .select {
+    height: 36px; padding: 0 12px; border: 1px solid var(--border-default);
+    border-radius: var(--r-md); background: #fff; font-family: var(--font-sans); font-size: 13px;
+    color: var(--text-primary); transition: border-color var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+    outline: none;
+  }
+  .input:focus, .select:focus {
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px rgba(0,61,165,.16);
+  }
+  .input--search { background: #fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='8'/><path d='m21 21-4.3-4.3'/></svg>") no-repeat 10px center; background-size: 14px; padding-left: 32px; }
+
+  /* ---------- Filter chip ---------- */
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 10px; border: 1px solid var(--border-default); border-radius: var(--r-pill);
+    background: #fff; font-size: 12px; color: var(--text-secondary);
+    cursor: pointer; transition: all var(--dur-fast) var(--ease);
+  }
+  .chip:hover { border-color: var(--brand-primary); color: var(--brand-primary); }
+  .chip--applied { background: var(--brand-primary-tint); border-color: var(--brand-primary); color: var(--brand-primary); font-weight: 500; }
+  .chip__close { font-size: 14px; line-height: 1; opacity: .7; }
+
+  /* ---------- Card ---------- */
+  .card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--r-lg);
+    padding: var(--sp-5);
+  }
+  .card--elevated { box-shadow: var(--shadow-md); border-color: transparent; }
+
+  /* ---------- KPI Card ---------- */
+  .kpi {
+    background: var(--bg-surface); border: 1px solid var(--border-subtle);
+    border-radius: var(--r-lg); padding: var(--sp-5);
+    transition: box-shadow var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+  }
+  .kpi:hover { box-shadow: var(--shadow-md); border-color: var(--border-default); }
+  .kpi__label { font-size: 12px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .04em; font-weight: 500; }
+  .kpi__value { font-family: var(--font-mono); font-size: 28px; font-weight: 600; color: var(--text-primary); margin-top: 6px; }
+  .kpi__delta { font-family: var(--font-mono); font-size: 12px; margin-top: 4px; display: inline-flex; align-items: center; gap: 4px; }
+  .kpi__delta--up { color: var(--status-success); }
+  .kpi__delta--down { color: var(--status-danger); }
+  .kpi__bar { height: 4px; background: var(--bg-hover); border-radius: 2px; margin-top: var(--sp-3); overflow: hidden; }
+  .kpi__bar > span { display: block; height: 100%; background: var(--brand-primary); }
+
+  /* ---------- Table ---------- */
+  .table-wrap { background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--r-lg); overflow: hidden; }
+  table.table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .table th, .table td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--border-subtle); }
+  .table th {
+    background: var(--bg-subtle); font-size: 11px; font-weight: 600; color: var(--text-tertiary);
+    text-transform: uppercase; letter-spacing: .05em; user-select: none;
+  }
+  .table th.sortable { cursor: pointer; }
+  .table th.sortable:hover { color: var(--text-primary); }
+  .table th .sort-arrow { color: var(--brand-primary); font-size: 10px; margin-left: 4px; }
+  .table tbody tr { transition: background var(--dur-fast) var(--ease); }
+  .table tbody tr:hover { background: var(--bg-hover); cursor: pointer; }
+  .table tbody tr.selected { background: var(--brand-primary-tint); }
+  .table td.num { font-family: var(--font-mono); text-align: right; }
+  .table .ratio-bar { display: inline-flex; align-items: center; gap: 8px; }
+  .table .ratio-bar__track { width: 80px; height: 6px; background: var(--bg-hover); border-radius: 3px; overflow: hidden; }
+  .table .ratio-bar__fill { height: 100%; background: var(--brand-primary); }
+
+  /* ---------- Sidebar mock ---------- */
+  .sidebar-demo {
+    width: 240px; background: var(--sidebar-bg); border-radius: var(--r-lg);
+    padding: var(--sp-4); color: var(--sidebar-text); font-size: 13px;
+  }
+  .sidebar-demo .logo { color: #fff; font-weight: 700; font-size: 16px; padding: 0 var(--sp-2) var(--sp-4); border-bottom: 1px solid var(--sidebar-border); margin-bottom: var(--sp-4); }
+  .sidebar-demo .group-label { color: var(--sidebar-text-muted); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; padding: var(--sp-3) var(--sp-2) var(--sp-1); }
+  .sidebar-demo .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px; border-radius: var(--r-md); cursor: pointer;
+    transition: background var(--dur-fast) var(--ease);
+  }
+  .sidebar-demo .nav-item:hover { background: var(--sidebar-hover); color: #fff; }
+  .sidebar-demo .nav-item.active { background: var(--sidebar-active-bg); color: var(--sidebar-active-text); border-left: 2px solid var(--brand-primary); padding-left: 8px; }
+  .sidebar-demo .phase-badge {
+    margin-left: auto; font-family: var(--font-mono); font-size: 10px;
+    background: rgba(255,255,255,.08); padding: 2px 6px; border-radius: var(--r-sm);
+  }
+
+  /* ---------- AI Panel ---------- */
+  .ai-panel {
+    background: linear-gradient(180deg, var(--ai-tint) 0%, #fff 100%);
+    border: 1px solid #DDD6FE;
+    border-left: 3px solid var(--ai-primary);
+    border-radius: var(--r-lg);
+    padding: var(--sp-4) var(--sp-5);
+  }
+  .ai-panel__header { display: flex; align-items: center; gap: 10px; margin-bottom: var(--sp-3); }
+  .ai-panel__icon {
+    width: 28px; height: 28px; border-radius: 50%; background: var(--ai-primary);
+    color: #fff; display: grid; place-items: center; font-size: 13px; font-weight: 700;
+  }
+  .ai-panel__title { font-weight: 600; font-size: 14px; color: var(--text-primary); }
+  .ai-panel__confidence { font-family: var(--font-mono); font-size: 11px; color: var(--ai-primary); margin-left: auto; background: #fff; padding: 3px 8px; border-radius: var(--r-pill); border: 1px solid #DDD6FE; }
+  .ai-panel__body { color: var(--text-secondary); font-size: 13px; line-height: 1.55; }
+  .ai-panel__evidence { font-size: 12px; color: var(--text-tertiary); margin-top: var(--sp-2); }
+  .ai-panel__actions { display: flex; gap: var(--sp-2); margin-top: var(--sp-4); }
+
+  /* ---------- Score Gauge ---------- */
+  .gauge { width: 140px; height: 140px; position: relative; }
+  .gauge svg { transform: rotate(-90deg); }
+  .gauge__track { fill: none; stroke: var(--bg-hover); stroke-width: 12; }
+  .gauge__fill { fill: none; stroke-width: 12; stroke-linecap: round; transition: stroke-dasharray .6s var(--ease); }
+  .gauge__fill--success { stroke: var(--status-success); }
+  .gauge__fill--warning { stroke: var(--status-warning); }
+  .gauge__fill--brand { stroke: var(--brand-primary); }
+  .gauge__inner { position: absolute; inset: 0; display: grid; place-items: center; flex-direction: column; }
+  .gauge__inner-stack { display: flex; flex-direction: column; align-items: center; }
+  .gauge__num { font-family: var(--font-mono); font-size: 28px; font-weight: 600; color: var(--text-primary); }
+  .gauge__label { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .05em; }
+
+  /* ---------- Pipeline Step ---------- */
+  .pipeline { display: flex; flex-direction: column; gap: 0; }
+  .step {
+    display: flex; gap: var(--sp-3); padding: var(--sp-3) 0; position: relative;
+  }
+  .step:not(:last-child)::before {
+    content: ''; position: absolute; left: 13px; top: 32px; bottom: -8px; width: 2px;
+    background: var(--border-subtle);
+  }
+  .step__marker {
+    width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+    display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 12px;
+    z-index: 1;
+  }
+  .step--success .step__marker { background: var(--status-success); }
+  .step--warning .step__marker { background: var(--status-warning); }
+  .step--running .step__marker { background: var(--brand-primary); }
+  .step--pending .step__marker { background: var(--border-strong); }
+  .step__body { flex: 1; padding-top: 2px; }
+  .step__title { font-weight: 600; font-size: 13px; color: var(--text-primary); display: flex; align-items: center; gap: var(--sp-2); }
+  .step__meta { font-size: 12px; color: var(--text-tertiary); margin-top: 2px; }
+
+  /* ---------- Exception Card ---------- */
+  .exception {
+    border: 1px solid var(--border-subtle); border-left: 3px solid var(--status-danger);
+    border-radius: var(--r-md); padding: var(--sp-4); background: #fff;
+  }
+  .exception__header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--sp-3); }
+  .exception__title { font-weight: 600; font-size: 14px; }
+  .exception__grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); font-size: 12px; }
+  .exception__key { color: var(--text-tertiary); text-transform: uppercase; font-size: 10px; letter-spacing: .05em; }
+  .exception__val { color: var(--text-primary); margin-top: 2px; }
+
+  /* ---------- Status dot inline ---------- */
+  .dot-inline { display: inline-block; width: 8px; height: 8px; border-radius: 50%; vertical-align: middle; margin-right: 6px; }
+  .dot-inline.success { background: var(--status-success); }
+  .dot-inline.warning { background: var(--status-warning); }
+  .dot-inline.danger { background: var(--status-danger); }
+
+  /* ---------- Tabs ---------- */
+  .tabs { display: flex; border-bottom: 1px solid var(--border-subtle); gap: var(--sp-1); }
+  .tab { padding: 10px 14px; font-size: 13px; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; transition: all var(--dur-fast) var(--ease); }
+  .tab:hover { color: var(--text-primary); }
+  .tab.active { color: var(--brand-primary); border-bottom-color: var(--brand-primary); font-weight: 600; }
+
+  /* ---------- Breadcrumbs ---------- */
+  .breadcrumbs { display: flex; gap: 6px; align-items: center; font-size: 12px; color: var(--text-tertiary); }
+  .breadcrumbs a { color: var(--text-secondary); text-decoration: none; }
+  .breadcrumbs a:hover { color: var(--brand-primary); }
+  .breadcrumbs .sep { color: var(--text-disabled); }
+  .breadcrumbs .current { color: var(--text-primary); font-weight: 500; }
+
+  /* ---------- Toggle ---------- */
+  .toggle { position: relative; display: inline-block; width: 36px; height: 20px; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle .slider { position: absolute; inset: 0; background: var(--border-default); border-radius: 999px; cursor: pointer; transition: var(--dur-fast); }
+  .toggle .slider::before { content: ''; position: absolute; height: 16px; width: 16px; left: 2px; bottom: 2px; background: #fff; border-radius: 50%; transition: var(--dur-fast); box-shadow: var(--shadow-sm); }
+  .toggle input:checked + .slider { background: var(--brand-primary); }
+  .toggle input:checked + .slider::before { transform: translateX(16px); }
+
+  /* ---------- Tooltip ---------- */
+  .has-tooltip { position: relative; }
+  .has-tooltip[data-tip]:hover::after {
+    content: attr(data-tip); position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+    background: #0F172A; color: #fff; font-size: 11px; padding: 6px 10px; border-radius: var(--r-sm);
+    white-space: nowrap; pointer-events: none; box-shadow: var(--shadow-md); z-index: 10;
+  }
+
+  /* ---------- Empty / Loading ---------- */
+  .empty {
+    text-align: center; padding: var(--sp-10) var(--sp-6);
+    border: 2px dashed var(--border-subtle); border-radius: var(--r-lg);
+    background: var(--bg-subtle); color: var(--text-tertiary);
+  }
+  .empty__icon { font-size: 28px; opacity: .6; margin-bottom: var(--sp-2); }
+  .empty__title { font-size: 14px; font-weight: 600; color: var(--text-secondary); margin-bottom: var(--sp-1); }
+
+  .skeleton { background: linear-gradient(90deg, #EEF1F4 0%, #F7F8FA 50%, #EEF1F4 100%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: var(--r-sm); }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+  /* ---------- Pareto chart (CSS-only mini) ---------- */
+  .pareto { display: grid; grid-template-columns: repeat(8, 1fr); align-items: end; gap: 8px; height: 160px; padding: var(--sp-3) 0; border-bottom: 1px solid var(--border-subtle); }
+  .pareto .bar { background: var(--brand-primary); border-radius: 3px 3px 0 0; position: relative; }
+  .pareto .bar span { position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%); font-family: var(--font-mono); font-size: 10px; color: var(--text-tertiary); }
+
+  /* ---------- TOC ---------- */
+  .toc {
+    background: #fff; border: 1px solid var(--border-subtle);
+    border-radius: var(--r-lg); padding: var(--sp-4) var(--sp-5);
+    margin-bottom: var(--sp-10);
+    column-count: 2; column-gap: var(--sp-6);
+  }
+  .toc h3 { margin: 0 0 var(--sp-2); font-size: 13px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-tertiary); column-span: all; }
+  .toc a { display: block; padding: 4px 0; font-size: 13px; color: var(--text-secondary); text-decoration: none; }
+  .toc a:hover { color: var(--brand-primary); }
+
+  /* ---------- Helpers ---------- */
+  .row { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; }
+  .row--lg { gap: var(--sp-6); }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-4); }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-4); }
+  .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--sp-4); }
+  @media (max-width: 900px) { .grid-3, .grid-4, .grid-5 { grid-template-columns: repeat(2, 1fr); } }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <!-- HERO -->
+  <header class="doc__hero">
+    <span class="pill">Design System v1.0 · ZoomInfo-inspired</span>
+    <h1>NovaCorp Design System</h1>
+    <p>The component library powering the NovaCorp Data Analytics &amp; Invoice Audit Platform. Built on the principle that <em>"benchmarking starts with data cleaning."</em> Every token, component, and pattern below traces back to the design walkthrough.</p>
+  </header>
+
+  <!-- TOC -->
+  <nav class="toc">
+    <h3>Contents</h3>
+    <a href="#principles">1. Principles</a>
+    <a href="#color">2. Color tokens</a>
+    <a href="#type">3. Typography</a>
+    <a href="#spacing">4. Spacing &amp; radius</a>
+    <a href="#elevation">5. Elevation &amp; motion</a>
+    <a href="#buttons">6. Buttons</a>
+    <a href="#badges">7. Badges &amp; status</a>
+    <a href="#inputs">8. Inputs &amp; filters</a>
+    <a href="#cards">9. Cards &amp; KPIs</a>
+    <a href="#tables">10. Tables</a>
+    <a href="#nav">11. Navigation</a>
+    <a href="#ai">12. AI patterns</a>
+    <a href="#charts">13. Charts &amp; data viz</a>
+    <a href="#composites">14. Composite patterns</a>
+    <a href="#states">15. States</a>
+    <a href="#sortable">16. Sortable + Filterable</a>
+    <a href="#gauge">17. Score gauge</a>
+    <a href="#stale">18. Stale &amp; partial-data</a>
+    <a href="#live-states">19. Live state patterns</a>
+  </nav>
+
+  <!-- 1. PRINCIPLES -->
+  <section class="section" id="principles">
+    <h2>1. Principles</h2>
+    <p class="lead">Three rules govern every choice. When components disagree, principles win.</p>
+    <div class="grid-3">
+      <div class="card">
+        <div class="spec-label">Principle 01</div>
+        <h3 style="margin:0 0 var(--sp-2)">Clarity over decoration</h3>
+        <p style="color:var(--text-secondary); margin:0; font-size:13px;">Enterprise users are time-pressured. No illustrations. No flourish. Data speaks. White space exists to separate sections, never as a stylistic move.</p>
+      </div>
+      <div class="card">
+        <div class="spec-label">Principle 02</div>
+        <h3 style="margin:0 0 var(--sp-2)">Progressive disclosure</h3>
+        <p style="color:var(--text-secondary); margin:0; font-size:13px;">Summary at the top. Drill-down within one click. Dashboard → Vendor → Invoice → Exception. Every screen answers "what do I do next?"</p>
+      </div>
+      <div class="card">
+        <div class="spec-label">Principle 03</div>
+        <h3 style="margin:0 0 var(--sp-2)">Automation is first-class</h3>
+        <p style="color:var(--text-secondary); margin:0; font-size:13px;">The AI agent is visible, trusted, and always explains its reasoning. Purple <code class="inline">#6D28D9</code> is its consistent visual signature.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. COLOR -->
+  <section class="section" id="color">
+    <h2>2. Color tokens</h2>
+    <p class="lead">All colors are CSS custom properties. Status colors are reserved for compliance semantics — never for decoration. Purple is reserved exclusively for AI activity.</p>
+
+    <h3 class="sub">Brand</h3>
+    <div class="swatch-grid">
+      <div class="swatch"><div class="swatch__chip" style="background:var(--brand-primary)"></div><div class="swatch__meta"><div class="swatch__name">Brand · Primary</div><div class="swatch__token">--brand-primary</div><div class="swatch__hex">#003DA5</div></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:var(--brand-primary-hover)"></div><div class="swatch__meta"><div class="swatch__name">Brand · Hover</div><div class="swatch__token">--brand-primary-hover</div><div class="swatch__hex">#002F80</div></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:var(--brand-primary-active)"></div><div class="swatch__meta"><div class="swatch__name">Brand · Active</div><div class="swatch__token">--brand-primary-active</div><div class="swatch__hex">#00245F</div></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:var(--brand-primary-tint)"></div><div class="swatch__meta"><div class="swatch__name">Brand · Tint</div><div class="swatch__token">--brand-primary-tint</div><div class="swatch__hex">#E5EBF6</div></div></div>
+    </div>
+
+    <h3 class="sub">AI</h3>
+    <div class="swatch-grid">
+      <div class="swatch"><div class="swatch__chip" style="background:var(--ai-primary)"></div><div class="swatch__meta"><div class="swatch__name">AI · Primary</div><div class="swatch__token">--ai-primary</div><div class="swatch__hex">#6D28D9</div></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:var(--ai-hover)"></div><div class="swatch__meta"><div class="swatch__name">AI · Hover</div><div class="swatch__token">--ai-hover</div><div class="swatch__hex">#5B21B6</div></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:var(--ai-tint)"></div><div class="swatch__meta"><div class="swatch__name">AI · Tint</div><div class="swatch__token">--ai-tint</div><div class="swatch__hex">#F1ECFB</div></div></div>
+    </div>
+
+    <h3 class="sub">Status</h3>
+    <div class="swatch-grid">
+      <div class="swatch"><div class="swatch__chip" style="background:var(--status-success)"></div><div class="swatch__meta"><div class="swatch__name">Compliant</div><div class="swatch__token">--status-success</div><div class="swatch__hex">#16A34A</div></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:var(--status-warning)"></div><div class="swatch__meta"><div class="swatch__name">Partial</div><div class="swatch__token">--status-warning</div><div class="swatch__hex">#D97706</div></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:var(--status-danger)"></div><div class="swatch__meta"><div class="swatch__name">Non-compliant</div><div class="swatch__token">--status-danger</div><div class="swatch__hex">#DC2626</div></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:var(--status-info)"></div><div class="swatch__meta"><div class="swatch__name">Info</div><div class="swatch__token">--status-info</div><div class="swatch__hex">#2563EB</div></div></div>
+    </div>
+
+    <h3 class="sub">Surface &amp; sidebar</h3>
+    <div class="swatch-grid">
+      <div class="swatch"><div class="swatch__chip" style="background:var(--sidebar-bg)"></div><div class="swatch__meta"><div class="swatch__name">Sidebar BG</div><div class="swatch__token">--sidebar-bg</div><div class="swatch__hex">#0D1117</div></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:var(--bg-page); border:1px solid var(--border-subtle)"></div><div class="swatch__meta"><div class="swatch__name">Page BG</div><div class="swatch__token">--bg-page</div><div class="swatch__hex">#F0F2F5</div></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:var(--bg-surface); border:1px solid var(--border-subtle)"></div><div class="swatch__meta"><div class="swatch__name">Surface</div><div class="swatch__token">--bg-surface</div><div class="swatch__hex">#FFFFFF</div></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:var(--bg-subtle); border:1px solid var(--border-subtle)"></div><div class="swatch__meta"><div class="swatch__name">Subtle</div><div class="swatch__token">--bg-subtle</div><div class="swatch__hex">#F8F9FB</div></div></div>
+    </div>
+
+    <h3 class="sub">Text &amp; borders</h3>
+    <div class="swatch-grid">
+      <div class="swatch"><div class="swatch__chip" style="background:var(--text-primary)"></div><div class="swatch__meta"><div class="swatch__name">Text · Primary</div><div class="swatch__token">--text-primary</div><div class="swatch__hex">#0F172A</div></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:var(--text-secondary)"></div><div class="swatch__meta"><div class="swatch__name">Text · Secondary</div><div class="swatch__token">--text-secondary</div><div class="swatch__hex">#475569</div></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:var(--text-tertiary)"></div><div class="swatch__meta"><div class="swatch__name">Text · Tertiary</div><div class="swatch__token">--text-tertiary</div><div class="swatch__hex">#64748B</div></div></div>
+      <div class="swatch"><div class="swatch__chip" style="background:var(--border-default)"></div><div class="swatch__meta"><div class="swatch__name">Border · Default</div><div class="swatch__token">--border-default</div><div class="swatch__hex">#D1D5DB</div></div></div>
+    </div>
+
+    <div class="specimen" style="margin-top:var(--sp-6)">
+      <div class="spec-label">Usage rule</div>
+      <p style="margin:0; font-size:13px; color:var(--text-secondary)">Status colors appear only on <strong>badges, dots, and chart marks</strong>. Never as panel backgrounds. Brand blue is the only color that signifies interactivity. AI purple is exclusive to AI-generated insights.</p>
+    </div>
+  </section>
+
+  <!-- 3. TYPE -->
+  <section class="section" id="type">
+    <h2>3. Typography</h2>
+    <p class="lead">IBM Plex Sans for prose and UI. IBM Plex Mono for numeric data — fixed-width is essential for scannability across rows of financial figures.</p>
+
+    <div class="specimen">
+      <div class="type-row">
+        <div class="type-meta">Display · 36/700 · Plex Sans</div>
+        <div style="font-size:36px; font-weight:700; letter-spacing:-.02em;">Compliance Overview</div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">H1 · 24/700 · Plex Sans</div>
+        <div style="font-size:24px; font-weight:700; letter-spacing:-.01em;">Vendor compliance ranking</div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">H2 · 18/600 · Plex Sans</div>
+        <div style="font-size:18px; font-weight:600;">Top exceptions this period</div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">H3 · 14/600 · Plex Sans</div>
+        <div style="font-size:14px; font-weight:600;">Recommended action</div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">Body · 14/400 · Plex Sans</div>
+        <div style="font-size:14px;">Invoice INV-2024-08812 was flagged because the unit rate ($412) exceeds the contracted ceiling ($385).</div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">Small · 12/400 · Plex Sans</div>
+        <div style="font-size:12px; color:var(--text-secondary)">Last sync · 4 minutes ago</div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">Caps · 11/600/.06 · Plex Sans</div>
+        <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--text-tertiary)">Ingestion log</div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">Numeric XL · 28/600 · Mono</div>
+        <div style="font-family:var(--font-mono); font-size:28px; font-weight:600;">$1,284,317.40</div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">Numeric · 14/500 · Mono</div>
+        <div style="font-family:var(--font-mono); font-size:14px;">87.4%</div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">Code · 12/400 · Mono</div>
+        <div style="font-family:var(--font-mono); font-size:12px; color:var(--text-secondary)">INV-2024-08812 · CTR-NV-0427</div>
+      </div>
+    </div>
+
+    <pre class="code">font-family: 'IBM Plex Sans', -apple-system, sans-serif;     /* UI &amp; prose */
+font-family: 'IBM Plex Mono', ui-monospace, monospace;        /* numerics &amp; refs */</pre>
+  </section>
+
+  <!-- 4. SPACING -->
+  <section class="section" id="spacing">
+    <h2>4. Spacing &amp; radius</h2>
+    <p class="lead">Strict 4-pt rhythm. Spacing tokens compose into layouts; radius tokens round components consistently.</p>
+
+    <div class="specimen">
+      <div class="spec-label">Spacing scale</div>
+      <div class="space-row"><span style="width:60px">--sp-1</span><div class="space-bar" style="width:4px"></div>4px</div>
+      <div class="space-row"><span style="width:60px">--sp-2</span><div class="space-bar" style="width:8px"></div>8px</div>
+      <div class="space-row"><span style="width:60px">--sp-3</span><div class="space-bar" style="width:12px"></div>12px</div>
+      <div class="space-row"><span style="width:60px">--sp-4</span><div class="space-bar" style="width:16px"></div>16px</div>
+      <div class="space-row"><span style="width:60px">--sp-5</span><div class="space-bar" style="width:20px"></div>20px</div>
+      <div class="space-row"><span style="width:60px">--sp-6</span><div class="space-bar" style="width:24px"></div>24px</div>
+      <div class="space-row"><span style="width:60px">--sp-8</span><div class="space-bar" style="width:32px"></div>32px</div>
+      <div class="space-row"><span style="width:60px">--sp-10</span><div class="space-bar" style="width:40px"></div>40px</div>
+      <div class="space-row"><span style="width:60px">--sp-12</span><div class="space-bar" style="width:48px"></div>48px</div>
+    </div>
+
+    <div class="specimen">
+      <div class="spec-label">Radius scale</div>
+      <div class="row">
+        <div style="width:60px;height:40px;background:var(--brand-primary-tint); border-radius:var(--r-sm); display:grid; place-items:center; font-family:var(--font-mono); font-size:11px;">4 · sm</div>
+        <div style="width:60px;height:40px;background:var(--brand-primary-tint); border-radius:var(--r-md); display:grid; place-items:center; font-family:var(--font-mono); font-size:11px;">6 · md</div>
+        <div style="width:60px;height:40px;background:var(--brand-primary-tint); border-radius:var(--r-lg); display:grid; place-items:center; font-family:var(--font-mono); font-size:11px;">8 · lg</div>
+        <div style="width:60px;height:40px;background:var(--brand-primary-tint); border-radius:var(--r-xl); display:grid; place-items:center; font-family:var(--font-mono); font-size:11px;">12 · xl</div>
+        <div style="width:80px;height:40px;background:var(--brand-primary-tint); border-radius:var(--r-pill); display:grid; place-items:center; font-family:var(--font-mono); font-size:11px;">pill</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. ELEVATION -->
+  <section class="section" id="elevation">
+    <h2>5. Elevation &amp; motion</h2>
+    <p class="lead">Three shadow tiers. Motion is fast (120–180ms) and uses a single ease curve.</p>
+
+    <div class="grid-3">
+      <div style="background:#fff; border-radius:var(--r-lg); padding:var(--sp-5); box-shadow:var(--shadow-sm)">
+        <div class="spec-label">--shadow-sm</div>
+        <div style="font-size:13px;color:var(--text-secondary)">Resting cards, KPI cards, tables.</div>
+      </div>
+      <div style="background:#fff; border-radius:var(--r-lg); padding:var(--sp-5); box-shadow:var(--shadow-md)">
+        <div class="spec-label">--shadow-md</div>
+        <div style="font-size:13px;color:var(--text-secondary)">Hover state, dropdowns, popovers.</div>
+      </div>
+      <div style="background:#fff; border-radius:var(--r-lg); padding:var(--sp-5); box-shadow:var(--shadow-lg)">
+        <div class="spec-label">--shadow-lg</div>
+        <div style="font-size:13px;color:var(--text-secondary)">Modals, drawers, command palette.</div>
+      </div>
+    </div>
+
+    <div class="specimen" style="margin-top:var(--sp-4)">
+      <div class="spec-label">Motion tokens</div>
+      <table class="table" style="border:0">
+        <thead><tr><th>Token</th><th>Value</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td><code class="inline">--dur-fast</code></td><td>120ms</td><td>Hover, focus, button states</td></tr>
+          <tr><td><code class="inline">--dur-base</code></td><td>180ms</td><td>Drawer open, dropdown reveal</td></tr>
+          <tr><td><code class="inline">--ease</code></td><td>cubic-bezier(.2,.8,.2,1)</td><td>All UI transitions</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 6. BUTTONS -->
+  <section class="section" id="buttons">
+    <h2>6. Buttons</h2>
+    <p class="lead">Five variants × three sizes. Primary blue is exclusive to the most important call-to-action on a screen.</p>
+
+    <div class="specimen">
+      <div class="spec-label">Variants</div>
+      <div class="row">
+        <button class="btn btn--primary">Run audit</button>
+        <button class="btn btn--secondary">Export CSV</button>
+        <button class="btn btn--ghost">Cancel</button>
+        <button class="btn btn--danger">Reject invoice</button>
+        <button class="btn btn--ai">✦ Apply AI fix</button>
+        <button class="btn btn--primary" disabled>Disabled</button>
+      </div>
+      <pre class="code">&lt;button class="btn btn--primary"&gt;Run audit&lt;/button&gt;
+&lt;button class="btn btn--ai"&gt;✦ Apply AI fix&lt;/button&gt;</pre>
+    </div>
+
+    <div class="specimen">
+      <div class="spec-label">Sizes</div>
+      <div class="row">
+        <button class="btn btn--primary">Default 36px</button>
+        <button class="btn btn--primary btn--md">Medium 38px</button>
+        <button class="btn btn--primary btn--lg">Large 42px</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. BADGES -->
+  <section class="section" id="badges">
+    <h2>7. Badges &amp; status</h2>
+    <p class="lead">Badges always carry a colored dot. The dot makes status legible at small sizes inside dense tables.</p>
+
+    <div class="specimen">
+      <div class="spec-label">Compliance badges</div>
+      <div class="row">
+        <span class="badge badge--success"><span class="dot"></span>Fully Compliant</span>
+        <span class="badge badge--warning"><span class="dot"></span>Partially Compliant</span>
+        <span class="badge badge--danger"><span class="dot"></span>Non-Compliant</span>
+      </div>
+      <pre class="code">&lt;span class="badge badge--success"&gt;
+  &lt;span class="dot"&gt;&lt;/span&gt;Fully Compliant
+&lt;/span&gt;</pre>
+    </div>
+
+    <div class="specimen">
+      <div class="spec-label">Other badges</div>
+      <div class="row">
+        <span class="badge badge--info"><span class="dot"></span>In Review</span>
+        <span class="badge badge--neutral"><span class="dot"></span>Draft</span>
+        <span class="badge badge--ai"><span class="dot"></span>AI Resolved</span>
+        <span class="badge badge--ai"><span class="dot"></span>AI Suggestion</span>
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="spec-label">AI three-state pattern</div>
+      <div class="row" style="gap:var(--sp-6)">
+        <div style="display:flex; align-items:center; gap:8px;"><span class="badge badge--danger"><span class="dot"></span>Flagged</span><span style="font-size:12px;color:var(--text-tertiary)">High impact · needs human review</span></div>
+        <div style="display:flex; align-items:center; gap:8px;"><span class="badge badge--warning"><span class="dot"></span>Suggested</span><span style="font-size:12px;color:var(--text-tertiary)">Medium confidence · awaits approval</span></div>
+        <div style="display:flex; align-items:center; gap:8px;"><span class="badge badge--success"><span class="dot"></span>Auto-resolved</span><span style="font-size:12px;color:var(--text-tertiary)">Low risk · logged + auditable</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. INPUTS -->
+  <section class="section" id="inputs">
+    <h2>8. Inputs &amp; filters</h2>
+    <p class="lead">Filters are first-class UI. Applied filters surface as chips at the top of the canvas.</p>
+
+    <div class="specimen">
+      <div class="spec-label">Form fields</div>
+      <div class="grid-3">
+        <div class="field">
+          <label class="field__label">Vendor</label>
+          <input class="input" placeholder="All vendors" />
+        </div>
+        <div class="field">
+          <label class="field__label">Search invoices</label>
+          <input class="input input--search" placeholder="Search by ID, vendor, contract…" />
+        </div>
+        <div class="field">
+          <label class="field__label">Geography</label>
+          <select class="select"><option>All regions</option><option>EMEA</option><option>NA</option><option>APAC</option></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="spec-label">Filter chips · applied state</div>
+      <div class="row">
+        <span class="chip chip--applied">Vendor: Acme Logistics <span class="chip__close">×</span></span>
+        <span class="chip chip--applied">Q1 2026 <span class="chip__close">×</span></span>
+        <span class="chip chip--applied">EMEA <span class="chip__close">×</span></span>
+        <span class="chip">+ Add filter</span>
+        <button class="btn btn--ghost" style="margin-left:auto">Clear all</button>
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="spec-label">Toggle · table density</div>
+      <div class="row">
+        <span style="font-size:13px;color:var(--text-secondary)">Compact rows</span>
+        <label class="toggle"><input type="checkbox" checked /><span class="slider"></span></label>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. CARDS -->
+  <section class="section" id="cards">
+    <h2>9. Cards &amp; KPIs</h2>
+    <p class="lead">KPI cards stand in a single row at the top of every dashboard view. They show one metric, one delta, and (where applicable) one progress encoding.</p>
+
+    <div class="specimen">
+      <div class="spec-label">KPI card row · 5-up</div>
+      <div class="grid-5">
+        <div class="kpi"><div class="kpi__label">Fully compliant</div><div class="kpi__value">87.4%</div><div class="kpi__delta kpi__delta--up">▲ 2.1pp vs Q4</div><div class="kpi__bar"><span style="width:87%"></span></div></div>
+        <div class="kpi"><div class="kpi__label">Partially compliant</div><div class="kpi__value">9.2%</div><div class="kpi__delta kpi__delta--down">▼ 1.4pp</div><div class="kpi__bar"><span style="width:9%; background:var(--status-warning)"></span></div></div>
+        <div class="kpi"><div class="kpi__label">Non-compliant</div><div class="kpi__value">3.4%</div><div class="kpi__delta kpi__delta--down">▼ 0.7pp</div><div class="kpi__bar"><span style="width:3.4%; background:var(--status-danger)"></span></div></div>
+        <div class="kpi"><div class="kpi__label">Total exposure</div><div class="kpi__value">$1.28M</div><div class="kpi__delta">▲ Net leakage</div></div>
+        <div class="kpi"><div class="kpi__label">Net leakage</div><div class="kpi__value">$184K</div><div class="kpi__delta kpi__delta--down">▼ 14% vs Q4</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. TABLES -->
+  <section class="section" id="tables">
+    <h2>10. Tables</h2>
+    <p class="lead">Dense tables with inline badges, sortable columns, and dual-encoded ratios. Every row is clickable; hover tints the row.</p>
+
+    <div class="specimen">
+      <div class="spec-label">Vendor compliance table</div>
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="sortable">Vendor <span class="sort-arrow">▲</span></th>
+              <th>Status</th>
+              <th>Compliance rate</th>
+              <th class="sortable">Invoices</th>
+              <th class="sortable">Exposure</th>
+              <th>AI flags</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Acme Logistics</strong><div style="font-family:var(--font-mono);font-size:11px;color:var(--text-tertiary)">VEN-0042 · EMEA</div></td>
+              <td><span class="badge badge--success"><span class="dot"></span>Compliant</span></td>
+              <td><div class="ratio-bar"><div class="ratio-bar__track"><div class="ratio-bar__fill" style="width:96%"></div></div><span style="font-family:var(--font-mono);font-size:12px">96%</span></div></td>
+              <td class="num">1,247</td>
+              <td class="num">$48,210</td>
+              <td><span class="badge badge--ai"><span class="dot"></span>2</span></td>
+            </tr>
+            <tr class="selected">
+              <td><strong>Northwind Supply</strong><div style="font-family:var(--font-mono);font-size:11px;color:var(--text-tertiary)">VEN-0118 · NA</div></td>
+              <td><span class="badge badge--warning"><span class="dot"></span>Partial</span></td>
+              <td><div class="ratio-bar"><div class="ratio-bar__track"><div class="ratio-bar__fill" style="width:74%; background:var(--status-warning)"></div></div><span style="font-family:var(--font-mono);font-size:12px">74%</span></div></td>
+              <td class="num">894</td>
+              <td class="num">$112,440</td>
+              <td><span class="badge badge--ai"><span class="dot"></span>9</span></td>
+            </tr>
+            <tr>
+              <td><strong>Globex Freight</strong><div style="font-family:var(--font-mono);font-size:11px;color:var(--text-tertiary)">VEN-0204 · APAC</div></td>
+              <td><span class="badge badge--danger"><span class="dot"></span>Non-compliant</span></td>
+              <td><div class="ratio-bar"><div class="ratio-bar__track"><div class="ratio-bar__fill" style="width:42%; background:var(--status-danger)"></div></div><span style="font-family:var(--font-mono);font-size:12px">42%</span></div></td>
+              <td class="num">412</td>
+              <td class="num">$284,008</td>
+              <td><span class="badge badge--ai"><span class="dot"></span>17</span></td>
+            </tr>
+            <tr>
+              <td><strong>Initech Carriers</strong><div style="font-family:var(--font-mono);font-size:11px;color:var(--text-tertiary)">VEN-0367 · EMEA</div></td>
+              <td><span class="badge badge--success"><span class="dot"></span>Compliant</span></td>
+              <td><div class="ratio-bar"><div class="ratio-bar__track"><div class="ratio-bar__fill" style="width:91%"></div></div><span style="font-family:var(--font-mono);font-size:12px">91%</span></div></td>
+              <td class="num">680</td>
+              <td class="num">$22,180</td>
+              <td>—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="spec-label">Invoiced vs Expected · line items</div>
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr><th>Line</th><th>Description</th><th>Invoiced</th><th>Expected</th><th>Deviation</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Express freight · LON→AMS</td><td class="num">$1,240.00</td><td class="num">$1,240.00</td><td class="num" style="color:var(--status-success)">$0.00</td></tr>
+            <tr><td>2</td><td>Surcharge · fuel</td><td class="num">$  412.00</td><td class="num">$  385.00</td><td class="num" style="color:var(--status-danger);font-weight:600">+$27.00</td></tr>
+            <tr><td>3</td><td>Customs handling</td><td class="num">$4,500.00</td><td class="num">$  342.00</td><td class="num" style="color:var(--status-danger);font-weight:600">+$4,158.00</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. NAVIGATION -->
+  <section class="section" id="nav">
+    <h2>11. Navigation</h2>
+    <p class="lead">Dark sidebar holds primary navigation, organized by the three platform phases. Phase badges (P1, P2, P3) communicate the workflow.</p>
+
+    <div class="row" style="align-items: stretch;">
+      <div class="sidebar-demo">
+        <div class="logo">◆ NovaCorp</div>
+        <div class="group-label">Phase 1 · Cleaning</div>
+        <div class="nav-item">📥 Ingest data <span class="phase-badge">P1</span></div>
+        <div class="nav-item active">📊 Data quality <span class="phase-badge">P1</span></div>
+        <div class="group-label">Phase 2 · Audit</div>
+        <div class="nav-item">📋 Compliance overview <span class="phase-badge">P2</span></div>
+        <div class="nav-item">🧾 Invoices <span class="phase-badge">P2</span></div>
+        <div class="nav-item">⚠ Exceptions <span class="phase-badge">P2</span></div>
+        <div class="group-label">Phase 3 · Benchmarking</div>
+        <div class="nav-item">📈 Indicators <span class="phase-badge">P3</span></div>
+      </div>
+
+      <div style="flex:1;">
+        <div class="specimen">
+          <div class="spec-label">Breadcrumbs</div>
+          <div class="breadcrumbs">
+            <a>Audit</a><span class="sep">/</span>
+            <a>Invoices</a><span class="sep">/</span>
+            <span class="current">INV-2024-08812</span>
+          </div>
+        </div>
+        <div class="specimen">
+          <div class="spec-label">Tabs</div>
+          <div class="tabs">
+            <div class="tab active">Audit Trail</div>
+            <div class="tab">Line Items</div>
+            <div class="tab">Exceptions <span class="badge badge--danger" style="margin-left:6px"><span class="dot"></span>3</span></div>
+            <div class="tab">Contract Reference</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. AI -->
+  <section class="section" id="ai">
+    <h2>12. AI patterns</h2>
+    <p class="lead">If it's purple, the agent did it. AI components always lead with evidence and confidence — actions appear last.</p>
+
+    <div class="specimen">
+      <div class="spec-label">AI insight panel · medium confidence</div>
+      <div class="ai-panel">
+        <div class="ai-panel__header">
+          <div class="ai-panel__icon">✦</div>
+          <div class="ai-panel__title">Pattern detected · Globex Freight</div>
+          <div class="ai-panel__confidence">Confidence 84%</div>
+        </div>
+        <div class="ai-panel__body">
+          17 invoices in the last 90 days show the same surcharge miscalculation. Estimated recovery: <strong>$48,210</strong>. The pattern correlates with rate-card version 2.3 ingested on Mar 12.
+        </div>
+        <div class="ai-panel__evidence">Evidence: 17 invoices · 3 contracts · 1 rate card · Source: ingestion-log-7841</div>
+        <div class="ai-panel__actions">
+          <button class="btn btn--ai">Open batch recovery (17)</button>
+          <button class="btn btn--secondary">Review one-by-one</button>
+          <button class="btn btn--ghost">Dismiss</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="spec-label">AI three-state hierarchy</div>
+      <div class="grid-3">
+        <div class="card" style="border-left:3px solid var(--status-danger)">
+          <span class="badge badge--danger"><span class="dot"></span>Flag for human</span>
+          <h3 style="margin:var(--sp-2) 0; font-size:14px">High-impact deviation</h3>
+          <p style="margin:0; font-size:12px; color:var(--text-secondary)">Confidence ≥ 75%. Financial impact above threshold. Always presents evidence first.</p>
+        </div>
+        <div class="card" style="border-left:3px solid var(--status-warning)">
+          <span class="badge badge--warning"><span class="dot"></span>Suggest action</span>
+          <h3 style="margin:var(--sp-2) 0; font-size:14px">Medium-confidence fix</h3>
+          <p style="margin:0; font-size:12px; color:var(--text-secondary)">Confidence 50–75%. Shows reasoning. Action button requires explicit approval.</p>
+        </div>
+        <div class="card" style="border-left:3px solid var(--status-success)">
+          <span class="badge badge--success"><span class="dot"></span>Auto-resolved</span>
+          <h3 style="margin:var(--sp-2) 0; font-size:14px">Low-risk routine</h3>
+          <p style="margin:0; font-size:12px; color:var(--text-secondary)">High confidence + low impact. Logged with rationale. User can audit at any time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13. CHARTS -->
+  <section class="section" id="charts">
+    <h2>13. Charts &amp; data viz</h2>
+    <p class="lead">Each chart type has one job. Pick by the question being answered, not by aesthetic.</p>
+
+    <div class="specimen">
+      <div class="spec-label">Chart-to-question mapping</div>
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>Chart</th><th>Answers</th><th>Where used</th></tr></thead>
+          <tbody>
+            <tr><td>Waterfall</td><td>Where did the net come from?</td><td>Compliance overview · financial impact</td></tr>
+            <tr><td>Pareto</td><td>Which 20% causes 80%?</td><td>Root cause analysis</td></tr>
+            <tr><td>Heatmap</td><td>Where is leakage concentrated?</td><td>Vendor × geography</td></tr>
+            <tr><td>Quadrant</td><td>Risk vs volume by vendor</td><td>Vendor strategy view</td></tr>
+            <tr><td>Trend line</td><td>Are we improving over time?</td><td>Compliance over quarters</td></tr>
+            <tr><td>Donut</td><td>Distribution of one variable</td><td>Compliance status share</td></tr>
+            <tr><td>Ranked bar</td><td>Top / bottom N comparison</td><td>Vendor leaderboard</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="spec-label">Pareto chart · CSS preview</div>
+      <div class="pareto">
+        <div class="bar" style="height:90%"><span>Surcharge</span></div>
+        <div class="bar" style="height:72%"><span>Rate</span></div>
+        <div class="bar" style="height:48%"><span>Currency</span></div>
+        <div class="bar" style="height:34%"><span>Volume</span></div>
+        <div class="bar" style="height:22%"><span>Mapping</span></div>
+        <div class="bar" style="height:14%"><span>Override</span></div>
+        <div class="bar" style="height:10%"><span>Outdated</span></div>
+        <div class="bar" style="height:6%"><span>Missing</span></div>
+      </div>
+      <p style="font-size:12px; color:var(--text-tertiary); margin:var(--sp-3) 0 0">Bars sort by financial impact (descending). Overlay a cumulative-percentage line to identify the 80/20 break.</p>
+    </div>
+
+    <div class="specimen">
+      <div class="spec-label">Score gauge · before vs after</div>
+      <div class="row" style="gap:var(--sp-8); justify-content:center;">
+        <div style="text-align:center">
+          <div class="gauge">
+            <svg width="140" height="140" viewBox="0 0 140 140">
+              <circle class="gauge__track" cx="70" cy="70" r="56" />
+              <circle class="gauge__fill gauge__fill--warning" cx="70" cy="70" r="56" stroke-dasharray="235 351" />
+            </svg>
+            <div class="gauge__inner"><div class="gauge__inner-stack"><div class="gauge__num">67</div><div class="gauge__label">Before</div></div></div>
+          </div>
+        </div>
+        <div style="font-size:32px;color:var(--text-disabled);align-self:center">→</div>
+        <div style="text-align:center">
+          <div class="gauge">
+            <svg width="140" height="140" viewBox="0 0 140 140">
+              <circle class="gauge__track" cx="70" cy="70" r="56" />
+              <circle class="gauge__fill gauge__fill--success" cx="70" cy="70" r="56" stroke-dasharray="330 351" />
+            </svg>
+            <div class="gauge__inner"><div class="gauge__inner-stack"><div class="gauge__num">94</div><div class="gauge__label">After</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14. COMPOSITES -->
+  <section class="section" id="composites">
+    <h2>14. Composite patterns</h2>
+    <p class="lead">Pre-assembled patterns that solve specific screen requirements from the brief.</p>
+
+    <div class="specimen">
+      <div class="spec-label">Agentic pipeline · Screen 2</div>
+      <div class="pipeline">
+        <div class="step step--success">
+          <div class="step__marker">✓</div>
+          <div class="step__body">
+            <div class="step__title">Schema validation <span class="badge badge--success"><span class="dot"></span>Passed</span></div>
+            <div class="step__meta">12,430 rows · 0 schema errors</div>
+          </div>
+        </div>
+        <div class="step step--success">
+          <div class="step__marker">✓</div>
+          <div class="step__body">
+            <div class="step__title">Currency normalization <span class="badge badge--success"><span class="dot"></span>Passed</span></div>
+            <div class="step__meta">3 currencies → USD · FX rate as of 2026-05-04</div>
+          </div>
+        </div>
+        <div class="step step--success">
+          <div class="step__marker">✓</div>
+          <div class="step__body">
+            <div class="step__title">Deduplication <span class="badge badge--success"><span class="dot"></span>Passed</span></div>
+            <div class="step__meta">87 duplicates removed</div>
+          </div>
+        </div>
+        <div class="step step--warning">
+          <div class="step__marker">!</div>
+          <div class="step__body">
+            <div class="step__title">Vendor harmonization <span class="badge badge--warning"><span class="dot"></span>Needs review</span></div>
+            <div class="step__meta">6 vendors flagged for human confirmation · agent paused</div>
+          </div>
+        </div>
+        <div class="step step--pending">
+          <div class="step__marker">5</div>
+          <div class="step__body">
+            <div class="step__title" style="color:var(--text-tertiary)">Cross-reference contracts</div>
+            <div class="step__meta">Pending step 4</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="spec-label">Exception card · Screen 3</div>
+      <div class="exception">
+        <div class="exception__header">
+          <div class="exception__title">Surcharge miscalculation</div>
+          <span class="badge badge--danger"><span class="dot"></span>+$4,185</span>
+        </div>
+        <div class="exception__grid">
+          <div><div class="exception__key">Deviation type</div><div class="exception__val">Rate card vs invoice</div></div>
+          <div><div class="exception__key">Financial impact</div><div class="exception__val" style="color:var(--status-danger);font-weight:600;font-family:var(--font-mono)">+$4,185.00</div></div>
+          <div><div class="exception__key">Root cause</div><div class="exception__val">Surcharge tier 3 applied; contract requires tier 1</div></div>
+          <div><div class="exception__key">Recommended action</div><div class="exception__val">Recover $4,185 from vendor · auto-fix similar 17 invoices</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="spec-label">Invoice header band · Screen 3</div>
+      <div class="card" style="display:flex; gap:var(--sp-6); align-items:center">
+        <div>
+          <div class="spec-label">Invoice</div>
+          <div style="font-family:var(--font-mono); font-weight:600; font-size:18px;">INV-2024-08812</div>
+        </div>
+        <div>
+          <div class="spec-label">Vendor</div>
+          <div>Globex Freight</div>
+        </div>
+        <div>
+          <div class="spec-label">Amount</div>
+          <div style="font-family:var(--font-mono); font-weight:600;">$5,940.00 <span style="color:var(--status-danger); font-size:13px">(+$4,185)</span></div>
+        </div>
+        <div>
+          <div class="spec-label">Contract</div>
+          <div style="font-family:var(--font-mono); font-size:13px;">CTR-NV-0427</div>
+        </div>
+        <div style="margin-left:auto">
+          <span class="badge badge--danger"><span class="dot"></span>Non-Compliant</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15. STATES -->
+  <section class="section" id="states">
+    <h2>15. States</h2>
+    <p class="lead">Empty, loading, and error states are part of every screen — designed once, used everywhere.</p>
+
+    <div class="grid-3">
+      <div class="specimen">
+        <div class="spec-label">Empty state</div>
+        <div class="empty">
+          <div class="empty__icon">📥</div>
+          <div class="empty__title">No data yet</div>
+          <p style="margin:0; font-size:12px;">Upload an invoice file to start your first audit.</p>
+          <button class="btn btn--primary" style="margin-top:var(--sp-3)">Upload file</button>
+        </div>
+      </div>
+      <div class="specimen">
+        <div class="spec-label">Loading state</div>
+        <div style="padding:var(--sp-3) 0">
+          <div class="skeleton" style="height:14px; width:50%; margin-bottom:8px"></div>
+          <div class="skeleton" style="height:28px; width:80%; margin-bottom:14px"></div>
+          <div class="skeleton" style="height:6px; width:100%"></div>
+          <div class="skeleton" style="height:14px; width:40%; margin-top:14px"></div>
+        </div>
+      </div>
+      <div class="specimen">
+        <div class="spec-label">Error / partial-data</div>
+        <div class="card" style="border-left:3px solid var(--status-danger)">
+          <span class="badge badge--danger"><span class="dot"></span>Sync failed</span>
+          <h3 style="margin:var(--sp-2) 0;font-size:14px">2 of 47 sources unavailable</h3>
+          <p style="margin:0;font-size:12px;color:var(--text-secondary)">Showing partial results. Last successful sync: 2 min ago.</p>
+          <button class="btn btn--secondary" style="margin-top:var(--sp-3)">Retry sync</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 16. SORTABLE + FILTERABLE -->
+  <section class="section" id="sortable">
+    <h2>16. Sortable + Filterable Tables</h2>
+    <p class="lead">The brief requires "tables must be sortable and filterable (show interaction states in your design)." This section specifies how that requirement is met.</p>
+
+    <h3 class="sub">Sort indicator · column header states</h3>
+    <div class="specimen">
+      <div class="spec-label">Three header states · default / hover / sorted</div>
+      <div style="background:var(--bg-subtle); padding:var(--sp-3) var(--sp-4); border-radius:var(--r-md); display:flex; gap:var(--sp-6); font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.05em; color:var(--text-tertiary);">
+        <div>Vendor <span style="color:var(--text-disabled); margin-left:4px; opacity:.5;">↕</span></div>
+        <div>Status</div>
+        <div style="color:var(--text-primary);">Compliance <span style="color:var(--text-secondary); margin-left:4px;">↕</span></div>
+        <div style="color:var(--brand);">Exposure <span style="color:var(--brand); margin-left:4px; font-size:9px;">▼</span></div>
+        <div>AI flags</div>
+      </div>
+      <table style="margin-top:var(--sp-3); border:1px solid var(--border-subtle); border-radius:var(--r-md); overflow:hidden;">
+        <thead><tr><th>State</th><th>Visual</th><th>When applied</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Default</strong></td><td><code class="inline">↕</code> at 50% opacity, text-disabled</td><td>Sortable column at rest</td></tr>
+          <tr><td><strong>Hover</strong></td><td><code class="inline">↕</code> at 100% opacity, text-secondary</td><td>Cursor over the column header</td></tr>
+          <tr><td><strong>Sorted</strong></td><td><code class="inline">▼</code> or <code class="inline">▲</code> in brand blue · column label brand blue</td><td>Active sort applied (descending or ascending)</td></tr>
+        </tbody>
+      </table>
+      <pre class="code">&lt;th class="sortable sorted" data-sort-key="exposure" data-sort-dir="desc"&gt;
+  Exposure &lt;span class="sort-arrow"&gt;▼&lt;/span&gt;
+&lt;/th&gt;</pre>
+    </div>
+
+    <h3 class="sub">Filter buttons · 5-dimension row</h3>
+    <p style="color:var(--text-secondary); font-size:13px; max-width:680px;">Distinct from chip pattern (Section 8). Filter buttons sit above the table and represent the brief's required dimensions: Vendor, Date Range, Geography, Contract, Service Level. Each carries an inline applied value when filtered.</p>
+    <div class="specimen">
+      <div class="spec-label">Default + applied state</div>
+      <div class="row" style="flex-wrap:wrap; gap:var(--sp-2);">
+        <button style="display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border:1px solid var(--border-default);border-radius:var(--r-md);background:#fff;font-size:12px;color:var(--text-secondary);font-family:var(--font-sans);cursor:pointer;">Vendor <span style="font-size:10px;opacity:.8;">▾</span></button>
+        <button style="display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border:1px solid var(--brand);border-radius:var(--r-md);background:var(--brand-tint);font-size:12px;color:var(--brand);font-weight:500;font-family:var(--font-sans);cursor:pointer;">Date: Q1 2026 <span style="font-size:10px;opacity:.8;">▾</span></button>
+        <button style="display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border:1px solid var(--border-default);border-radius:var(--r-md);background:#fff;font-size:12px;color:var(--text-secondary);font-family:var(--font-sans);cursor:pointer;">Geography <span style="font-size:10px;opacity:.8;">▾</span></button>
+        <button style="display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border:1px solid var(--brand);border-radius:var(--r-md);background:var(--brand-tint);font-size:12px;color:var(--brand);font-weight:500;font-family:var(--font-sans);cursor:pointer;">Contract: All <span style="font-size:10px;opacity:.8;">▾</span></button>
+        <button style="display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border:1px solid var(--border-default);border-radius:var(--r-md);background:#fff;font-size:12px;color:var(--text-secondary);font-family:var(--font-sans);cursor:pointer;">Service Level <span style="font-size:10px;opacity:.8;">▾</span></button>
+      </div>
+      <pre class="code">&lt;button class="filter-btn"&gt;Vendor &lt;span class="caret"&gt;▾&lt;/span&gt;&lt;/button&gt;
+&lt;button class="filter-btn filter-btn--applied"&gt;Date: Q1 2026 &lt;span class="caret"&gt;▾&lt;/span&gt;&lt;/button&gt;</pre>
+    </div>
+
+    <h3 class="sub">Filter dropdown popover</h3>
+    <div class="specimen">
+      <div class="spec-label">Opens on click of any filter button</div>
+      <div style="background:#fff; border:1px solid var(--border-subtle); border-radius:var(--r-md); box-shadow:var(--shadow-md); padding:var(--sp-2); width:240px;">
+        <div style="font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:var(--text-tertiary); padding:6px 10px; font-weight:600;">Geography</div>
+        <label style="display:flex; align-items:center; gap:8px; padding:7px 10px; border-radius:var(--r-sm); font-size:12px; cursor:pointer;"><input type="checkbox" style="accent-color:var(--brand)"/> EMEA</label>
+        <label style="display:flex; align-items:center; gap:8px; padding:7px 10px; border-radius:var(--r-sm); font-size:12px; cursor:pointer; background:var(--bg-hover);"><input type="checkbox" checked style="accent-color:var(--brand)"/> APAC</label>
+        <label style="display:flex; align-items:center; gap:8px; padding:7px 10px; border-radius:var(--r-sm); font-size:12px; cursor:pointer;"><input type="checkbox" style="accent-color:var(--brand)"/> NA</label>
+        <div style="height:1px; background:var(--border-subtle); margin:var(--sp-1) 0;"></div>
+        <div style="display:flex; gap:6px; padding:6px;"><button class="btn btn--ghost" style="flex:1; justify-content:center;">Clear</button><button class="btn btn--primary" style="flex:1; justify-content:center;">Apply</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 17. SCORE GAUGE -->
+  <section class="section" id="gauge">
+    <h2>17. Score gauge</h2>
+    <p class="lead">Circular SVG gauge used for the data-quality before/after pattern on Screen 2. Three color states map to score ranges so the gauge tells the story without reading the number.</p>
+
+    <div class="specimen">
+      <div class="spec-label">Before / after pair · 67 → 94</div>
+      <div class="row" style="gap:var(--sp-8); justify-content:center; padding:var(--sp-4);">
+        <div style="text-align:center; position:relative; width:130px; height:130px;">
+          <svg width="130" height="130" viewBox="0 0 130 130" style="transform:rotate(-90deg);">
+            <circle cx="65" cy="65" r="52" fill="none" stroke="var(--bg-hover)" stroke-width="11"/>
+            <circle cx="65" cy="65" r="52" fill="none" stroke="var(--status-warning)" stroke-width="11" stroke-linecap="round" stroke-dasharray="219 327"/>
+          </svg>
+          <div style="position:absolute; inset:0; display:grid; place-items:center;"><div><div style="font-family:var(--font-mono); font-size:28px; font-weight:600;">67</div><div style="font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:var(--text-tertiary)">Before</div></div></div>
+        </div>
+        <div style="font-size:32px; color:var(--text-disabled); align-self:center;">→</div>
+        <div style="text-align:center; position:relative; width:130px; height:130px;">
+          <svg width="130" height="130" viewBox="0 0 130 130" style="transform:rotate(-90deg);">
+            <circle cx="65" cy="65" r="52" fill="none" stroke="var(--bg-hover)" stroke-width="11"/>
+            <circle cx="65" cy="65" r="52" fill="none" stroke="var(--status-success)" stroke-width="11" stroke-linecap="round" stroke-dasharray="307 327"/>
+          </svg>
+          <div style="position:absolute; inset:0; display:grid; place-items:center;"><div><div style="font-family:var(--font-mono); font-size:28px; font-weight:600;">94</div><div style="font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:var(--text-tertiary)">After</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="spec-label">Score-to-color mapping</div>
+      <table style="border:1px solid var(--border-subtle); border-radius:var(--r-md); overflow:hidden;">
+        <thead><tr><th>Score range</th><th>Stroke color</th><th>Token</th></tr></thead>
+        <tbody>
+          <tr><td>0–60 · Poor</td><td><span style="display:inline-block; width:60px; height:8px; background:var(--status-warning); vertical-align:middle; border-radius:2px;"></span> Warning amber</td><td><code class="inline">--status-warning</code></td></tr>
+          <tr><td>61–85 · Acceptable</td><td><span style="display:inline-block; width:60px; height:8px; background:var(--brand); vertical-align:middle; border-radius:2px;"></span> Brand blue</td><td><code class="inline">--brand-primary</code></td></tr>
+          <tr><td>86–100 · Excellent</td><td><span style="display:inline-block; width:60px; height:8px; background:var(--status-success); vertical-align:middle; border-radius:2px;"></span> Success green</td><td><code class="inline">--status-success</code></td></tr>
+        </tbody>
+      </table>
+      <pre class="code">circumference = 2 × π × 52 ≈ 326.7
+fill-length   = (score / 100) × 326.7
+
+// Examples
+score 67 → stroke-dasharray="218.9 326.7"
+score 81 → stroke-dasharray="264.6 326.7"   // live, brand
+score 94 → stroke-dasharray="307.1 326.7"   // success</pre>
+    </div>
+  </section>
+
+  <!-- 18. STALE TAG -->
+  <section class="section" id="stale">
+    <h2>18. Stale &amp; partial-data tags</h2>
+    <p class="lead">Inline indicator that data is out-of-date or only partially available. Used in error/partial states to signal compromised data without hiding it.</p>
+
+    <div class="specimen">
+      <div class="spec-label">Inline tags · attached to KPI labels or page titles</div>
+      <div class="row" style="gap:var(--sp-3);">
+        <div style="font-size:14px;">Total exposure <span style="display:inline-flex; align-items:center; background:var(--status-warning-tint); color:#92400E; padding:2px 7px; border-radius:var(--r-sm); font-size:10px; font-weight:600; margin-left:6px;">stale</span></div>
+        <div style="font-size:14px;">Net leakage <span style="display:inline-flex; align-items:center; background:var(--status-warning-tint); color:#92400E; padding:2px 7px; border-radius:var(--r-sm); font-size:10px; font-weight:600; margin-left:6px;">partial</span></div>
+        <div style="font-size:18px; font-weight:600;">Compliance Overview <span style="display:inline-flex; align-items:center; background:var(--status-warning-tint); color:#92400E; padding:2px 7px; border-radius:var(--r-sm); font-size:10px; font-weight:600; margin-left:8px; letter-spacing:.05em;">PARTIAL DATA</span></div>
+      </div>
+      <pre class="code">&lt;span class="stale-tag"&gt;stale&lt;/span&gt;
+&lt;span class="stale-tag"&gt;partial&lt;/span&gt;
+&lt;span class="stale-tag"&gt;PARTIAL DATA&lt;/span&gt;</pre>
+    </div>
+  </section>
+
+  <!-- 19. LIVE STATE PATTERNS -->
+  <section class="section" id="live-states">
+    <h2>19. Live state patterns</h2>
+    <p class="lead">Detailed specs for the four state variants shown in the submission. Each composite pattern combines tokens from sections 1–15.</p>
+
+    <h3 class="sub">19.1 Empty state · pre-data</h3>
+    <div class="specimen">
+      <div class="spec-label">Composition</div>
+      <ul style="margin:0; padding-left:var(--sp-5); color:var(--text-secondary); font-size:13px;">
+        <li>2px dashed border container, light surface, 56px vertical padding</li>
+        <li>80px circular icon · brand-tint background, brand-blue stroke icon</li>
+        <li>Headline 22/700 + supporting line 14/400 secondary</li>
+        <li>Two CTAs side-by-side (primary + secondary), large size</li>
+        <li>Format chips below CTAs · mono font, 11px, neutral surface</li>
+        <li>Optional: 3-step "what happens next" preview row of mini cards</li>
+      </ul>
+    </div>
+
+    <h3 class="sub">19.2 Loading state · syncing</h3>
+    <div class="specimen">
+      <div class="spec-label">Progress banner anatomy</div>
+      <div style="background:var(--brand-tint); border:1px solid #C7D5EC; border-left:3px solid var(--brand); border-radius:var(--r-lg); padding:14px 18px; display:flex; align-items:center; gap:14px;">
+        <span style="width:10px; height:10px; border-radius:50%; background:var(--brand); flex-shrink:0;"></span>
+        <div style="flex-shrink:0;"><div style="font-size:13px; font-weight:600; color:var(--brand);">Syncing data sources</div><div style="font-size:11px; color:var(--text-tertiary); margin-top:2px;">22 of 47 sources processed · ETA 1m 30s</div></div>
+        <div style="flex:1; background:#fff; border-radius:var(--r-pill); height:8px; overflow:hidden;"><span style="display:block; height:100%; background:var(--brand); width:47%;"></span></div>
+        <div style="font-family:var(--font-mono); font-size:12px; color:var(--brand); font-weight:500;">47%</div>
+      </div>
+      <p style="font-size:12px; color:var(--text-tertiary); margin-top:var(--sp-3);">Used at the top of any screen waiting on data. Pulse animation on the dot. AI panel below renders dimmed with a "✦ Agent will surface insights once sync completes…" line in italic AI purple.</p>
+    </div>
+
+    <h3 class="sub">19.3 Error state · partial data</h3>
+    <div class="specimen">
+      <div class="spec-label">Error banner + paused-AI panel</div>
+      <div style="background:#FFF5F5; border:1px solid #FECACA; border-left:3px solid var(--status-danger); border-radius:var(--r-lg); padding:14px 18px; display:flex; align-items:flex-start; gap:14px; margin-bottom:var(--sp-3);">
+        <div style="width:32px; height:32px; border-radius:50%; background:var(--status-danger-tint); color:var(--status-danger); display:grid; place-items:center; flex-shrink:0; font-weight:700; font-size:16px;">!</div>
+        <div style="flex:1;"><div style="font-weight:600; font-size:14px; color:#991B1B;">Sync failed · 2 of 47 data sources unavailable</div><div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">Showing partial results. The AI agent has paused new analysis.</div></div>
+        <button class="btn btn--danger">↻ Retry</button>
+      </div>
+      <p style="font-size:12px; color:var(--text-secondary); margin:0;">KPIs render with reduced opacity (0.7) and stale tags. Affected-sources list shown as a panel above the KPIs. AI panel switches to "Paused" badge — agent never operates on incomplete data.</p>
+    </div>
+
+    <h3 class="sub">19.4 Agent-running state · in-flight cleaning</h3>
+    <div class="specimen">
+      <div class="spec-label">Live progress + pulsing pipeline step</div>
+      <div style="background:var(--ai-tint); border:1px solid #DDD6FE; border-left:3px solid var(--ai-primary); border-radius:var(--r-lg); padding:14px 18px; display:flex; align-items:center; gap:14px; margin-bottom:var(--sp-3);">
+        <span style="width:10px; height:10px; border-radius:50%; background:var(--ai-primary); flex-shrink:0;"></span>
+        <div style="flex-shrink:0;"><div style="font-size:13px; font-weight:600; color:var(--ai-primary);">✦ AI agent active · Cleaning your data</div><div style="font-size:11px; color:var(--text-tertiary); margin-top:2px;">Step 4 of 6 · ETA 42s</div></div>
+        <div style="flex:1; background:#fff; border-radius:var(--r-pill); height:8px; overflow:hidden;"><span style="display:block; height:100%; background:var(--ai-primary); width:67%;"></span></div>
+        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ai-primary); font-weight:500;">67%</div>
+      </div>
+      <ul style="margin:0; padding-left:var(--sp-5); color:var(--text-secondary); font-size:13px;">
+        <li>Progress banner uses AI purple variant of the loading banner pattern</li>
+        <li>"Live" gauge renders in brand blue (in-flight, not yet success-green) — shows interim score</li>
+        <li>Active pipeline step has a pulsing brand-blue marker and inline progress bar</li>
+        <li>Streaming activity log on the right shows recent agent actions in mono</li>
+        <li>Required text: "✦ Agent will…" prefix on every agent-narrated string</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer style="margin-top:var(--sp-12); padding-top:var(--sp-6); border-top:1px solid var(--border-subtle); color:var(--text-tertiary); font-size:12px; text-align:center;">
+    NovaCorp Design System · v1.1 · Includes sortable/filterable patterns, score gauge, stale tags, and full state library · Yossi P.
+  </footer>
+
+</div>
+</body>
+</html>

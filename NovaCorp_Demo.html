@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>NovaCorp · Interactive Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --brand: #003DA5; --brand-hover: #002F80; --brand-tint: #E5EBF6;
+    --ai: #6D28D9; --ai-tint: #F1ECFB;
+    --success: #16A34A; --success-tint: #DCFCE7; --success-text: #065F46;
+    --warning: #D97706; --warning-tint: #FEF3C7; --warning-text: #92400E;
+    --danger: #DC2626; --danger-tint: #FEE2E2; --danger-text: #991B1B;
+    --info: #2563EB; --info-tint: #DBEAFE;
+    --sidebar-bg: #0D1117; --sidebar-border: #1C232E; --sidebar-text: #C9D1D9; --sidebar-muted: #8B949E;
+    --bg-page: #F0F2F5; --bg-surface: #FFFFFF; --bg-subtle: #F8F9FB; --bg-hover: #F3F4F7;
+    --text-primary: #0F172A; --text-secondary: #475569; --text-tertiary: #64748B; --text-disabled: #94A3B8;
+    --border-subtle: #E5E7EB; --border-default: #D1D5DB;
+    --r-sm: 4px; --r-md: 6px; --r-lg: 8px; --r-pill: 999px;
+    --shadow-sm: 0 1px 2px rgba(15,23,42,.06);
+    --shadow-md: 0 2px 6px rgba(15,23,42,.08), 0 1px 2px rgba(15,23,42,.04);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,.12);
+    --font-sans: 'IBM Plex Sans', -apple-system, sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body { font-family: var(--font-sans); background: #1B2632; color: var(--text-primary); font-size: 13px; line-height: 1.5; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+
+  /* ---------- Demo control bar ---------- */
+  .demo-bar {
+    position: sticky; top: 0; z-index: 100;
+    background: linear-gradient(135deg, #001F54 0%, #003DA5 100%);
+    color: #fff; padding: 14px 24px;
+    display: flex; align-items: center; gap: 18px;
+    box-shadow: 0 4px 12px rgba(0,0,0,.25);
+  }
+  .demo-bar__brand { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+  .demo-bar__brand-mark { width: 26px; height: 26px; background: rgba(255,255,255,.16); border-radius: 6px; display: grid; place-items: center; font-size: 13px; }
+  .demo-bar__title { font-size: 15px; font-weight: 600; }
+  .demo-bar__sub { font-size: 11px; opacity: .8; font-weight: 400; }
+
+  .demo-pills { display: flex; gap: 6px; align-items: center; }
+  .demo-pill {
+    background: rgba(255,255,255,.1); color: #fff; border: 1px solid rgba(255,255,255,.18);
+    padding: 6px 12px; border-radius: var(--r-pill); font-size: 12px; cursor: pointer;
+    font-family: var(--font-sans); transition: all .15s ease;
+  }
+  .demo-pill:hover { background: rgba(255,255,255,.2); }
+  .demo-pill.active { background: #fff; color: var(--brand); font-weight: 600; }
+
+  .demo-bar__spacer { flex: 1; }
+  .demo-cta {
+    background: var(--ai); color: #fff; border: 0; padding: 8px 16px; border-radius: var(--r-md);
+    font-size: 13px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--font-sans); transition: all .15s ease;
+  }
+  .demo-cta:hover { background: #5B21B6; transform: translateY(-1px); }
+  .demo-cta:active { transform: translateY(0); }
+  .demo-cta.playing { background: var(--danger); animation: pulse-ring 1.5s ease-in-out infinite; }
+  @keyframes pulse-ring { 0%, 100% { box-shadow: 0 0 0 0 rgba(220,38,38,.6); } 50% { box-shadow: 0 0 0 6px rgba(220,38,38,0); } }
+
+  .demo-help { font-size: 11px; opacity: .8; }
+
+  /* ---------- Stage ---------- */
+  .stage { display: grid; grid-template-columns: 240px 1fr; min-height: calc(100vh - 64px); background: var(--bg-page); }
+
+  /* ---------- Sidebar ---------- */
+  .sb { background: var(--sidebar-bg); color: var(--sidebar-text); padding: 20px 14px; font-size: 13px; position: sticky; top: 64px; align-self: start; height: calc(100vh - 64px); overflow-y: auto; }
+  .sb__logo { color: #fff; font-weight: 700; font-size: 16px; padding: 0 8px 18px; border-bottom: 1px solid var(--sidebar-border); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .sb__logo-mark { width: 22px; height: 22px; background: var(--brand); border-radius: 5px; display: grid; place-items: center; color: #fff; font-size: 13px; }
+  .sb__group { color: var(--sidebar-muted); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; padding: 14px 8px 4px; }
+  .sb__item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--r-md); cursor: pointer; color: var(--sidebar-text); margin-bottom: 2px; transition: background .12s ease; }
+  .sb__item:hover { background: #161B22; color: #fff; }
+  .sb__item.active { background: rgba(0,61,165,.18); color: #fff; border-left: 2px solid var(--brand); padding-left: 8px; }
+  .sb__icon { width: 16px; display: inline-block; text-align: center; opacity: .8; font-size: 14px; }
+  .sb__phase { margin-left: auto; font-family: var(--font-mono); font-size: 10px; background: rgba(255,255,255,.08); padding: 2px 6px; border-radius: var(--r-sm); color: var(--sidebar-muted); }
+  .sb__user { margin-top: 32px; padding: 12px 8px; border-top: 1px solid var(--sidebar-border); display: flex; align-items: center; gap: 10px; }
+  .sb__avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #003DA5, #6D28D9); display: grid; place-items: center; color: #fff; font-weight: 600; font-size: 12px; }
+  .sb__user-name { color: #fff; font-size: 13px; font-weight: 500; }
+  .sb__user-role { color: var(--sidebar-muted); font-size: 11px; }
+
+  /* ---------- Screen viewport ---------- */
+  .canvas { position: relative; }
+  .screen { display: none; animation: fadeIn .4s cubic-bezier(.2,.8,.2,1); }
+  .screen.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ---------- Common screen chrome ---------- */
+  .tb { background: var(--bg-surface); border-bottom: 1px solid var(--border-subtle); padding: 16px 28px; }
+  .tb__row1 { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
+  .breadcrumb { display: flex; gap: 6px; align-items: center; font-size: 12px; color: var(--text-tertiary); }
+  .breadcrumb a { color: var(--text-secondary); text-decoration: none; cursor: pointer; }
+  .breadcrumb a:hover { color: var(--brand); }
+  .breadcrumb .sep { color: var(--text-disabled); }
+  .breadcrumb .current { color: var(--text-primary); font-weight: 500; }
+  .tb__title { font-size: 22px; font-weight: 700; color: var(--text-primary); letter-spacing: -.01em; }
+  .tb__subtitle { font-size: 13px; color: var(--text-tertiary); margin-top: 2px; }
+  .tb__actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+
+  .body { padding: 24px 28px 60px; }
+
+  /* ---------- Buttons ---------- */
+  .btn { display: inline-flex; align-items: center; gap: 6px; border-radius: var(--r-md); font-family: var(--font-sans); font-weight: 500; cursor: pointer; border: 1px solid transparent; padding: 7px 12px; font-size: 12px; line-height: 1; transition: all .12s ease; }
+  .btn:hover { transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+  .btn--primary { background: var(--brand); color: #fff; }
+  .btn--primary:hover { background: var(--brand-hover); }
+  .btn--secondary { background: #fff; color: var(--brand); border-color: var(--brand); }
+  .btn--secondary:hover { background: var(--brand-tint); }
+  .btn--ghost { background: transparent; color: var(--text-secondary); }
+  .btn--ghost:hover { background: var(--bg-hover); color: var(--text-primary); }
+  .btn--ai { background: var(--ai); color: #fff; }
+  .btn--ai:hover { background: #5B21B6; }
+  .btn--danger { background: var(--danger); color: #fff; }
+  .btn--lg { padding: 10px 18px; font-size: 13px; }
+
+  /* ---------- Filter chips ---------- */
+  .chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border: 1px solid var(--border-default); border-radius: var(--r-pill); background: #fff; font-size: 12px; color: var(--text-secondary); cursor: pointer; }
+  .chip--applied { background: var(--brand-tint); border-color: var(--brand); color: var(--brand); font-weight: 500; }
+  .filter-btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; border: 1px solid var(--border-default); border-radius: var(--r-md); background: #fff; font-size: 12px; color: var(--text-secondary); cursor: pointer; font-family: var(--font-sans); transition: all .12s ease; }
+  .filter-btn:hover { border-color: var(--brand); color: var(--brand); }
+  .filter-btn--applied { background: var(--brand-tint); border-color: var(--brand); color: var(--brand); font-weight: 500; }
+  .filter-btn .caret { font-size: 10px; opacity: .8; }
+  .filter-wrap { position: relative; }
+  .filter-dd { position: absolute; top: calc(100% + 6px); left: 0; min-width: 200px; background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--r-md); box-shadow: var(--shadow-md); padding: 6px; z-index: 50; display: none; }
+  .filter-wrap.open .filter-dd { display: block; }
+  .filter-dd__title { font-size: 10px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-tertiary); padding: 6px 10px; font-weight: 600; }
+  .filter-dd__opt { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: var(--r-sm); cursor: pointer; font-size: 12px; }
+  .filter-dd__opt:hover { background: var(--bg-hover); }
+  .filter-dd__opt input { width: 14px; height: 14px; accent-color: var(--brand); cursor: pointer; }
+  .filter-dd__opt span { flex: 1; }
+  .filter-dd__divider { height: 1px; background: var(--border-subtle); margin: 4px 0; }
+  .filter-dd__footer { display: flex; gap: 6px; padding: 6px; }
+  .filter-dd__footer .btn { flex: 1; justify-content: center; padding: 6px 10px; }
+  th.sortable { cursor: pointer; user-select: none; transition: color .12s ease; }
+  th.sortable:hover { color: var(--text-primary); }
+  th.sortable.sorted { color: var(--brand); }
+  th .sort-arrow { color: var(--brand); font-size: 9px; margin-left: 4px; }
+  th .sort-arrow-inactive { color: var(--text-disabled); font-size: 10px; margin-left: 4px; opacity: .5; }
+  th.sortable:hover .sort-arrow-inactive { opacity: 1; color: var(--text-secondary); }
+  .chip__close { font-size: 14px; line-height: 1; opacity: .7; }
+
+  /* ---------- KPIs ---------- */
+  .kpis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .kpi { background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--r-lg); padding: 14px 16px; transition: box-shadow .15s ease, transform .15s ease; }
+  .kpi:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+  .kpi__label { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .04em; font-weight: 500; }
+  .kpi__value { font-family: var(--font-mono); font-size: 24px; font-weight: 600; color: var(--text-primary); margin-top: 4px; }
+  .kpi__delta { font-family: var(--font-mono); font-size: 11px; margin-top: 3px; display: inline-flex; align-items: center; gap: 4px; }
+  .kpi__delta--up { color: var(--success); }
+  .kpi__delta--down { color: var(--danger); }
+  .kpi__bar { height: 4px; background: var(--bg-hover); border-radius: 2px; margin-top: 10px; overflow: hidden; }
+  .kpi__bar > span { display: block; height: 100%; background: var(--brand); }
+
+  /* ---------- Panel ---------- */
+  .panel { background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--r-lg); padding: 18px; }
+  .panel__head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .panel__title { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+  .panel__sub { font-size: 11px; color: var(--text-tertiary); }
+  .panel__actions { margin-left: auto; display: flex; gap: 8px; }
+
+  /* ---------- Badges ---------- */
+  .badge { display: inline-flex; align-items: center; gap: 5px; padding: 2px 8px; border-radius: var(--r-pill); font-size: 11px; font-weight: 600; line-height: 1.4; }
+  .badge .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .b-success { background: var(--success-tint); color: var(--success-text); }
+  .b-success .dot { background: var(--success); }
+  .b-warning { background: var(--warning-tint); color: var(--warning-text); }
+  .b-warning .dot { background: var(--warning); }
+  .b-danger { background: var(--danger-tint); color: var(--danger-text); }
+  .b-danger .dot { background: var(--danger); }
+  .b-ai { background: var(--ai-tint); color: var(--ai); }
+  .b-ai .dot { background: var(--ai); }
+  .b-info { background: var(--info-tint); color: #1E40AF; }
+  .b-info .dot { background: var(--info); }
+
+  /* ---------- Tables ---------- */
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th, td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--border-subtle); }
+  th { background: var(--bg-subtle); font-size: 10px; font-weight: 600; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .05em; }
+  td.num, th.num { font-family: var(--font-mono); text-align: right; }
+  tbody tr { transition: background .12s ease; }
+  tbody tr:hover { background: var(--bg-hover); cursor: pointer; }
+  tbody tr.selected { background: var(--brand-tint); }
+  .ratio { display: inline-flex; align-items: center; gap: 8px; }
+  .ratio__track { width: 70px; height: 5px; background: var(--bg-hover); border-radius: 3px; overflow: hidden; }
+  .ratio__fill { height: 100%; background: var(--brand); }
+
+  /* ---------- AI card ---------- */
+  .ai-card { background: linear-gradient(180deg, var(--ai-tint) 0%, #fff 100%); border: 1px solid #DDD6FE; border-left: 3px solid var(--ai); border-radius: var(--r-lg); padding: 16px 20px; }
+  .ai-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .ai-icon { width: 28px; height: 28px; border-radius: 50%; background: var(--ai); color: #fff; display: grid; place-items: center; font-weight: 700; }
+  .ai-title { font-weight: 600; font-size: 14px; }
+  .ai-conf { margin-left: auto; font-family: var(--font-mono); font-size: 11px; color: var(--ai); background: #fff; padding: 3px 8px; border-radius: var(--r-pill); border: 1px solid #DDD6FE; }
+  .ai-body { color: var(--text-secondary); font-size: 13px; line-height: 1.55; }
+  .ai-evidence { font-size: 11px; color: var(--text-tertiary); margin-top: 8px; }
+  .ai-actions { display: flex; gap: 8px; margin-top: 14px; }
+
+  /* ---------- Pipeline ---------- */
+  .pipeline { display: flex; flex-direction: column; gap: 0; }
+  .step { display: flex; gap: 12px; padding: 10px 0; position: relative; }
+  .step:not(:last-child)::before { content: ''; position: absolute; left: 13px; top: 38px; bottom: -10px; width: 2px; background: var(--border-subtle); }
+  .step__marker { width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 12px; z-index: 1; }
+  .step--ok .step__marker { background: var(--success); }
+  .step--warn .step__marker { background: var(--warning); }
+  .step--running .step__marker { background: var(--brand); animation: pulse-bg 1.6s ease-in-out infinite; }
+  @keyframes pulse-bg { 0%, 100% { box-shadow: 0 0 0 0 rgba(0,61,165,.5); } 50% { box-shadow: 0 0 0 8px rgba(0,61,165,0); } }
+  .step--pending .step__marker { background: var(--border-default); }
+  .step__body { flex: 1; padding-top: 3px; }
+  .step__title { font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+  .step__meta { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+  .step__progress { height: 4px; background: var(--bg-hover); border-radius: 2px; margin-top: 8px; overflow: hidden; max-width: 320px; }
+  .step__progress > span { display: block; height: 100%; background: var(--brand); border-radius: 2px; transition: width 1s ease; }
+
+  /* ---------- Gauge ---------- */
+  .gauge-row { display: flex; gap: 28px; align-items: center; }
+  .gauge { width: 130px; height: 130px; position: relative; flex-shrink: 0; }
+  .gauge svg { transform: rotate(-90deg); }
+  .gauge__track { fill: none; stroke: var(--bg-hover); stroke-width: 11; }
+  .gauge__fill { fill: none; stroke-width: 11; stroke-linecap: round; transition: stroke-dasharray 1s ease; }
+  .gauge__inner { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; }
+  .gauge__num { font-family: var(--font-mono); font-size: 28px; font-weight: 600; }
+  .gauge__lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-tertiary); margin-top: 2px; }
+
+  /* ---------- Empty hero ---------- */
+  .empty-hero { background: #fff; border: 2px dashed var(--border-default); border-radius: 12px; padding: 56px 40px; text-align: center; margin-top: 32px; }
+  .empty-hero__icon { width: 80px; height: 80px; margin: 0 auto 20px; border-radius: 50%; background: var(--brand-tint); color: var(--brand); display: grid; place-items: center; }
+  .empty-hero__icon svg { width: 38px; height: 38px; }
+  .empty-hero__title { font-size: 22px; font-weight: 700; color: var(--text-primary); margin: 0 0 10px; letter-spacing: -.01em; }
+  .empty-hero__sub { font-size: 14px; color: var(--text-secondary); max-width: 480px; margin: 0 auto 24px; line-height: 1.55; }
+  .empty-hero__ctas { display: flex; gap: 10px; justify-content: center; margin-bottom: 28px; }
+  .formats { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .format { display: inline-flex; align-items: center; gap: 4px; background: var(--bg-subtle); border: 1px solid var(--border-subtle); border-radius: var(--r-pill); padding: 4px 10px; font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary); }
+
+  /* ---------- Skeleton ---------- */
+  .skel { background: linear-gradient(90deg, #EEF1F4 0%, #F7F8FA 50%, #EEF1F4 100%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: var(--r-sm); }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+  .progress-banner { background: var(--brand-tint); border: 1px solid #C7D5EC; border-left: 3px solid var(--brand); border-radius: var(--r-lg); padding: 14px 18px; display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+  .progress-banner .pulse { width: 10px; height: 10px; border-radius: 50%; background: var(--brand); flex-shrink: 0; animation: pulse-d 1.2s ease-in-out infinite; }
+  @keyframes pulse-d { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.6); opacity: .4; } }
+  .progress-bar { flex: 1; background: #fff; border-radius: var(--r-pill); height: 8px; overflow: hidden; }
+  .progress-bar > span { display: block; height: 100%; background: var(--brand); border-radius: var(--r-pill); width: 0%; transition: width 1s ease; }
+  .progress-meta { font-family: var(--font-mono); font-size: 12px; color: var(--brand); font-weight: 500; flex-shrink: 0; }
+
+  /* ---------- Helpers ---------- */
+  .grid-2-3 { display: grid; grid-template-columns: 3fr 2fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .mt-12 { margin-top: 12px; } .mt-16 { margin-top: 16px; } .mt-20 { margin-top: 20px; } .mt-24 { margin-top: 24px; }
+  .row { display: flex; gap: 12px; align-items: center; }
+
+  .clickable-row { position: relative; }
+  .click-hint { position: absolute; top: 50%; right: 14px; transform: translateY(-50%); background: var(--ai); color: #fff; font-size: 10px; padding: 2px 6px; border-radius: var(--r-sm); font-family: var(--font-mono); opacity: 0; transition: opacity .15s ease; pointer-events: none; }
+  tr:hover .click-hint { opacity: 1; }
+
+  /* Pareto */
+  .pareto-wrap { position: relative; padding: 10px 0 28px; }
+  .pareto-bars { display: grid; grid-template-columns: repeat(8, 1fr); align-items: end; gap: 12px; height: 200px; }
+  .pareto-bar { background: var(--brand); border-radius: 3px 3px 0 0; position: relative; transition: opacity .15s ease; }
+  .pareto-bar.dim { opacity: .35; }
+  .pareto-bar > .v { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-family: var(--font-mono); font-size: 10px; color: var(--text-secondary); }
+  .pareto-bar > .lbl { position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%); font-size: 10px; color: var(--text-tertiary); white-space: nowrap; }
+  .pareto-line { position: absolute; inset: 10px 0 28px; pointer-events: none; }
+
+  .cat { background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--r-lg); padding: 14px 16px; cursor: pointer; transition: all .12s ease; }
+  .cat:hover { border-color: var(--border-default); box-shadow: var(--shadow-md); transform: translateY(-1px); }
+  .cat__top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+  .cat__name { font-weight: 600; font-size: 13px; max-width: 70%; }
+  .cat__impact { font-family: var(--font-mono); font-size: 16px; font-weight: 600; color: var(--text-primary); }
+  .cat__sub { display: flex; gap: 14px; font-size: 11px; color: var(--text-tertiary); margin-top: 8px; }
+  .cat__sub strong { color: var(--text-primary); font-family: var(--font-mono); font-weight: 500; }
+
+  /* Tabs */
+  .tabs { display: flex; border-bottom: 1px solid var(--border-subtle); gap: 4px; margin-bottom: 18px; }
+  .tab { padding: 9px 14px; font-size: 12px; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; }
+  .tab:hover { color: var(--text-primary); }
+  .tab.active { color: var(--brand); border-bottom-color: var(--brand); font-weight: 600; }
+
+  /* Exception cards */
+  .exc { background: #fff; border: 1px solid var(--border-subtle); border-left: 3px solid var(--danger); border-radius: var(--r-md); padding: 14px 16px; }
+  .exc__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .exc__title { font-weight: 600; font-size: 13px; }
+  .exc__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px; }
+  .exc__k { color: var(--text-tertiary); text-transform: uppercase; font-size: 10px; letter-spacing: .05em; }
+  .exc__v { color: var(--text-primary); margin-top: 2px; }
+
+  .delta-pos { color: var(--danger); font-weight: 600; }
+  .delta-zero { color: var(--success); }
+
+  .seg { display: inline-flex; background: var(--bg-subtle); border: 1px solid var(--border-subtle); border-radius: var(--r-md); padding: 2px; }
+  .seg button { background: none; border: 0; padding: 5px 12px; font-size: 12px; cursor: pointer; color: var(--text-secondary); border-radius: var(--r-sm); font-family: var(--font-sans); }
+  .seg button.active { background: #fff; color: var(--brand); font-weight: 600; box-shadow: var(--shadow-sm); }
+
+  .error-banner { background: #FFF5F5; border: 1px solid #FECACA; border-left: 3px solid var(--danger); border-radius: var(--r-lg); padding: 14px 18px; display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px; }
+  .error-banner__icon { width: 32px; height: 32px; border-radius: 50%; background: var(--danger-tint); color: var(--danger); display: grid; place-items: center; flex-shrink: 0; font-weight: 700; font-size: 16px; }
+  .error-banner__title { font-weight: 600; font-size: 14px; color: var(--danger-text); }
+  .error-banner__body { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+  .error-banner__actions { margin-left: auto; display: flex; gap: 8px; flex-shrink: 0; }
+  .stale-tag { display: inline-flex; align-items: center; background: var(--warning-tint); color: var(--warning-text); padding: 2px 7px; border-radius: var(--r-sm); font-size: 10px; font-weight: 600; margin-left: 6px; vertical-align: middle; }
+
+  /* Helper toast */
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: #0F172A; color: #fff; padding: 12px 20px; border-radius: var(--r-md); font-size: 13px; font-weight: 500; box-shadow: var(--shadow-lg); z-index: 200; transition: transform .3s cubic-bezier(.2,.8,.2,1); display: flex; align-items: center; gap: 10px; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--ai); animation: pulse-d 1.2s ease-in-out infinite; }
+</style>
+</head>
+<body>
+
+<!-- ====== Demo control bar ====== -->
+<div class="demo-bar">
+  <div class="demo-bar__brand">
+    <div class="demo-bar__brand-mark">◆</div>
+    <div>
+      <div class="demo-bar__title">NovaCorp · Interactive Demo</div>
+      <div class="demo-bar__sub">Click any item, or press Play story to auto-walk through.</div>
+    </div>
+  </div>
+
+  <div class="demo-bar__spacer"></div>
+
+  <div class="demo-pills" id="screenPills">
+    <button class="demo-pill" data-screen="empty">Empty</button>
+    <button class="demo-pill" data-screen="loading">Loading</button>
+    <button class="demo-pill" data-screen="agent">Agent ▶</button>
+    <button class="demo-pill" data-screen="quality">Quality</button>
+    <button class="demo-pill active" data-screen="overview">Overview</button>
+    <button class="demo-pill" data-screen="invoice">Invoice</button>
+    <button class="demo-pill" data-screen="root">Root cause</button>
+    <button class="demo-pill" data-screen="error">Error</button>
+  </div>
+
+  <button class="demo-cta" id="playBtn">▶ Play story</button>
+</div>
+
+<!-- ====== Stage ====== -->
+<div class="stage">
+  <!-- Sidebar -->
+  <aside class="sb">
+    <div class="sb__logo"><span class="sb__logo-mark">◆</span>NovaCorp</div>
+    <div class="sb__group">Phase 1 · Cleaning</div>
+    <div class="sb__item" data-nav="empty"><span class="sb__icon">📥</span>Ingest data<span class="sb__phase">P1</span></div>
+    <div class="sb__item" data-nav="quality"><span class="sb__icon">📊</span>Data quality<span class="sb__phase">P1</span></div>
+    <div class="sb__group">Phase 2 · Audit</div>
+    <div class="sb__item active" data-nav="overview"><span class="sb__icon">📋</span>Compliance overview<span class="sb__phase">P2</span></div>
+    <div class="sb__item" data-nav="invoice"><span class="sb__icon">🧾</span>Invoices<span class="sb__phase">P2</span></div>
+    <div class="sb__item" data-nav="root"><span class="sb__icon">⚠</span>Exceptions<span class="sb__phase">P2</span></div>
+    <div class="sb__group">Phase 3 · Benchmarking</div>
+    <div class="sb__item"><span class="sb__icon">📈</span>Indicators<span class="sb__phase">P3</span></div>
+    <div class="sb__user"><div class="sb__avatar">YP</div><div><div class="sb__user-name">Yossi P.</div><div class="sb__user-role" id="userRole">Procurement Manager</div></div></div>
+  </aside>
+
+  <!-- Canvas -->
+  <main class="canvas">
+
+    <!-- ============== EMPTY ============== -->
+    <section class="screen" data-id="empty">
+      <div class="tb">
+        <div class="tb__row1">
+          <div>
+            <div class="breadcrumb"><span class="current">Compliance Overview</span></div>
+            <div class="tb__title">Compliance Overview</div>
+            <div class="tb__subtitle">No data ingested yet</div>
+          </div>
+          <div class="tb__actions">
+            <button class="btn btn--ghost">View documentation</button>
+            <button class="btn btn--primary" data-go="loading">+ Upload file</button>
+          </div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="empty-hero">
+          <div class="empty-hero__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <h2 class="empty-hero__title">No invoices to audit yet</h2>
+          <p class="empty-hero__sub">Upload your first invoice file to start. The agent will clean the data, match it against your contracts, and flag anything that needs attention — usually within 90 seconds.</p>
+          <div class="empty-hero__ctas">
+            <button class="btn btn--primary btn--lg" data-go="loading">📥 Upload file</button>
+            <button class="btn btn--secondary btn--lg">Connect a data source</button>
+          </div>
+          <div class="formats">
+            <span class="format">.csv</span><span class="format">.xlsx</span><span class="format">.json</span>
+            <span class="format">SAP Concur</span><span class="format">Coupa</span><span class="format">+ 8 more</span>
+          </div>
+        </div>
+        <div class="grid-3 mt-24">
+          <div class="panel"><div style="display:flex;gap:12px;align-items:flex-start;"><div style="width:28px;height:28px;border-radius:50%;background:var(--brand-tint);color:var(--brand);font-weight:700;display:grid;place-items:center;font-family:var(--font-mono);">1</div><div><h4 style="margin:0 0 4px;font-size:13px;">Ingest &amp; clean</h4><p style="margin:0;font-size:12px;color:var(--text-secondary);line-height:1.5;">The agent normalizes currencies, dedups rows, and validates schema automatically.</p></div></div></div>
+          <div class="panel"><div style="display:flex;gap:12px;align-items:flex-start;"><div style="width:28px;height:28px;border-radius:50%;background:var(--brand-tint);color:var(--brand);font-weight:700;display:grid;place-items:center;font-family:var(--font-mono);">2</div><div><h4 style="margin:0 0 4px;font-size:13px;">Match against contracts</h4><p style="margin:0;font-size:12px;color:var(--text-secondary);line-height:1.5;">Every line is checked against your active contracts and rate cards.</p></div></div></div>
+          <div class="panel"><div style="display:flex;gap:12px;align-items:flex-start;"><div style="width:28px;height:28px;border-radius:50%;background:var(--brand-tint);color:var(--brand);font-weight:700;display:grid;place-items:center;font-family:var(--font-mono);">3</div><div><h4 style="margin:0 0 4px;font-size:13px;">Surface exceptions</h4><p style="margin:0;font-size:12px;color:var(--text-secondary);line-height:1.5;">You'll see ranked vendors and a clear path to recover any leakage.</p></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== LOADING ============== -->
+    <section class="screen" data-id="loading">
+      <div class="tb">
+        <div class="tb__row1">
+          <div>
+            <div class="breadcrumb"><span class="current">Compliance Overview</span></div>
+            <div class="tb__title">Compliance Overview · Q1 2026</div>
+            <div class="tb__subtitle">Syncing data — agent will analyze once complete</div>
+          </div>
+          <div class="tb__actions"><button class="btn btn--ghost">Cancel sync</button></div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="progress-banner">
+          <span class="pulse"></span>
+          <div style="flex-shrink:0;"><div style="font-size:13px;font-weight:600;color:var(--brand);">Syncing data sources</div><div style="font-size:11px;color:var(--text-tertiary);margin-top:2px;" id="loadingMeta">Connecting to data sources… ETA 1m 30s</div></div>
+          <div class="progress-bar"><span id="loadingBar"></span></div>
+          <div class="progress-meta" id="loadingPct">0%</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;">
+          <div class="panel"><div class="skel" style="height:11px;width:60%"></div><div class="skel" style="height:24px;width:55%;margin-top:8px"></div><div class="skel" style="height:4px;width:100%;margin-top:14px"></div></div>
+          <div class="panel"><div class="skel" style="height:11px;width:65%"></div><div class="skel" style="height:24px;width:45%;margin-top:8px"></div><div class="skel" style="height:4px;width:100%;margin-top:14px"></div></div>
+          <div class="panel"><div class="skel" style="height:11px;width:55%"></div><div class="skel" style="height:24px;width:40%;margin-top:8px"></div><div class="skel" style="height:4px;width:100%;margin-top:14px"></div></div>
+          <div class="panel"><div class="skel" style="height:11px;width:60%"></div><div class="skel" style="height:24px;width:50%;margin-top:8px"></div><div class="skel" style="height:11px;width:35%;margin-top:6px"></div></div>
+          <div class="panel"><div class="skel" style="height:11px;width:55%"></div><div class="skel" style="height:24px;width:48%;margin-top:8px"></div><div class="skel" style="height:11px;width:40%;margin-top:6px"></div></div>
+        </div>
+        <div class="ai-card mt-20" style="opacity:.7;">
+          <div class="ai-head"><div class="ai-icon">✦</div><div class="skel" style="height:14px; width:240px;"></div><div class="skel" style="height:18px; width:80px; border-radius:999px; margin-left:auto;"></div></div>
+          <div class="skel" style="height:10px; width:100%; margin-bottom:6px;"></div>
+          <div class="skel" style="height:10px; width:88%;"></div>
+          <div style="font-size:11px; color:var(--ai); margin-top:14px; font-style:italic;">✦ Agent will surface insights once data sync completes…</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== AGENT RUNNING ============== -->
+    <section class="screen" data-id="agent">
+      <div class="tb">
+        <div class="tb__row1">
+          <div>
+            <div class="breadcrumb"><a data-nav="empty">Cleaning</a><span class="sep">/</span><span class="current">Data Quality Report</span></div>
+            <div class="tb__title">Data Quality · Ingestion #7841</div>
+            <div class="tb__subtitle">Agent is cleaning · step <span id="agentStep">4</span> of 6 · ETA <span id="agentEta">42</span> seconds</div>
+          </div>
+          <div class="tb__actions"><button class="btn btn--ghost">Cancel run</button></div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="progress-banner" style="background:var(--ai-tint); border-color:#DDD6FE; border-left-color:var(--ai);">
+          <span class="pulse" style="background:var(--ai);"></span>
+          <div style="flex-shrink:0;"><div style="font-size:13px;font-weight:600;color:var(--ai);">✦ AI agent active · Cleaning your data</div><div style="font-size:11px;color:var(--text-tertiary);margin-top:2px;">Step 4 of 6 · ETA 42s</div></div>
+          <div class="progress-bar"><span style="width:67%; background:var(--ai);"></span></div>
+          <div class="progress-meta" style="color:var(--ai);">67%</div>
+        </div>
+        <div class="panel">
+          <div class="panel__head"><div><div class="panel__title">Data quality score</div><div class="panel__sub">Live · updating as the pipeline runs</div></div><span class="badge b-ai"><span class="dot"></span>In progress</span></div>
+          <div class="gauge-row" style="justify-content:center;">
+            <div class="gauge"><svg width="130" height="130" viewBox="0 0 130 130"><circle class="gauge__track" cx="65" cy="65" r="52"/><circle class="gauge__fill" cx="65" cy="65" r="52" stroke="#D97706" stroke-dasharray="219 327"/></svg><div class="gauge__inner"><div><div class="gauge__num">67</div><div class="gauge__lbl">Before</div></div></div></div>
+            <div style="font-size:36px;color:var(--text-disabled);align-self:center">→</div>
+            <div class="gauge"><svg width="130" height="130" viewBox="0 0 130 130"><circle class="gauge__track" cx="65" cy="65" r="52"/><circle class="gauge__fill" cx="65" cy="65" r="52" stroke="#003DA5" stroke-dasharray="265 327"/></svg><div class="gauge__inner"><div><div class="gauge__num" style="color:var(--brand);">81</div><div class="gauge__lbl">Live</div></div></div></div>
+            <div style="margin-left:24px;max-width:280px;"><div style="font-size:12px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Issues resolved so far</div><div style="font-family:var(--font-mono);font-size:24px;font-weight:600;color:var(--ai)">534</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">~172 more expected by end of run.</div></div>
+          </div>
+        </div>
+        <div class="grid-2-3 mt-20">
+          <div class="panel">
+            <div class="panel__head"><div><div class="panel__title">AI cleaning pipeline</div><div class="panel__sub">Live status · the agent is working through each step.</div></div><span class="badge b-ai"><span class="dot"></span>Agent active</span></div>
+            <div class="pipeline">
+              <div class="step step--ok"><div class="step__marker">✓</div><div class="step__body"><div class="step__title">Schema validation <span class="badge b-success"><span class="dot"></span>Done</span></div><div class="step__meta">12,430 rows · 0 errors · 14s</div></div></div>
+              <div class="step step--ok"><div class="step__marker">✓</div><div class="step__body"><div class="step__title">Currency normalization <span class="badge b-success"><span class="dot"></span>Done</span></div><div class="step__meta">3 currencies → USD · 8s</div></div></div>
+              <div class="step step--ok"><div class="step__marker">✓</div><div class="step__body"><div class="step__title">Deduplication <span class="badge b-success"><span class="dot"></span>Done</span></div><div class="step__meta">87 duplicates removed · 22s</div></div></div>
+              <div class="step step--running"><div class="step__marker">●</div><div class="step__body"><div class="step__title" style="color:var(--brand);">Vendor harmonization <span class="badge b-info"><span class="dot"></span>Running</span></div><div class="step__meta">Matching 432 vendor variants · 271 of 432 done</div><div class="step__progress"><span style="width:63%"></span></div></div></div>
+              <div class="step step--pending"><div class="step__marker">5</div><div class="step__body"><div class="step__title" style="color:var(--text-tertiary)">Cross-reference contracts</div><div class="step__meta">Pending step 4</div></div></div>
+              <div class="step step--pending"><div class="step__marker">6</div><div class="step__body"><div class="step__title" style="color:var(--text-tertiary)">Final validation &amp; handoff</div><div class="step__meta">Pending step 5</div></div></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel__head"><div><div class="panel__title">Live activity</div><div class="panel__sub">Streaming · last events</div></div><span class="badge b-ai"><span class="dot"></span>Live</span></div>
+            <div style="font-family:var(--font-mono); font-size:11px; color:var(--text-secondary); display:flex; flex-direction:column; gap:5px;">
+              <div><span style="color:var(--text-tertiary)">10:43:42</span> · ✦ Vendor "Globex Frt" → "Globex Freight"</div>
+              <div><span style="color:var(--text-tertiary)">10:43:41</span> · ✦ Vendor "Acme Log" → "Acme Logistics"</div>
+              <div><span style="color:var(--text-tertiary)">10:43:39</span> · ✦ Vendor "NorthW Sup" → "Northwind Supply"</div>
+              <div><span style="color:var(--text-tertiary)">10:43:36</span> · → Step 4 started · vendor harmonization</div>
+              <div><span style="color:var(--text-tertiary)">10:43:35</span> · ✓ Step 3 complete · 87 dedups removed</div>
+            </div>
+            <button class="btn btn--ai" style="margin-top:14px;width:100%;justify-content:center;" data-go="quality">Continue when complete →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== QUALITY (Screen 2 default) ============== -->
+    <section class="screen" data-id="quality">
+      <div class="tb">
+        <div class="tb__row1">
+          <div>
+            <div class="breadcrumb"><a data-nav="empty">Cleaning</a><span class="sep">/</span><span class="current">Data Quality Report</span></div>
+            <div class="tb__title">Data Quality · Ingestion #7841</div>
+            <div class="tb__subtitle">12,430 rows ingested · 87 duplicates removed · 3 currencies normalized</div>
+          </div>
+          <div class="tb__actions">
+            <button class="btn btn--secondary">Download log</button>
+            <button class="btn btn--primary" data-go="overview">Continue to audit →</button>
+          </div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="panel">
+          <div class="panel__head"><div><div class="panel__title">Data quality score</div><div class="panel__sub">Before cleaning vs after AI-assisted pipeline</div></div><span class="badge b-success"><span class="dot"></span>+27 points</span></div>
+          <div class="gauge-row" style="justify-content:center;">
+            <div class="gauge"><svg width="130" height="130" viewBox="0 0 130 130"><circle class="gauge__track" cx="65" cy="65" r="52"/><circle class="gauge__fill" cx="65" cy="65" r="52" stroke="#D97706" stroke-dasharray="219 327"/></svg><div class="gauge__inner"><div><div class="gauge__num">67</div><div class="gauge__lbl">Before</div></div></div></div>
+            <div style="font-size:36px;color:var(--text-disabled);align-self:center">→</div>
+            <div class="gauge"><svg width="130" height="130" viewBox="0 0 130 130"><circle class="gauge__track" cx="65" cy="65" r="52"/><circle class="gauge__fill" cx="65" cy="65" r="52" stroke="#16A34A" stroke-dasharray="307 327"/></svg><div class="gauge__inner"><div><div class="gauge__num">94</div><div class="gauge__lbl">After</div></div></div></div>
+            <div style="margin-left:24px;max-width:280px;"><div style="font-size:12px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Issues resolved by AI</div><div style="font-family:var(--font-mono);font-size:24px;font-weight:600;color:var(--ai)">706</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">Across 5 categories. 6 vendors flagged for human confirmation.</div></div>
+          </div>
+        </div>
+        <div class="grid-2-3 mt-20">
+          <div class="panel">
+            <div class="panel__head"><div><div class="panel__title">AI cleaning pipeline</div><div class="panel__sub">All steps completed</div></div><span class="badge b-success"><span class="dot"></span>Complete</span></div>
+            <div class="pipeline">
+              <div class="step step--ok"><div class="step__marker">✓</div><div class="step__body"><div class="step__title">Schema validation <span class="badge b-success"><span class="dot"></span>Passed</span></div><div class="step__meta">12,430 rows · 0 errors</div></div></div>
+              <div class="step step--ok"><div class="step__marker">✓</div><div class="step__body"><div class="step__title">Currency normalization <span class="badge b-success"><span class="dot"></span>Passed</span></div><div class="step__meta">3 currencies → USD</div></div></div>
+              <div class="step step--ok"><div class="step__marker">✓</div><div class="step__body"><div class="step__title">Deduplication <span class="badge b-success"><span class="dot"></span>Passed</span></div><div class="step__meta">87 duplicates removed</div></div></div>
+              <div class="step step--warn"><div class="step__marker">!</div><div class="step__body"><div class="step__title">Vendor harmonization <span class="badge b-warning"><span class="dot"></span>Needs review</span></div><div class="step__meta">6 vendors flagged for human confirmation</div></div></div>
+              <div class="step step--ok"><div class="step__marker">✓</div><div class="step__body"><div class="step__title">Cross-reference contracts <span class="badge b-success"><span class="dot"></span>Passed</span></div><div class="step__meta">Matched 12,343 of 12,430 rows</div></div></div>
+              <div class="step step--ok"><div class="step__marker">✓</div><div class="step__body"><div class="step__title">Final validation &amp; handoff <span class="badge b-success"><span class="dot"></span>Passed</span></div><div class="step__meta">Ready to audit</div></div></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel__head"><div><div class="panel__title">Issues by type</div><div class="panel__sub">Before / after</div></div></div>
+            <div style="display:flex;flex-direction:column;gap:14px;font-size:12px;">
+              <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Missing values</span><span style="font-family:var(--font-mono);"><span style="color:var(--danger)">412</span> → <span style="color:var(--success)">8</span></span></div><div style="display:flex;gap:2px;height:8px;"><div style="flex:412;background:var(--danger);border-radius:2px;"></div><div style="flex:600;background:var(--bg-hover);border-radius:2px;"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Duplicates</span><span style="font-family:var(--font-mono);"><span style="color:var(--danger)">87</span> → <span style="color:var(--success)">0</span></span></div><div style="display:flex;gap:2px;height:8px;"><div style="flex:87;background:var(--danger);border-radius:2px;"></div><div style="flex:925;background:var(--bg-hover);border-radius:2px;"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Currency mismatch</span><span style="font-family:var(--font-mono);"><span style="color:var(--danger)">156</span> → <span style="color:var(--success)">0</span></span></div><div style="display:flex;gap:2px;height:8px;"><div style="flex:156;background:var(--danger);border-radius:2px;"></div><div style="flex:856;background:var(--bg-hover);border-radius:2px;"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Invalid references</span><span style="font-family:var(--font-mono);"><span style="color:var(--danger)">42</span> → <span style="color:var(--warning)">6</span></span></div><div style="display:flex;gap:2px;height:8px;"><div style="flex:42;background:var(--danger);border-radius:2px;"></div><div style="flex:6;background:var(--warning);border-radius:2px;"></div><div style="flex:964;background:var(--bg-hover);border-radius:2px;"></div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== OVERVIEW (Screen 1 default) ============== -->
+    <section class="screen active" data-id="overview">
+      <div class="tb">
+        <div class="tb__row1">
+          <div>
+            <div class="breadcrumb"><a>Audit</a><span class="sep">/</span><span class="current">Compliance Overview</span></div>
+            <div class="tb__title">Compliance Overview · Q1 2026</div>
+            <div class="tb__subtitle">87.4% fully compliant · last sync 4 minutes ago</div>
+          </div>
+          <div class="tb__actions">
+            <button class="btn btn--secondary">Export CSV</button>
+            <button class="btn btn--primary">Run audit</button>
+          </div>
+        </div>
+        <div class="row" id="filterRow" style="padding-top:8px;border-top:1px dashed var(--border-subtle);margin-top:8px;flex-wrap:wrap;position:relative;">
+          <div class="filter-wrap" data-filter="vendor"><button class="filter-btn">Vendor <span class="caret">▾</span></button></div>
+          <div class="filter-wrap" data-filter="date"><button class="filter-btn filter-btn--applied">Date: Q1 2026 <span class="caret">▾</span></button></div>
+          <div class="filter-wrap" data-filter="region"><button class="filter-btn">Geography <span class="caret">▾</span></button></div>
+          <div class="filter-wrap" data-filter="contract"><button class="filter-btn filter-btn--applied">Contract: All <span class="caret">▾</span></button></div>
+          <div class="filter-wrap" data-filter="serviceLevel"><button class="filter-btn">Service Level <span class="caret">▾</span></button></div>
+          <button class="btn btn--ghost" id="clearFilters" style="margin-left:auto">Clear all</button>
+        </div>
+      </div>
+      <div class="body">
+        <div class="kpis">
+          <div class="kpi"><div class="kpi__label">Fully compliant</div><div class="kpi__value">87.4%</div><div class="kpi__delta kpi__delta--up">▲ 2.1pp vs Q4</div><div class="kpi__bar"><span style="width:87%"></span></div></div>
+          <div class="kpi"><div class="kpi__label">Partially compliant</div><div class="kpi__value">9.2%</div><div class="kpi__delta kpi__delta--down">▼ 1.4pp</div><div class="kpi__bar"><span style="width:9.2%; background:var(--warning)"></span></div></div>
+          <div class="kpi"><div class="kpi__label">Non-compliant</div><div class="kpi__value">3.4%</div><div class="kpi__delta kpi__delta--down">▼ 0.7pp</div><div class="kpi__bar"><span style="width:3.4%; background:var(--danger)"></span></div></div>
+          <div class="kpi"><div class="kpi__label">Total exposure</div><div class="kpi__value">$1.28M</div><div class="kpi__delta">across 247 invoices</div></div>
+          <div class="kpi"><div class="kpi__label">Net leakage</div><div class="kpi__value">$184K</div><div class="kpi__delta kpi__delta--down">▼ 14% vs Q4</div></div>
+        </div>
+        <div class="ai-card mt-20">
+          <div class="ai-head"><div class="ai-icon">✦</div><div class="ai-title">Pattern detected · Globex Freight surcharge miscalculation</div><div class="ai-conf">Confidence 84%</div></div>
+          <div class="ai-body">17 invoices in the last 90 days show the same surcharge tier error. Estimated recoverable: <strong>$48,210</strong>. Pattern correlates with rate-card v2.3 ingested on Mar 12.</div>
+          <div class="ai-evidence">Evidence: 17 invoices · 3 contracts · 1 rate card</div>
+          <div class="ai-actions">
+            <button class="btn btn--ai" data-go="invoice">Open batch recovery (17) →</button>
+            <button class="btn btn--secondary" data-go="invoice">Review one-by-one</button>
+            <button class="btn btn--ghost">Dismiss</button>
+          </div>
+        </div>
+        <div class="grid-2-3 mt-20">
+          <div class="panel">
+            <div class="panel__head"><div><div class="panel__title">Financial impact</div><div class="panel__sub">Overcharges vs undercharges → net leakage</div></div></div>
+            <svg viewBox="0 0 600 240" width="100%" height="220" font-family="IBM Plex Sans" font-size="11">
+              <line x1="40" y1="200" x2="580" y2="200" stroke="#E5E7EB"/>
+              <rect x="60" y="40" width="80" height="160" fill="#DC2626" rx="2"/>
+              <text x="100" y="32" text-anchor="middle" fill="#0F172A" font-weight="600">+$430K</text>
+              <text x="100" y="218" text-anchor="middle" fill="#64748B">Gross overcharges</text>
+              <line x1="140" y1="40" x2="200" y2="40" stroke="#9CA3AF" stroke-dasharray="3,3"/>
+              <rect x="200" y="40" width="80" height="92" fill="#16A34A" rx="2"/>
+              <text x="240" y="32" text-anchor="middle" fill="#0F172A" font-weight="600">−$228K</text>
+              <text x="240" y="218" text-anchor="middle" fill="#64748B">Undercharges</text>
+              <line x1="280" y1="132" x2="340" y2="132" stroke="#9CA3AF" stroke-dasharray="3,3"/>
+              <rect x="340" y="132" width="80" height="40" fill="#6D28D9" rx="2"/>
+              <text x="380" y="124" text-anchor="middle" fill="#0F172A" font-weight="600">−$18K AI</text>
+              <text x="380" y="218" text-anchor="middle" fill="#64748B">Auto-resolved</text>
+              <line x1="420" y1="172" x2="480" y2="172" stroke="#9CA3AF" stroke-dasharray="3,3"/>
+              <rect x="480" y="40" width="80" height="132" fill="#003DA5" rx="2"/>
+              <text x="520" y="32" text-anchor="middle" fill="#003DA5" font-weight="700">$184K</text>
+              <text x="520" y="218" text-anchor="middle" fill="#0F172A" font-weight="600">Net leakage</text>
+            </svg>
+          </div>
+          <div class="panel">
+            <div class="panel__head"><div><div class="panel__title">Vendor compliance ranking</div><div class="panel__sub">Top &amp; bottom by % compliant</div></div></div>
+            <div style="display:flex; flex-direction:column; gap:6px; font-size:12px;">
+              <div style="display:grid; grid-template-columns:140px 1fr 50px; gap:8px; align-items:center;"><span>Acme Logistics</span><div class="ratio__track" style="width:auto"><div class="ratio__fill" style="width:96%"></div></div><span style="font-family:var(--font-mono); text-align:right">96%</span></div>
+              <div style="display:grid; grid-template-columns:140px 1fr 50px; gap:8px; align-items:center;"><span>Initech Carriers</span><div class="ratio__track" style="width:auto"><div class="ratio__fill" style="width:91%"></div></div><span style="font-family:var(--font-mono); text-align:right">91%</span></div>
+              <div style="display:grid; grid-template-columns:140px 1fr 50px; gap:8px; align-items:center;"><span>Stark Shipping</span><div class="ratio__track" style="width:auto"><div class="ratio__fill" style="width:88%"></div></div><span style="font-family:var(--font-mono); text-align:right">88%</span></div>
+              <div style="height:1px; background:var(--border-subtle); margin:8px 0;"></div>
+              <div style="display:grid; grid-template-columns:140px 1fr 50px; gap:8px; align-items:center;"><span>Northwind Supply</span><div class="ratio__track" style="width:auto"><div class="ratio__fill" style="width:74%; background:var(--warning)"></div></div><span style="font-family:var(--font-mono); text-align:right">74%</span></div>
+              <div style="display:grid; grid-template-columns:140px 1fr 50px; gap:8px; align-items:center;"><span>Wayne Freight</span><div class="ratio__track" style="width:auto"><div class="ratio__fill" style="width:58%; background:var(--warning)"></div></div><span style="font-family:var(--font-mono); text-align:right">58%</span></div>
+              <div style="display:grid; grid-template-columns:140px 1fr 50px; gap:8px; align-items:center;"><span>Globex Freight</span><div class="ratio__track" style="width:auto"><div class="ratio__fill" style="width:42%; background:var(--danger)"></div></div><span style="font-family:var(--font-mono); text-align:right">42%</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="panel mt-20" style="padding:0;overflow:hidden;">
+          <div class="panel__head" style="padding:16px 18px 8px;margin-bottom:0;"><div><div class="panel__title">All vendors · 5 of 5 shown</div></div></div>
+          <table id="vendorTable">
+            <thead><tr>
+              <th class="sortable" data-sort-key="vendor" data-sort-type="string">Vendor <span class="sort-arrow-inactive">↕</span></th>
+              <th>Status</th>
+              <th class="sortable" data-sort-key="compliance" data-sort-type="number">Compliance <span class="sort-arrow-inactive">↕</span></th>
+              <th class="num sortable" data-sort-key="invoices" data-sort-type="number">Invoices <span class="sort-arrow-inactive">↕</span></th>
+              <th class="num sortable sorted" data-sort-key="exposure" data-sort-type="number" data-sort-dir="desc">Exposure <span class="sort-arrow">▼</span></th>
+              <th>AI flags</th>
+              <th></th>
+            </tr></thead>
+            <tbody>
+              <tr class="selected clickable-row" data-go="invoice" data-vendor="Globex Freight" data-status="non-compliant" data-region="APAC" data-compliance="42" data-invoices="412" data-exposure="284008"><td><strong>Globex Freight</strong><div style="font-family:var(--font-mono);font-size:10px;color:var(--text-tertiary)">VEN-0204 · APAC</div></td><td><span class="badge b-danger"><span class="dot"></span>Non-compliant</span></td><td><div class="ratio"><div class="ratio__track"><div class="ratio__fill" style="width:42%; background:var(--danger)"></div></div><span style="font-family:var(--font-mono);">42%</span></div></td><td class="num">412</td><td class="num">$284,008</td><td><span class="badge b-ai"><span class="dot"></span>17</span></td><td><span class="click-hint">Click ▸</span></td></tr>
+              <tr class="clickable-row" data-go="invoice" data-vendor="Northwind Supply" data-status="partial" data-region="NA" data-compliance="74" data-invoices="894" data-exposure="112440"><td><strong>Northwind Supply</strong><div style="font-family:var(--font-mono);font-size:10px;color:var(--text-tertiary)">VEN-0118 · NA</div></td><td><span class="badge b-warning"><span class="dot"></span>Partial</span></td><td><div class="ratio"><div class="ratio__track"><div class="ratio__fill" style="width:74%; background:var(--warning)"></div></div><span style="font-family:var(--font-mono);">74%</span></div></td><td class="num">894</td><td class="num">$112,440</td><td><span class="badge b-ai"><span class="dot"></span>9</span></td><td><span class="click-hint">Click ▸</span></td></tr>
+              <tr class="clickable-row" data-go="invoice" data-vendor="Acme Logistics" data-status="compliant" data-region="EMEA" data-compliance="96" data-invoices="1247" data-exposure="48210"><td><strong>Acme Logistics</strong><div style="font-family:var(--font-mono);font-size:10px;color:var(--text-tertiary)">VEN-0042 · EMEA</div></td><td><span class="badge b-success"><span class="dot"></span>Compliant</span></td><td><div class="ratio"><div class="ratio__track"><div class="ratio__fill" style="width:96%"></div></div><span style="font-family:var(--font-mono);">96%</span></div></td><td class="num">1,247</td><td class="num">$48,210</td><td><span class="badge b-ai"><span class="dot"></span>2</span></td><td><span class="click-hint">Click ▸</span></td></tr>
+              <tr class="clickable-row" data-go="invoice" data-vendor="Initech Carriers" data-status="compliant" data-region="EMEA" data-compliance="91" data-invoices="680" data-exposure="22180"><td><strong>Initech Carriers</strong><div style="font-family:var(--font-mono);font-size:10px;color:var(--text-tertiary)">VEN-0367 · EMEA</div></td><td><span class="badge b-success"><span class="dot"></span>Compliant</span></td><td><div class="ratio"><div class="ratio__track"><div class="ratio__fill" style="width:91%"></div></div><span style="font-family:var(--font-mono);">91%</span></div></td><td class="num">680</td><td class="num">$22,180</td><td>—</td><td><span class="click-hint">Click ▸</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== INVOICE (Screen 3) ============== -->
+    <section class="screen" data-id="invoice">
+      <div class="tb">
+        <div class="tb__row1">
+          <div>
+            <div class="breadcrumb"><a data-nav="overview">Audit</a><span class="sep">/</span><a data-nav="overview">Invoices</a><span class="sep">/</span><span class="current">INV-2024-08812</span></div>
+            <div class="tb__title">INV-2024-08812 · Globex Freight</div>
+            <div class="tb__subtitle">Issued 2026-04-22 · Contract CTR-NV-0427 · 2 exceptions detected</div>
+          </div>
+          <div class="tb__actions">
+            <button class="btn btn--ghost" data-nav="overview">‹ Back to vendors</button>
+            <button class="btn btn--ai" data-go="root">✦ AI batch recovery (17) →</button>
+          </div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="panel" style="display:flex;gap:24px;align-items:center;padding:16px 20px;">
+          <div><div style="font-size:10px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.04em;">Invoice</div><div style="font-family:var(--font-mono);font-weight:600;font-size:16px;">INV-2024-08812</div></div>
+          <div><div style="font-size:10px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.04em;">Vendor</div><div style="font-weight:500">Globex Freight</div></div>
+          <div><div style="font-size:10px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.04em;">Amount</div><div style="font-family:var(--font-mono);font-weight:600;">$6,262.00 <span style="color:var(--danger);font-size:12px;">(+$4,185)</span></div></div>
+          <div><div style="font-size:10px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.04em;">Contract</div><div style="font-family:var(--font-mono);font-size:13px;">CTR-NV-0427</div></div>
+          <div style="margin-left:auto"><span class="badge b-danger" style="font-size:12px;padding:4px 10px;"><span class="dot"></span>Non-Compliant</span></div>
+        </div>
+        <div class="mt-20">
+          <div class="tabs"><div class="tab">Audit Trail</div><div class="tab active">Line Items <span class="badge b-danger" style="margin-left:6px;"><span class="dot"></span>2</span></div><div class="tab">Exceptions <span class="badge b-danger" style="margin-left:6px;"><span class="dot"></span>2</span></div><div class="tab">Contract</div></div>
+          <div class="grid-2-3">
+            <div class="panel" style="padding:0;overflow:hidden;">
+              <div class="panel__head" style="padding:14px 18px 6px;margin-bottom:0;"><div><div class="panel__title">Invoiced vs Expected</div><div class="panel__sub">2 deviations detected · $4,185 total impact</div></div></div>
+              <table>
+                <thead><tr><th>#</th><th>Description</th><th class="num">Invoiced</th><th class="num">Expected</th><th class="num">Deviation</th></tr></thead>
+                <tbody>
+                  <tr><td>1</td><td>Express freight · LON→AMS</td><td class="num">$1,240.00</td><td class="num">$1,240.00</td><td class="num delta-zero">$0.00</td></tr>
+                  <tr><td>2</td><td>Surcharge · fuel</td><td class="num">$ 412.00</td><td class="num">$ 385.00</td><td class="num delta-pos">+$27.00</td></tr>
+                  <tr style="background:#FEF2F2"><td>3</td><td>Customs handling <span class="badge b-danger" style="margin-left:6px;"><span class="dot"></span>Tier mismatch</span></td><td class="num">$4,500.00</td><td class="num">$ 342.00</td><td class="num delta-pos">+$4,158.00</td></tr>
+                  <tr><td>4</td><td>Documentation fee</td><td class="num">$ 25.00</td><td class="num">$ 25.00</td><td class="num delta-zero">$0.00</td></tr>
+                  <tr><td>5</td><td>Insurance</td><td class="num">$ 85.00</td><td class="num">$ 85.00</td><td class="num delta-zero">$0.00</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <div class="exc">
+                <div class="exc__head"><div class="exc__title">Surcharge miscalculation</div><span class="badge b-danger"><span class="dot"></span>+$4,158</span></div>
+                <div class="exc__grid">
+                  <div><div class="exc__k">Deviation type</div><div class="exc__v">Rate-card tier mismatch</div></div>
+                  <div><div class="exc__k">Financial impact</div><div class="exc__v" style="color:var(--danger);font-weight:600;font-family:var(--font-mono);">+$4,158.00</div></div>
+                  <div><div class="exc__k">Root cause</div><div class="exc__v">Tier 3 surcharge applied; contract requires tier 1.</div></div>
+                  <div><div class="exc__k">Recommended action</div><div class="exc__v">Recover $4,158 from vendor.</div></div>
+                </div>
+              </div>
+              <div class="exc">
+                <div class="exc__head"><div class="exc__title">Fuel surcharge variance</div><span class="badge b-warning"><span class="dot"></span>+$27</span></div>
+                <div class="exc__grid"><div><div class="exc__k">Deviation type</div><div class="exc__v">Index drift</div></div><div><div class="exc__k">Financial impact</div><div class="exc__v" style="color:var(--warning);font-weight:600;font-family:var(--font-mono);">+$27.00</div></div></div>
+              </div>
+              <div class="ai-card">
+                <div class="ai-head"><div class="ai-icon">✦</div><div class="ai-title">17 invoices like this</div><div class="ai-conf">84%</div></div>
+                <div class="ai-body" style="font-size:12px;">Same surcharge tier error across 17 invoices. Total recoverable: <strong>$48,210</strong>.</div>
+                <div class="ai-actions"><button class="btn btn--ai" data-go="root">Open batch recovery →</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== ROOT CAUSE (Screen 4) ============== -->
+    <section class="screen" data-id="root">
+      <div class="tb">
+        <div class="tb__row1">
+          <div>
+            <div class="breadcrumb"><a data-nav="overview">Audit</a><span class="sep">/</span><span class="current">Root Cause Analysis</span></div>
+            <div class="tb__title">Root Cause Analysis</div>
+            <div class="tb__subtitle">8 categories · 247 exceptions · $1.262M total exposure</div>
+          </div>
+          <div class="tb__actions">
+            <div class="seg"><button class="active">Financial impact</button><button>Frequency</button></div>
+            <button class="btn btn--secondary">Export</button>
+          </div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="panel">
+          <div class="panel__head"><div><div class="panel__title">Exceptions by financial impact</div><div class="panel__sub">Pareto · top 4 categories drive 81% of leakage</div></div><span class="badge b-info"><span class="dot"></span>80/20 break at category 4</span></div>
+          <div class="pareto-wrap">
+            <div class="pareto-bars">
+              <div class="pareto-bar" style="height:90%"><div class="v">$412K</div><div class="lbl">Surcharge</div></div>
+              <div class="pareto-bar" style="height:72%"><div class="v">$298K</div><div class="lbl">Rate</div></div>
+              <div class="pareto-bar" style="height:48%"><div class="v">$184K</div><div class="lbl">Currency</div></div>
+              <div class="pareto-bar" style="height:34%"><div class="v">$148K</div><div class="lbl">Volume</div></div>
+              <div class="pareto-bar dim" style="height:22%"><div class="v">$92K</div><div class="lbl">Mapping</div></div>
+              <div class="pareto-bar dim" style="height:14%"><div class="v">$58K</div><div class="lbl">Override</div></div>
+              <div class="pareto-bar dim" style="height:10%"><div class="v">$42K</div><div class="lbl">Outdated</div></div>
+              <div class="pareto-bar dim" style="height:6%"><div class="v">$28K</div><div class="lbl">Missing</div></div>
+            </div>
+            <svg class="pareto-line" viewBox="0 0 800 200" preserveAspectRatio="none"><polyline points="50,180 150,140 250,108 350,90 450,75 550,65 650,60 750,55" stroke="#6D28D9" stroke-width="2" fill="none" stroke-dasharray="4,3"/><circle cx="350" cy="90" r="5" fill="#6D28D9"/><text x="360" y="86" font-family="IBM Plex Mono" font-size="11" fill="#6D28D9" font-weight="600">81%</text></svg>
+          </div>
+        </div>
+        <div class="grid-4 mt-20">
+          <div class="cat" style="border-left:3px solid var(--danger)" data-go="invoice"><div class="cat__top"><div class="cat__name">Surcharge miscalculation</div><div class="cat__impact">$412K</div></div><span class="badge b-danger"><span class="dot"></span>Severe</span><div class="cat__sub"><span><strong>89</strong> invoices</span><span><strong>$4,629</strong> avg</span></div></div>
+          <div class="cat" style="border-left:3px solid var(--danger)"><div class="cat__top"><div class="cat__name">Incorrect rate</div><div class="cat__impact">$298K</div></div><span class="badge b-danger"><span class="dot"></span>Severe</span><div class="cat__sub"><span><strong>54</strong> invoices</span><span><strong>$5,518</strong> avg</span></div></div>
+          <div class="cat" style="border-left:3px solid var(--warning)"><div class="cat__top"><div class="cat__name">Currency mismatch</div><div class="cat__impact">$184K</div></div><span class="badge b-warning"><span class="dot"></span>High</span><div class="cat__sub"><span><strong>32</strong> invoices</span><span><strong>$5,750</strong> avg</span></div></div>
+          <div class="cat" style="border-left:3px solid var(--warning)"><div class="cat__top"><div class="cat__name">Volume tier error</div><div class="cat__impact">$148K</div></div><span class="badge b-warning"><span class="dot"></span>High</span><div class="cat__sub"><span><strong>27</strong> invoices</span><span><strong>$5,481</strong> avg</span></div></div>
+        </div>
+        <div class="grid-3 mt-20">
+          <div class="ai-card" style="border-left:3px solid var(--danger)"><div class="ai-head"><div class="ai-icon" style="background:var(--danger)">!</div><div class="ai-title">Systemic issue</div><div class="ai-conf">91%</div></div><div class="ai-body" style="font-size:12px;">Rate-card v2.3 drove 73% of surcharge errors. Roll back recommended for 3 contracts.</div><div class="ai-actions"><button class="btn btn--ai">Initiate rollback</button></div></div>
+          <div class="ai-card" style="border-left:3px solid var(--warning)"><div class="ai-head"><div class="ai-icon" style="background:var(--warning)">⌁</div><div class="ai-title">Predictive alert</div><div class="ai-conf">76%</div></div><div class="ai-body" style="font-size:12px;">Pattern likely to repeat in Q2. Estimated future leakage: $52K.</div><div class="ai-actions"><button class="btn btn--ai">Schedule audit</button></div></div>
+          <div class="ai-card" style="border-left:3px solid var(--success)"><div class="ai-head"><div class="ai-icon" style="background:var(--success)">✦</div><div class="ai-title">Quick-win opportunity</div><div class="ai-conf">98%</div></div><div class="ai-body" style="font-size:12px;">9 outdated rate-card matches can be auto-resolved. $42K recoverable.</div><div class="ai-actions"><button class="btn btn--ai">Auto-resolve all</button></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== ERROR ============== -->
+    <section class="screen" data-id="error">
+      <div class="tb">
+        <div class="tb__row1">
+          <div>
+            <div class="breadcrumb"><span class="current">Compliance Overview</span></div>
+            <div class="tb__title">Compliance Overview · Q1 2026 <span class="stale-tag">PARTIAL DATA</span></div>
+            <div class="tb__subtitle">Last successful sync: 2026-04-22 09:14 · 2 sources unavailable</div>
+          </div>
+          <div class="tb__actions"><button class="btn btn--ghost">View error log</button><button class="btn btn--primary">↻ Retry sync</button></div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="error-banner">
+          <div class="error-banner__icon">!</div>
+          <div style="flex:1;"><div class="error-banner__title">Sync failed · 2 of 47 data sources unavailable</div><div class="error-banner__body">Showing partial results from 45 sources. The AI agent has paused new analysis until sync recovers.</div></div>
+          <div class="error-banner__actions"><button class="btn btn--ghost">Dismiss</button><button class="btn btn--danger">↻ Retry sync</button></div>
+        </div>
+        <div class="kpis">
+          <div class="kpi" style="opacity:.7"><div class="kpi__label">Fully compliant <span class="stale-tag">stale</span></div><div class="kpi__value">87.4%</div><div class="kpi__delta">as of Apr 22</div><div class="kpi__bar"><span style="width:87%"></span></div></div>
+          <div class="kpi" style="opacity:.7"><div class="kpi__label">Partially compliant <span class="stale-tag">stale</span></div><div class="kpi__value">9.2%</div><div class="kpi__delta">as of Apr 22</div><div class="kpi__bar"><span style="width:9.2%; background:var(--warning)"></span></div></div>
+          <div class="kpi" style="opacity:.7"><div class="kpi__label">Non-compliant <span class="stale-tag">stale</span></div><div class="kpi__value">3.4%</div><div class="kpi__delta">as of Apr 22</div><div class="kpi__bar"><span style="width:3.4%; background:var(--danger)"></span></div></div>
+          <div class="kpi" style="opacity:.7"><div class="kpi__label">Total exposure <span class="stale-tag">partial</span></div><div class="kpi__value">$1.21M</div><div class="kpi__delta">45 of 47 sources</div></div>
+          <div class="kpi" style="opacity:.7"><div class="kpi__label">Net leakage <span class="stale-tag">partial</span></div><div class="kpi__value">$172K</div><div class="kpi__delta">may be incomplete</div></div>
+        </div>
+        <div class="panel mt-20" style="background:#FFF8F8;border-left:3px solid var(--danger);">
+          <div class="panel__head">
+            <div><div class="panel__title" style="display:flex;align-items:center;gap:8px;"><span class="badge b-danger"><span class="dot"></span>Paused</span>AI agent has paused new analysis</div><div class="panel__sub" style="margin-top:6px;">Working with incomplete data could surface false patterns. The agent will resume automatically once all sources reconnect.</div></div>
+            <div class="panel__actions"><button class="btn btn--secondary">Continue with partial data</button><button class="btn btn--primary">↻ Retry sync</button></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"><span class="pulse"></span><span id="toastMsg">Demo step</span></div>
+
+<script>
+  // ---------- Routing ----------
+  const screens = document.querySelectorAll('[data-id]');
+  const pills = document.querySelectorAll('#screenPills .demo-pill');
+  const navItems = document.querySelectorAll('.sb__item');
+  const userRoleEl = document.getElementById('userRole');
+  const userRole = {
+    empty: 'Procurement Manager',
+    loading: 'Procurement Manager',
+    error: 'Procurement Manager',
+    overview: 'Procurement Manager',
+    invoice: 'Finance Controller',
+    root: 'Procurement Manager',
+    quality: 'Operations Analyst',
+    agent: 'Operations Analyst',
+  };
+  const navMap = {
+    empty: 'empty', loading: 'empty', error: 'empty',
+    quality: 'quality', agent: 'quality',
+    overview: 'overview',
+    invoice: 'invoice',
+    root: 'root',
+  };
+  function go(id) {
+    screens.forEach(s => s.classList.toggle('active', s.dataset.id === id));
+    pills.forEach(p => p.classList.toggle('active', p.dataset.screen === id));
+    navItems.forEach(n => n.classList.toggle('active', n.dataset.nav === navMap[id]));
+    if (userRoleEl) userRoleEl.textContent = userRole[id] || 'Procurement Manager';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  // Pill clicks
+  pills.forEach(p => p.addEventListener('click', () => go(p.dataset.screen)));
+  // Sidebar clicks
+  navItems.forEach(n => n.addEventListener('click', () => { const t = n.dataset.nav; if (t) go(t); }));
+  // In-screen click hotspots
+  document.body.addEventListener('click', e => {
+    const el = e.target.closest('[data-go]');
+    if (el) { e.preventDefault(); go(el.dataset.go); }
+  });
+
+  // ---------- Toast ----------
+  const toast = document.getElementById('toast');
+  const toastMsg = document.getElementById('toastMsg');
+  let toastTimeout;
+  function showToast(msg, ms = 1800) {
+    toastMsg.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => toast.classList.remove('show'), ms);
+  }
+
+  // ---------- Loading bar simulation ----------
+  let loadingInterval;
+  function startLoading() {
+    const bar = document.getElementById('loadingBar');
+    const pct = document.getElementById('loadingPct');
+    const meta = document.getElementById('loadingMeta');
+    let v = 0;
+    if (loadingInterval) clearInterval(loadingInterval);
+    if (bar) bar.style.width = '0%';
+    loadingInterval = setInterval(() => {
+      v += 6 + Math.random() * 4;
+      if (v > 100) v = 100;
+      if (bar) bar.style.width = v + '%';
+      if (pct) pct.textContent = Math.floor(v) + '%';
+      if (meta) {
+        const sources = Math.floor((v / 100) * 47);
+        meta.textContent = `${sources} of 47 sources processed · ETA ${Math.max(0, 90 - Math.floor(v * 0.9))}s`;
+      }
+      if (v >= 100) clearInterval(loadingInterval);
+    }, 220);
+  }
+
+  // ---------- Story playback ----------
+  const story = [
+    { id: 'empty',    msg: '1 / 7 · The user starts with no data', wait: 2400 },
+    { id: 'loading',  msg: '2 / 7 · Upload triggered · ingesting',  wait: 3000, before: () => startLoading() },
+    { id: 'agent',    msg: '3 / 7 · AI agent cleans the data',       wait: 3000 },
+    { id: 'quality',  msg: '4 / 7 · Quality verified · 67 → 94',     wait: 2600 },
+    { id: 'overview', msg: '5 / 7 · Compliance overview',             wait: 2600 },
+    { id: 'invoice',  msg: '6 / 7 · Drill into a flagged invoice',   wait: 2600 },
+    { id: 'root',     msg: '7 / 7 · Root cause + AI insights',        wait: 0    },
+  ];
+  const playBtn = document.getElementById('playBtn');
+  let storyTimer = null;
+  let playing = false;
+
+  function stopStory() {
+    if (storyTimer) clearTimeout(storyTimer);
+    storyTimer = null;
+    playing = false;
+    playBtn.textContent = '▶ Play story';
+    playBtn.classList.remove('playing');
+  }
+  function playStory(i = 0) {
+    if (i >= story.length) { stopStory(); showToast('Story complete', 2000); return; }
+    const s = story[i];
+    if (s.before) s.before();
+    go(s.id);
+    showToast(s.msg, Math.max(1600, s.wait - 200));
+    storyTimer = setTimeout(() => playStory(i + 1), s.wait);
+  }
+  playBtn.addEventListener('click', () => {
+    if (playing) { stopStory(); return; }
+    playing = true;
+    playBtn.textContent = '■ Stop';
+    playBtn.classList.add('playing');
+    playStory(0);
+  });
+
+  // ---------- Sort + Filter (Screen 1 vendor table) ----------
+  const FILTER_OPTIONS = {
+    vendor: { label: 'Vendor', options: ['Globex Freight','Northwind Supply','Acme Logistics','Initech Carriers'] },
+    date: { label: 'Date', options: ['Q4 2025','Q1 2026','Q2 2026','YTD'] },
+    region: { label: 'Geography', options: ['EMEA','NA','APAC'] },
+    contract: { label: 'Contract', options: ['All','CTR-NV-0427','CTR-NV-0118'] },
+    serviceLevel: { label: 'Service Level', options: ['Express','Standard','Economy'] },
+  };
+  // currently applied filters (multi-select per dimension)
+  const filterState = {
+    vendor: [],
+    date: ['Q1 2026'],
+    region: [],
+    contract: ['All'],
+    serviceLevel: [],
+  };
+
+  function buildFilterDropdown(wrap) {
+    const key = wrap.dataset.filter;
+    const cfg = FILTER_OPTIONS[key];
+    if (!cfg) return;
+    const dd = document.createElement('div');
+    dd.className = 'filter-dd';
+    dd.innerHTML = `
+      <div class="filter-dd__title">${cfg.label}</div>
+      ${cfg.options.map(opt => `
+        <label class="filter-dd__opt">
+          <input type="checkbox" data-value="${opt}" ${filterState[key].includes(opt) ? 'checked' : ''}/>
+          <span>${opt}</span>
+        </label>
+      `).join('')}
+      <div class="filter-dd__divider"></div>
+      <div class="filter-dd__footer">
+        <button class="btn btn--ghost" data-act="clear">Clear</button>
+        <button class="btn btn--primary" data-act="apply">Apply</button>
+      </div>
+    `;
+    wrap.appendChild(dd);
+  }
+
+  function refreshFilterButton(wrap) {
+    const key = wrap.dataset.filter;
+    const btn = wrap.querySelector('.filter-btn');
+    const cfg = FILTER_OPTIONS[key];
+    const sel = filterState[key];
+    if (sel.length === 0) {
+      btn.classList.remove('filter-btn--applied');
+      btn.innerHTML = `${cfg.label} <span class="caret">▾</span>`;
+    } else if (sel.length === 1) {
+      btn.classList.add('filter-btn--applied');
+      btn.innerHTML = `${cfg.label}: ${sel[0]} <span class="caret">▾</span>`;
+    } else {
+      btn.classList.add('filter-btn--applied');
+      btn.innerHTML = `${cfg.label}: ${sel.length} selected <span class="caret">▾</span>`;
+    }
+  }
+
+  function applyTableFilters() {
+    const tbody = document.querySelector('#vendorTable tbody');
+    if (!tbody) return;
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    let visible = 0;
+    rows.forEach(row => {
+      const matches = Object.keys(filterState).every(key => {
+        const sel = filterState[key];
+        if (sel.length === 0) return true;
+        if (key === 'date' || key === 'contract') return true; // these don't filter the demo rows
+        const rv = row.dataset[key];
+        return sel.includes(rv);
+      });
+      row.style.display = matches ? '' : 'none';
+      if (matches) visible++;
+    });
+    // Update count label
+    const lbl = document.querySelector('#vendorTable').closest('.panel').querySelector('.panel__title');
+    if (lbl) lbl.textContent = `All vendors · ${visible} of ${rows.length} shown`;
+  }
+
+  function closeAllFilterDropdowns(except) {
+    document.querySelectorAll('.filter-wrap.open').forEach(w => { if (w !== except) w.classList.remove('open'); });
+  }
+
+  // Initialize all filter dropdowns
+  document.querySelectorAll('.filter-wrap').forEach(wrap => {
+    buildFilterDropdown(wrap);
+    refreshFilterButton(wrap);
+    const btn = wrap.querySelector('.filter-btn');
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const wasOpen = wrap.classList.contains('open');
+      closeAllFilterDropdowns();
+      if (!wasOpen) wrap.classList.add('open');
+    });
+    // Handle dropdown actions
+    wrap.querySelector('.filter-dd').addEventListener('click', e => {
+      e.stopPropagation();
+      const act = e.target.dataset.act;
+      if (act === 'apply') {
+        const checked = Array.from(wrap.querySelectorAll('input[type=checkbox]:checked')).map(cb => cb.dataset.value);
+        filterState[wrap.dataset.filter] = checked;
+        refreshFilterButton(wrap);
+        applyTableFilters();
+        wrap.classList.remove('open');
+      } else if (act === 'clear') {
+        wrap.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = false);
+        filterState[wrap.dataset.filter] = [];
+        refreshFilterButton(wrap);
+        applyTableFilters();
+        wrap.classList.remove('open');
+      }
+    });
+  });
+
+  // Click outside closes dropdowns
+  document.addEventListener('click', () => closeAllFilterDropdowns());
+
+  // Clear all filters
+  const clearAllBtn = document.getElementById('clearFilters');
+  if (clearAllBtn) {
+    clearAllBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      Object.keys(filterState).forEach(k => filterState[k] = []);
+      document.querySelectorAll('.filter-wrap').forEach(w => {
+        w.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = false);
+        refreshFilterButton(w);
+      });
+      applyTableFilters();
+    });
+  }
+
+  // ---------- Sort ----------
+  document.querySelectorAll('#vendorTable th.sortable').forEach(th => {
+    th.addEventListener('click', () => {
+      const key = th.dataset.sortKey;
+      const type = th.dataset.sortType;
+      const tbody = document.querySelector('#vendorTable tbody');
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+      const currentDir = th.dataset.sortDir || 'asc';
+      const newDir = currentDir === 'asc' ? 'desc' : 'asc';
+      // Reset all sort indicators
+      document.querySelectorAll('#vendorTable th.sortable').forEach(h => {
+        h.classList.remove('sorted');
+        delete h.dataset.sortDir;
+        const arr = h.querySelector('.sort-arrow, .sort-arrow-inactive');
+        if (arr) {
+          arr.className = 'sort-arrow-inactive';
+          arr.textContent = '↕';
+        }
+      });
+      th.classList.add('sorted');
+      th.dataset.sortDir = newDir;
+      const arrow = th.querySelector('.sort-arrow-inactive, .sort-arrow');
+      if (arrow) {
+        arrow.className = 'sort-arrow';
+        arrow.textContent = newDir === 'desc' ? '▼' : '▲';
+      }
+      // Sort
+      rows.sort((a, b) => {
+        let av = a.dataset[key], bv = b.dataset[key];
+        if (type === 'number') { av = parseFloat(av); bv = parseFloat(bv); }
+        if (av < bv) return newDir === 'asc' ? -1 : 1;
+        if (av > bv) return newDir === 'asc' ? 1 : -1;
+        return 0;
+      });
+      rows.forEach(r => tbody.appendChild(r));
+    });
+  });
+
+  // Initial filter pass to set count label
+  applyTableFilters();
+
+  // Initialize
+  go('overview');
+</script>
+</body>
+</html>

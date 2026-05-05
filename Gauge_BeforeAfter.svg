@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 470 160" width="470" height="160" font-family="IBM Plex Sans, -apple-system, sans-serif">
+
+  <!-- ============ BEFORE gauge (score 67) ============ -->
+  <g transform="translate(80,80)">
+    <!-- track -->
+    <circle r="52" cx="0" cy="0" fill="none" stroke="#F3F4F7" stroke-width="11"/>
+    <!-- fill (67% of circumference 326.7 = 218.9) -->
+    <circle r="52" cx="0" cy="0" fill="none" stroke="#D97706" stroke-width="11"
+            stroke-linecap="round"
+            stroke-dasharray="218.9 326.7"
+            transform="rotate(-90)"/>
+    <!-- number -->
+    <text x="0" y="2" text-anchor="middle" dominant-baseline="middle"
+          font-size="32" font-weight="600" fill="#0F172A"
+          font-family="IBM Plex Mono, ui-monospace, monospace">67</text>
+    <!-- label -->
+    <text x="0" y="22" text-anchor="middle"
+          font-size="11" font-weight="600" letter-spacing="1.2"
+          fill="#64748B">BEFORE</text>
+  </g>
+
+  <!-- ============ Arrow ============ -->
+  <g transform="translate(235,80)" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" fill="none">
+    <line x1="-30" y1="0" x2="30" y2="0"/>
+    <polyline points="20,-7 30,0 20,7"/>
+  </g>
+
+  <!-- ============ AFTER gauge (score 94) ============ -->
+  <g transform="translate(390,80)">
+    <!-- track -->
+    <circle r="52" cx="0" cy="0" fill="none" stroke="#F3F4F7" stroke-width="11"/>
+    <!-- fill (94% of circumference 326.7 = 307.1) -->
+    <circle r="52" cx="0" cy="0" fill="none" stroke="#16A34A" stroke-width="11"
+            stroke-linecap="round"
+            stroke-dasharray="307.1 326.7"
+            transform="rotate(-90)"/>
+    <!-- number -->
+    <text x="0" y="2" text-anchor="middle" dominant-baseline="middle"
+          font-size="32" font-weight="600" fill="#0F172A"
+          font-family="IBM Plex Mono, ui-monospace, monospace">94</text>
+    <!-- label -->
+    <text x="0" y="22" text-anchor="middle"
+          font-size="11" font-weight="600" letter-spacing="1.2"
+          fill="#64748B">AFTER</text>
+  </g>
+
+</svg>

@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>NovaCorp · State Variants (Empty / Loading / Error / Agent-running)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --brand: #003DA5; --brand-hover: #002F80; --brand-tint: #E5EBF6;
+    --ai: #6D28D9; --ai-tint: #F1ECFB;
+    --success: #16A34A; --success-tint: #DCFCE7; --success-text: #065F46;
+    --warning: #D97706; --warning-tint: #FEF3C7; --warning-text: #92400E;
+    --danger: #DC2626; --danger-tint: #FEE2E2; --danger-text: #991B1B;
+    --info: #2563EB; --info-tint: #DBEAFE;
+    --sidebar-bg: #0D1117; --sidebar-border: #1C232E; --sidebar-text: #C9D1D9; --sidebar-muted: #8B949E;
+    --bg-page: #F0F2F5; --bg-surface: #FFFFFF; --bg-subtle: #F8F9FB; --bg-hover: #F3F4F7;
+    --text-primary: #0F172A; --text-secondary: #475569; --text-tertiary: #64748B; --text-disabled: #94A3B8;
+    --border-subtle: #E5E7EB; --border-default: #D1D5DB;
+    --r-sm: 4px; --r-md: 6px; --r-lg: 8px; --r-pill: 999px;
+    --shadow-sm: 0 1px 2px rgba(15,23,42,.06);
+    --shadow-md: 0 2px 6px rgba(15,23,42,.08), 0 1px 2px rgba(15,23,42,.04);
+    --font-sans: 'IBM Plex Sans', -apple-system, sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 0; background: #DCDFE3; font-family: var(--font-sans); color: var(--text-primary); font-size: 13px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  .doc-header { background: linear-gradient(135deg, #001F54 0%, #003DA5 100%); color: #fff; padding: 32px 40px; max-width: 1280px; margin: 24px auto 0; border-radius: 12px; }
+  .doc-header h1 { margin: 0 0 6px; font-size: 28px; font-weight: 700; letter-spacing: -.02em; }
+  .doc-header p { margin: 0; opacity: .9; font-size: 14px; max-width: 760px; }
+  .doc-header .index { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+  .doc-header .index a { color: #fff; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.2); padding: 6px 12px; border-radius: var(--r-pill); text-decoration: none; font-size: 12px; }
+  .screen-marker { max-width: 1280px; margin: 32px auto 8px; padding: 0 40px; display: flex; align-items: center; gap: 12px; color: #1B2632; font-size: 13px; font-weight: 600; }
+  .screen-marker .pill { background: var(--brand); padding: 4px 10px; border-radius: var(--r-pill); font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #fff; font-weight: 600; }
+  .screen-marker .pill--ai { background: var(--ai); }
+  .screen-marker .pill--warning { background: var(--warning); }
+  .screen-marker .pill--danger { background: var(--danger); }
+  .screen-marker .meta { margin-left: auto; color: #5C6473; font-family: var(--font-mono); font-size: 11px; font-weight: 400; }
+
+  /* Screen frame */
+  .screen { width: 1280px; margin: 0 auto 48px; background: var(--bg-page); border-radius: 12px; overflow: hidden; box-shadow: 0 12px 32px rgba(0,0,0,.12); display: grid; grid-template-columns: 240px 1fr; min-height: 760px; }
+
+  /* Sidebar */
+  .sb { background: var(--sidebar-bg); color: var(--sidebar-text); padding: 20px 14px; font-size: 13px; }
+  .sb__logo { color: #fff; font-weight: 700; font-size: 16px; padding: 0 8px 18px; border-bottom: 1px solid var(--sidebar-border); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .sb__logo-mark { width: 22px; height: 22px; background: var(--brand); border-radius: 5px; display: grid; place-items: center; color: #fff; font-size: 13px; }
+  .sb__group { color: var(--sidebar-muted); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; padding: 14px 8px 4px; }
+  .sb__item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--r-md); color: var(--sidebar-text); margin-bottom: 2px; }
+  .sb__item.active { background: rgba(0,61,165,.18); color: #fff; border-left: 2px solid var(--brand); padding-left: 8px; }
+  .sb__icon { width: 16px; display: inline-block; text-align: center; opacity: .8; font-size: 14px; }
+  .sb__phase { margin-left: auto; font-family: var(--font-mono); font-size: 10px; background: rgba(255,255,255,.08); padding: 2px 6px; border-radius: var(--r-sm); color: var(--sidebar-muted); }
+  .sb__user { margin-top: 32px; padding: 12px 8px; border-top: 1px solid var(--sidebar-border); display: flex; align-items: center; gap: 10px; }
+  .sb__avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #003DA5, #6D28D9); display: grid; place-items: center; color: #fff; font-weight: 600; font-size: 12px; }
+  .sb__user-name { color: #fff; font-size: 13px; font-weight: 500; }
+  .sb__user-role { color: var(--sidebar-muted); font-size: 11px; }
+
+  /* Top bar */
+  .tb { background: var(--bg-surface); border-bottom: 1px solid var(--border-subtle); padding: 16px 28px; }
+  .tb__row1 { display: flex; align-items: center; gap: 16px; }
+  .breadcrumb { display: flex; gap: 6px; align-items: center; font-size: 12px; color: var(--text-tertiary); }
+  .breadcrumb .current { color: var(--text-primary); font-weight: 500; }
+  .breadcrumb .sep { color: var(--text-disabled); }
+  .tb__title { font-size: 22px; font-weight: 700; color: var(--text-primary); letter-spacing: -.01em; }
+  .tb__subtitle { font-size: 13px; color: var(--text-tertiary); margin-top: 2px; }
+  .tb__actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+
+  /* Body */
+  .body { padding: 24px 28px 28px; }
+
+  /* Buttons */
+  .btn { display: inline-flex; align-items: center; gap: 6px; border-radius: var(--r-md); font-family: var(--font-sans); font-weight: 500; cursor: pointer; border: 1px solid transparent; padding: 8px 14px; font-size: 13px; line-height: 1; }
+  .btn--primary { background: var(--brand); color: #fff; }
+  .btn--secondary { background: #fff; color: var(--brand); border-color: var(--brand); }
+  .btn--ghost { background: transparent; color: var(--text-secondary); }
+  .btn--danger { background: var(--danger); color: #fff; }
+  .btn--ai { background: var(--ai); color: #fff; }
+  .btn--lg { padding: 11px 20px; font-size: 14px; }
+
+  /* Badges */
+  .badge { display: inline-flex; align-items: center; gap: 5px; padding: 2px 8px; border-radius: var(--r-pill); font-size: 11px; font-weight: 600; line-height: 1.4; }
+  .badge .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .b-success { background: var(--success-tint); color: var(--success-text); }
+  .b-success .dot { background: var(--success); }
+  .b-warning { background: var(--warning-tint); color: var(--warning-text); }
+  .b-warning .dot { background: var(--warning); }
+  .b-danger { background: var(--danger-tint); color: var(--danger-text); }
+  .b-danger .dot { background: var(--danger); }
+  .b-ai { background: var(--ai-tint); color: var(--ai); }
+  .b-ai .dot { background: var(--ai); }
+  .b-info { background: var(--info-tint); color: #1E40AF; }
+  .b-info .dot { background: var(--info); }
+
+  /* Panels */
+  .panel { background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--r-lg); padding: 18px; }
+
+  /* ============ Empty state ============ */
+  .empty-hero {
+    background: #fff; border: 2px dashed var(--border-default); border-radius: 12px;
+    padding: 56px 40px; text-align: center;
+    margin-top: 32px;
+  }
+  .empty-hero__icon {
+    width: 80px; height: 80px; margin: 0 auto 20px;
+    border-radius: 50%; background: var(--brand-tint); color: var(--brand);
+    display: grid; place-items: center;
+  }
+  .empty-hero__icon svg { width: 38px; height: 38px; }
+  .empty-hero__title { font-size: 22px; font-weight: 700; color: var(--text-primary); margin: 0 0 10px; letter-spacing: -.01em; }
+  .empty-hero__sub { font-size: 14px; color: var(--text-secondary); max-width: 480px; margin: 0 auto 24px; line-height: 1.55; }
+  .empty-hero__ctas { display: flex; gap: 10px; justify-content: center; margin-bottom: 28px; }
+  .formats { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .format { display: inline-flex; align-items: center; gap: 6px; background: var(--bg-subtle); border: 1px solid var(--border-subtle); border-radius: var(--r-pill); padding: 5px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary); }
+
+  .next-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }
+  .step-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--r-lg); padding: 16px 18px; display: flex; gap: 12px; align-items: flex-start; }
+  .step-num { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: var(--brand-tint); color: var(--brand); font-weight: 700; font-size: 13px; display: grid; place-items: center; font-family: var(--font-mono); }
+  .step-card h4 { margin: 0 0 4px; font-size: 13px; font-weight: 600; }
+  .step-card p { margin: 0; font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+
+  /* ============ Loading state ============ */
+  .skel { background: linear-gradient(90deg, #EEF1F4 0%, #F7F8FA 50%, #EEF1F4 100%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: var(--r-sm); }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+  .progress-banner {
+    background: var(--brand-tint); border: 1px solid #C7D5EC; border-left: 3px solid var(--brand);
+    border-radius: var(--r-lg); padding: 14px 18px; display: flex; align-items: center; gap: 14px; margin-bottom: 20px;
+  }
+  .progress-banner .pulse { width: 10px; height: 10px; border-radius: 50%; background: var(--brand); flex-shrink: 0; animation: pulse 1.2s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.6); opacity: .4; } }
+  .progress-bar { flex: 1; background: #fff; border-radius: var(--r-pill); height: 8px; overflow: hidden; }
+  .progress-bar > span { display: block; height: 100%; background: var(--brand); border-radius: var(--r-pill); width: 47%; transition: width 1s ease; }
+  .progress-meta { font-family: var(--font-mono); font-size: 12px; color: var(--brand); font-weight: 500; flex-shrink: 0; }
+
+  .kpi-skel { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px; }
+  .kpi-skel-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--r-lg); padding: 14px 16px; }
+
+  /* ============ Error state ============ */
+  .error-banner {
+    background: #FFF5F5; border: 1px solid #FECACA; border-left: 3px solid var(--danger);
+    border-radius: var(--r-lg); padding: 14px 18px; display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px;
+  }
+  .error-banner__icon { width: 32px; height: 32px; border-radius: 50%; background: var(--danger-tint); color: var(--danger); display: grid; place-items: center; flex-shrink: 0; font-weight: 700; font-size: 16px; }
+  .error-banner__title { font-weight: 600; font-size: 14px; color: var(--danger-text); }
+  .error-banner__body { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+  .error-banner__actions { margin-left: auto; display: flex; gap: 8px; flex-shrink: 0; }
+  .stale-tag { display: inline-flex; align-items: center; gap: 4px; background: var(--warning-tint); color: var(--warning-text); padding: 2px 7px; border-radius: var(--r-sm); font-size: 10px; font-weight: 600; margin-left: 6px; }
+
+  /* KPI cards - normal styling reused */
+  .kpis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .kpi { background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--r-lg); padding: 14px 16px; }
+  .kpi__label { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .04em; font-weight: 500; }
+  .kpi__value { font-family: var(--font-mono); font-size: 24px; font-weight: 600; color: var(--text-primary); margin-top: 4px; }
+  .kpi__delta { font-family: var(--font-mono); font-size: 11px; margin-top: 3px; color: var(--text-tertiary); }
+  .kpi__bar { height: 4px; background: var(--bg-hover); border-radius: 2px; margin-top: 10px; overflow: hidden; }
+  .kpi__bar > span { display: block; height: 100%; background: var(--brand); }
+  .kpi--stale { opacity: .7; position: relative; }
+
+  /* Affected sources list */
+  .affected-list { display: flex; flex-direction: column; gap: 6px; font-family: var(--font-mono); font-size: 12px; }
+  .affected-row { display: flex; gap: 10px; align-items: center; padding: 8px 12px; background: var(--bg-subtle); border-radius: var(--r-sm); }
+  .affected-row .badge { margin-left: auto; }
+
+  /* ============ Agent running (Screen 2 variant) ============ */
+  .gauge-row { display: flex; gap: 28px; align-items: center; }
+  .gauge { width: 130px; height: 130px; position: relative; flex-shrink: 0; }
+  .gauge svg { transform: rotate(-90deg); }
+  .gauge__track { fill: none; stroke: var(--bg-hover); stroke-width: 11; }
+  .gauge__fill { fill: none; stroke-width: 11; stroke-linecap: round; }
+  .gauge__inner { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; }
+  .gauge__num { font-family: var(--font-mono); font-size: 28px; font-weight: 600; }
+  .gauge__lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-tertiary); margin-top: 2px; }
+
+  /* Pipeline */
+  .pipeline { display: flex; flex-direction: column; gap: 0; }
+  .step { display: flex; gap: 12px; padding: 10px 0; position: relative; }
+  .step:not(:last-child)::before { content: ''; position: absolute; left: 13px; top: 38px; bottom: -10px; width: 2px; background: var(--border-subtle); }
+  .step__marker { width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 12px; z-index: 1; }
+  .step--ok .step__marker { background: var(--success); }
+  .step--running .step__marker { background: var(--brand); animation: pulse-bg 1.6s ease-in-out infinite; box-shadow: 0 0 0 0 var(--brand); }
+  @keyframes pulse-bg { 0%, 100% { box-shadow: 0 0 0 0 rgba(0,61,165,.5); } 50% { box-shadow: 0 0 0 8px rgba(0,61,165,0); } }
+  .step--pending .step__marker { background: var(--border-default); }
+  .step__body { flex: 1; padding-top: 3px; }
+  .step__title { font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+  .step__meta { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+  .step__progress { height: 4px; background: var(--bg-hover); border-radius: 2px; margin-top: 8px; overflow: hidden; max-width: 320px; }
+  .step__progress > span { display: block; height: 100%; background: var(--brand); border-radius: 2px; }
+
+  .panel__head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .panel__title { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+  .panel__sub { font-size: 11px; color: var(--text-tertiary); }
+  .panel__actions { margin-left: auto; display: flex; gap: 8px; }
+  .grid-2-3 { display: grid; grid-template-columns: 3fr 2fr; gap: 16px; }
+  .mt-20 { margin-top: 20px; }
+
+  @media (max-width: 1280px) { body { overflow-x: auto; } }
+</style>
+</head>
+<body>
+
+<header class="doc-header">
+  <h1>NovaCorp · State Variants</h1>
+  <p>Empty, loading, error, and agent-running states. Each is a self-contained 1280px frame to demonstrate the platform's behavior beyond the happy path. Same design system as the main wireframes.</p>
+  <div class="index">
+    <a href="#empty">Screen 1 · Empty</a>
+    <a href="#loading">Screen 1 · Loading</a>
+    <a href="#error">Screen 1 · Error</a>
+    <a href="#agent">Screen 2 · Agent running</a>
+  </div>
+</header>
+
+<!-- ============================ EMPTY ============================ -->
+<div class="screen-marker"><span class="pill">STATE 1</span><span>Compliance Overview · Empty state</span><span class="meta">1280 × auto</span></div>
+<section class="screen" id="empty">
+  <aside class="sb">
+    <div class="sb__logo"><span class="sb__logo-mark">◆</span>NovaCorp</div>
+    <div class="sb__group">Phase 1 · Cleaning</div>
+    <div class="sb__item"><span class="sb__icon">📥</span>Ingest data<span class="sb__phase">P1</span></div>
+    <div class="sb__item"><span class="sb__icon">📊</span>Data quality<span class="sb__phase">P1</span></div>
+    <div class="sb__group">Phase 2 · Audit</div>
+    <div class="sb__item active"><span class="sb__icon">📋</span>Compliance overview<span class="sb__phase">P2</span></div>
+    <div class="sb__item"><span class="sb__icon">🧾</span>Invoices<span class="sb__phase">P2</span></div>
+    <div class="sb__item"><span class="sb__icon">⚠</span>Exceptions<span class="sb__phase">P2</span></div>
+    <div class="sb__group">Phase 3 · Benchmarking</div>
+    <div class="sb__item"><span class="sb__icon">📈</span>Indicators<span class="sb__phase">P3</span></div>
+    <div class="sb__user"><div class="sb__avatar">YP</div><div><div class="sb__user-name">Yossi P.</div><div class="sb__user-role">Procurement Manager</div></div></div>
+  </aside>
+  <main>
+    <div class="tb">
+      <div class="tb__row1">
+        <div>
+          <div class="breadcrumb"><a>Audit</a><span class="sep">/</span><span class="current">Compliance Overview</span></div>
+          <div class="tb__title">Compliance Overview</div>
+          <div class="tb__subtitle">No data ingested yet</div>
+        </div>
+        <div class="tb__actions">
+          <button class="btn btn--ghost">View documentation</button>
+          <button class="btn btn--primary">+ Upload file</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="empty-hero">
+        <div class="empty-hero__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+        </div>
+        <h2 class="empty-hero__title">No invoices to audit yet</h2>
+        <p class="empty-hero__sub">Upload your first invoice file to start. We'll clean the data, match it against your contracts, and flag anything that needs attention — usually within 90 seconds.</p>
+        <div class="empty-hero__ctas">
+          <button class="btn btn--primary btn--lg">📥 Upload file</button>
+          <button class="btn btn--secondary btn--lg">Connect a data source</button>
+        </div>
+        <div class="formats">
+          <span class="format">.csv</span>
+          <span class="format">.xlsx</span>
+          <span class="format">.json</span>
+          <span class="format">SAP Concur</span>
+          <span class="format">Coupa</span>
+          <span class="format">+ 8 more</span>
+        </div>
+      </div>
+
+      <div class="next-steps">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <div><h4>Ingest &amp; clean</h4><p>The agent normalizes currencies, dedups rows, and validates schema automatically.</p></div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <div><h4>Match against contracts</h4><p>Every line item is checked against your active contracts and rate cards.</p></div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <div><h4>Surface exceptions</h4><p>You'll see a ranked list of vendors and a clear path to recover any leakage.</p></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- ============================ LOADING ============================ -->
+<div class="screen-marker"><span class="pill pill--ai">STATE 2</span><span>Compliance Overview · Loading / syncing</span><span class="meta">1280 × auto</span></div>
+<section class="screen" id="loading">
+  <aside class="sb">
+    <div class="sb__logo"><span class="sb__logo-mark">◆</span>NovaCorp</div>
+    <div class="sb__group">Phase 1 · Cleaning</div>
+    <div class="sb__item"><span class="sb__icon">📥</span>Ingest data<span class="sb__phase">P1</span></div>
+    <div class="sb__item"><span class="sb__icon">📊</span>Data quality<span class="sb__phase">P1</span></div>
+    <div class="sb__group">Phase 2 · Audit</div>
+    <div class="sb__item active"><span class="sb__icon">📋</span>Compliance overview<span class="sb__phase">P2</span></div>
+    <div class="sb__item"><span class="sb__icon">🧾</span>Invoices<span class="sb__phase">P2</span></div>
+    <div class="sb__item"><span class="sb__icon">⚠</span>Exceptions<span class="sb__phase">P2</span></div>
+    <div class="sb__group">Phase 3 · Benchmarking</div>
+    <div class="sb__item"><span class="sb__icon">📈</span>Indicators<span class="sb__phase">P3</span></div>
+    <div class="sb__user"><div class="sb__avatar">YP</div><div><div class="sb__user-name">Yossi P.</div><div class="sb__user-role">Procurement Manager</div></div></div>
+  </aside>
+  <main>
+    <div class="tb">
+      <div class="tb__row1">
+        <div>
+          <div class="breadcrumb"><a>Audit</a><span class="sep">/</span><span class="current">Compliance Overview</span></div>
+          <div class="tb__title">Compliance Overview · Q1 2026</div>
+          <div class="tb__subtitle">Syncing data — agent will analyze once complete</div>
+        </div>
+        <div class="tb__actions">
+          <button class="btn btn--ghost">Cancel sync</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="body">
+      <!-- Progress banner -->
+      <div class="progress-banner">
+        <span class="pulse"></span>
+        <div style="flex-shrink:0;">
+          <div style="font-size:13px; font-weight:600; color:var(--brand);">Syncing data sources</div>
+          <div style="font-size:11px; color:var(--text-tertiary); margin-top:2px;">22 of 47 sources processed · ETA 1m 30s</div>
+        </div>
+        <div class="progress-bar"><span></span></div>
+        <div class="progress-meta">47%</div>
+      </div>
+
+      <!-- Skeleton KPIs -->
+      <div class="kpi-skel">
+        <div class="kpi-skel-card"><div class="skel" style="height:11px;width:60%"></div><div class="skel" style="height:24px;width:55%;margin-top:8px"></div><div class="skel" style="height:4px;width:100%;margin-top:14px"></div></div>
+        <div class="kpi-skel-card"><div class="skel" style="height:11px;width:65%"></div><div class="skel" style="height:24px;width:45%;margin-top:8px"></div><div class="skel" style="height:4px;width:100%;margin-top:14px"></div></div>
+        <div class="kpi-skel-card"><div class="skel" style="height:11px;width:55%"></div><div class="skel" style="height:24px;width:40%;margin-top:8px"></div><div class="skel" style="height:4px;width:100%;margin-top:14px"></div></div>
+        <div class="kpi-skel-card"><div class="skel" style="height:11px;width:60%"></div><div class="skel" style="height:24px;width:50%;margin-top:8px"></div><div class="skel" style="height:11px;width:35%;margin-top:6px"></div></div>
+        <div class="kpi-skel-card"><div class="skel" style="height:11px;width:55%"></div><div class="skel" style="height:24px;width:48%;margin-top:8px"></div><div class="skel" style="height:11px;width:40%;margin-top:6px"></div></div>
+      </div>
+
+      <!-- Skeleton AI panel -->
+      <div class="panel" style="background:linear-gradient(180deg,var(--ai-tint) 0%,#fff 80%); border-color:#DDD6FE; border-left:3px solid var(--ai); margin-bottom:20px;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+          <div style="width:28px; height:28px; border-radius:50%; background:var(--ai); color:#fff; display:grid; place-items:center; font-weight:700; opacity:.6;">✦</div>
+          <div class="skel" style="height:14px; width:240px;"></div>
+          <div class="skel" style="height:18px; width:90px; border-radius:999px; margin-left:auto;"></div>
+        </div>
+        <div class="skel" style="height:10px; width:100%; margin-bottom:6px;"></div>
+        <div class="skel" style="height:10px; width:88%; margin-bottom:6px;"></div>
+        <div class="skel" style="height:10px; width:64%;"></div>
+        <div style="font-size:11px; color:var(--ai); margin-top:14px; font-style:italic;">✦ Agent will surface insights once data sync completes…</div>
+      </div>
+
+      <!-- Skeleton chart + table -->
+      <div class="grid-2-3">
+        <div class="panel">
+          <div class="skel" style="height:14px; width:160px; margin-bottom:6px;"></div>
+          <div class="skel" style="height:10px; width:240px; margin-bottom:18px;"></div>
+          <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:24px; align-items:end; height:180px;">
+            <div class="skel" style="height:75%; border-radius:3px 3px 0 0"></div>
+            <div class="skel" style="height:48%; border-radius:3px 3px 0 0"></div>
+            <div class="skel" style="height:22%; border-radius:3px 3px 0 0"></div>
+            <div class="skel" style="height:60%; border-radius:3px 3px 0 0"></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="skel" style="height:14px; width:200px; margin-bottom:6px;"></div>
+          <div class="skel" style="height:10px; width:140px; margin-bottom:16px;"></div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <div style="display:flex; gap:10px; align-items:center;"><div class="skel" style="height:10px; width:120px;"></div><div class="skel" style="height:6px; flex:1;"></div></div>
+            <div style="display:flex; gap:10px; align-items:center;"><div class="skel" style="height:10px; width:120px;"></div><div class="skel" style="height:6px; flex:1;"></div></div>
+            <div style="display:flex; gap:10px; align-items:center;"><div class="skel" style="height:10px; width:120px;"></div><div class="skel" style="height:6px; flex:1;"></div></div>
+            <div style="display:flex; gap:10px; align-items:center;"><div class="skel" style="height:10px; width:120px;"></div><div class="skel" style="height:6px; flex:1;"></div></div>
+            <div style="display:flex; gap:10px; align-items:center;"><div class="skel" style="height:10px; width:120px;"></div><div class="skel" style="height:6px; flex:1;"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Skeleton table -->
+      <div class="panel mt-20" style="padding:0; overflow:hidden;">
+        <div style="padding:14px 18px; border-bottom:1px solid var(--border-subtle);">
+          <div class="skel" style="height:14px; width:180px;"></div>
+        </div>
+        <div style="padding:14px 18px; display:flex; flex-direction:column; gap:14px;">
+          <div style="display:grid; grid-template-columns:1.5fr 1fr 1fr 0.7fr 1fr 0.7fr; gap:16px; align-items:center;"><div class="skel" style="height:14px;"></div><div class="skel" style="height:14px;"></div><div class="skel" style="height:14px;"></div><div class="skel" style="height:14px;"></div><div class="skel" style="height:14px;"></div><div class="skel" style="height:14px;"></div></div>
+          <div style="display:grid; grid-template-columns:1.5fr 1fr 1fr 0.7fr 1fr 0.7fr; gap:16px; align-items:center;"><div class="skel" style="height:14px;"></div><div class="skel" style="height:14px;"></div><div class="skel" style="height:14px;"></div><div class="skel" style="height:14px;"></div><div class="skel" style="height:14px;"></div><div class="skel" style="height:14px;"></div></div>
+          <div style="display:grid; grid-template-columns:1.5fr 1fr 1fr 0.7fr 1fr 0.7fr; gap:16px; align-items:center;"><div class="skel" style="height:14px;"></div><div class="skel" style="height:14px;"></div><div class="skel" style="height:14px;"></div><div class="skel" style="height:14px;"></div><div class="skel" style="height:14px;"></div><div class="skel" style="height:14px;"></div></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- ============================ ERROR ============================ -->
+<div class="screen-marker"><span class="pill pill--danger">STATE 3</span><span>Compliance Overview · Error / partial data</span><span class="meta">1280 × auto</span></div>
+<section class="screen" id="error">
+  <aside class="sb">
+    <div class="sb__logo"><span class="sb__logo-mark">◆</span>NovaCorp</div>
+    <div class="sb__group">Phase 1 · Cleaning</div>
+    <div class="sb__item"><span class="sb__icon">📥</span>Ingest data<span class="sb__phase">P1</span></div>
+    <div class="sb__item"><span class="sb__icon">📊</span>Data quality<span class="sb__phase">P1</span></div>
+    <div class="sb__group">Phase 2 · Audit</div>
+    <div class="sb__item active"><span class="sb__icon">📋</span>Compliance overview<span class="sb__phase">P2</span></div>
+    <div class="sb__item"><span class="sb__icon">🧾</span>Invoices<span class="sb__phase">P2</span></div>
+    <div class="sb__item"><span class="sb__icon">⚠</span>Exceptions<span class="sb__phase">P2</span></div>
+    <div class="sb__group">Phase 3 · Benchmarking</div>
+    <div class="sb__item"><span class="sb__icon">📈</span>Indicators<span class="sb__phase">P3</span></div>
+    <div class="sb__user"><div class="sb__avatar">YP</div><div><div class="sb__user-name">Yossi P.</div><div class="sb__user-role">Procurement Manager</div></div></div>
+  </aside>
+  <main>
+    <div class="tb">
+      <div class="tb__row1">
+        <div>
+          <div class="breadcrumb"><a>Audit</a><span class="sep">/</span><span class="current">Compliance Overview</span></div>
+          <div class="tb__title">Compliance Overview · Q1 2026 <span class="stale-tag">PARTIAL DATA</span></div>
+          <div class="tb__subtitle">Last successful sync: 2026-04-22 09:14 · 2 sources unavailable</div>
+        </div>
+        <div class="tb__actions">
+          <button class="btn btn--ghost">View error log</button>
+          <button class="btn btn--primary">↻ Retry sync</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="body">
+      <!-- Error banner -->
+      <div class="error-banner">
+        <div class="error-banner__icon">!</div>
+        <div style="flex:1;">
+          <div class="error-banner__title">Sync failed · 2 of 47 data sources unavailable</div>
+          <div class="error-banner__body">Showing partial results from 45 sources. Compliance figures may not reflect the latest data. The AI agent has paused new analysis until sync recovers.</div>
+        </div>
+        <div class="error-banner__actions">
+          <button class="btn btn--ghost">Dismiss</button>
+          <button class="btn btn--danger">↻ Retry sync</button>
+        </div>
+      </div>
+
+      <!-- Affected sources -->
+      <div class="panel" style="margin-bottom:20px;">
+        <div class="panel__head">
+          <div><div class="panel__title">Affected sources</div><div class="panel__sub">Click any source to view its error log</div></div>
+        </div>
+        <div class="affected-list">
+          <div class="affected-row">
+            <span style="color:var(--text-secondary);">SAP Concur · EU instance</span>
+            <span style="color:var(--text-tertiary); font-size:11px;">Connection timeout · 503 after 30s</span>
+            <span class="badge b-danger"><span class="dot"></span>Failed</span>
+          </div>
+          <div class="affected-row">
+            <span style="color:var(--text-secondary);">Coupa · APAC instance</span>
+            <span style="color:var(--text-tertiary); font-size:11px;">Authentication expired · token refresh required</span>
+            <span class="badge b-warning"><span class="dot"></span>Auth required</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stale KPIs -->
+      <div class="kpis">
+        <div class="kpi kpi--stale"><div class="kpi__label">Fully compliant <span class="stale-tag">stale</span></div><div class="kpi__value">87.4%</div><div class="kpi__delta">as of Apr 22</div><div class="kpi__bar"><span style="width:87%"></span></div></div>
+        <div class="kpi kpi--stale"><div class="kpi__label">Partially compliant <span class="stale-tag">stale</span></div><div class="kpi__value">9.2%</div><div class="kpi__delta">as of Apr 22</div><div class="kpi__bar"><span style="width:9.2%; background:var(--warning)"></span></div></div>
+        <div class="kpi kpi--stale"><div class="kpi__label">Non-compliant <span class="stale-tag">stale</span></div><div class="kpi__value">3.4%</div><div class="kpi__delta">as of Apr 22</div><div class="kpi__bar"><span style="width:3.4%; background:var(--danger)"></span></div></div>
+        <div class="kpi kpi--stale"><div class="kpi__label">Total exposure <span class="stale-tag">partial</span></div><div class="kpi__value">$1.21M</div><div class="kpi__delta">45 of 47 sources</div></div>
+        <div class="kpi kpi--stale"><div class="kpi__label">Net leakage <span class="stale-tag">partial</span></div><div class="kpi__value">$172K</div><div class="kpi__delta">may be incomplete</div></div>
+      </div>
+
+      <!-- AI paused panel -->
+      <div class="panel mt-20" style="background:#FFF8F8; border-left:3px solid var(--danger);">
+        <div class="panel__head">
+          <div>
+            <div class="panel__title" style="display:flex; align-items:center; gap:8px;">
+              <span class="badge b-danger"><span class="dot"></span>Paused</span>
+              AI agent has paused new analysis
+            </div>
+            <div class="panel__sub" style="margin-top:6px;">Working with incomplete data could surface false patterns. The agent will resume automatically once all sources reconnect, or you can let it run on the partial data.</div>
+          </div>
+          <div class="panel__actions">
+            <button class="btn btn--secondary">Continue with partial data</button>
+            <button class="btn btn--primary">↻ Retry sync</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- ============================ AGENT RUNNING ============================ -->
+<div class="screen-marker"><span class="pill pill--ai">STATE 4</span><span>Data Quality Report · Agent in progress</span><span class="meta">1280 × auto</span></div>
+<section class="screen" id="agent">
+  <aside class="sb">
+    <div class="sb__logo"><span class="sb__logo-mark">◆</span>NovaCorp</div>
+    <div class="sb__group">Phase 1 · Cleaning</div>
+    <div class="sb__item"><span class="sb__icon">📥</span>Ingest data<span class="sb__phase">P1</span></div>
+    <div class="sb__item active"><span class="sb__icon">📊</span>Data quality<span class="sb__phase">P1</span></div>
+    <div class="sb__group">Phase 2 · Audit</div>
+    <div class="sb__item"><span class="sb__icon">📋</span>Compliance overview<span class="sb__phase">P2</span></div>
+    <div class="sb__item"><span class="sb__icon">🧾</span>Invoices<span class="sb__phase">P2</span></div>
+    <div class="sb__item"><span class="sb__icon">⚠</span>Exceptions<span class="sb__phase">P2</span></div>
+    <div class="sb__group">Phase 3 · Benchmarking</div>
+    <div class="sb__item"><span class="sb__icon">📈</span>Indicators<span class="sb__phase">P3</span></div>
+    <div class="sb__user"><div class="sb__avatar">YP</div><div><div class="sb__user-name">Yossi P.</div><div class="sb__user-role">Operations Analyst</div></div></div>
+  </aside>
+  <main>
+    <div class="tb">
+      <div class="tb__row1">
+        <div>
+          <div class="breadcrumb"><a>Cleaning</a><span class="sep">/</span><span class="current">Data Quality Report</span></div>
+          <div class="tb__title">Data Quality · Ingestion #7841</div>
+          <div class="tb__subtitle">Agent is cleaning · step 4 of 6 · ETA 42 seconds</div>
+        </div>
+        <div class="tb__actions">
+          <button class="btn btn--ghost">Cancel run</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="body">
+      <!-- Progress banner with AI accent -->
+      <div class="progress-banner" style="background:var(--ai-tint); border-color:#DDD6FE; border-left-color:var(--ai);">
+        <span class="pulse" style="background:var(--ai);"></span>
+        <div style="flex-shrink:0;">
+          <div style="font-size:13px; font-weight:600; color:var(--ai);">✦ AI agent active · Cleaning your data</div>
+          <div style="font-size:11px; color:var(--text-tertiary); margin-top:2px;">Step 4 of 6 · ETA 42s</div>
+        </div>
+        <div class="progress-bar"><span style="width:67%; background:var(--ai);"></span></div>
+        <div class="progress-meta" style="color:var(--ai);">67%</div>
+      </div>
+
+      <!-- Gauges - one done, one pending -->
+      <div class="panel">
+        <div class="panel__head">
+          <div><div class="panel__title">Data quality score</div><div class="panel__sub">Live · updating as the pipeline runs</div></div>
+          <div class="panel__actions"><span class="badge b-ai"><span class="dot"></span>In progress</span></div>
+        </div>
+        <div class="gauge-row" style="justify-content:center;">
+          <div class="gauge">
+            <svg width="130" height="130" viewBox="0 0 130 130">
+              <circle class="gauge__track" cx="65" cy="65" r="52"/>
+              <circle class="gauge__fill" cx="65" cy="65" r="52" stroke="#D97706" stroke-dasharray="219 327"/>
+            </svg>
+            <div class="gauge__inner"><div><div class="gauge__num">67</div><div class="gauge__lbl">Before</div></div></div>
+          </div>
+          <div style="font-size:36px; color:var(--text-disabled); align-self:center">→</div>
+          <div class="gauge">
+            <svg width="130" height="130" viewBox="0 0 130 130">
+              <circle class="gauge__track" cx="65" cy="65" r="52"/>
+              <circle class="gauge__fill" cx="65" cy="65" r="52" stroke="#003DA5" stroke-dasharray="265 327" stroke-opacity=".7"/>
+            </svg>
+            <div class="gauge__inner"><div><div class="gauge__num" style="color:var(--brand);">81</div><div class="gauge__lbl">Live</div></div></div>
+          </div>
+          <div style="margin-left:24px; max-width:280px;">
+            <div style="font-size:12px; color:var(--text-tertiary); text-transform:uppercase; letter-spacing:.05em; margin-bottom:6px;">Issues resolved so far</div>
+            <div style="font-family:var(--font-mono); font-size:24px; font-weight:600; color:var(--ai)">534</div>
+            <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">~172 more expected by end of run.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pipeline + live log -->
+      <div class="grid-2-3 mt-20">
+        <div class="panel">
+          <div class="panel__head">
+            <div><div class="panel__title">AI cleaning pipeline</div><div class="panel__sub">Live status · the agent is working through each step.</div></div>
+            <div class="panel__actions"><span class="badge b-ai"><span class="dot"></span>Agent active</span></div>
+          </div>
+          <div class="pipeline">
+            <div class="step step--ok">
+              <div class="step__marker">✓</div>
+              <div class="step__body">
+                <div class="step__title">Schema validation <span class="badge b-success"><span class="dot"></span>Done</span></div>
+                <div class="step__meta">12,430 rows · 0 errors · completed in 14s</div>
+              </div>
+            </div>
+            <div class="step step--ok">
+              <div class="step__marker">✓</div>
+              <div class="step__body">
+                <div class="step__title">Currency normalization <span class="badge b-success"><span class="dot"></span>Done</span></div>
+                <div class="step__meta">3 currencies → USD · 8s</div>
+              </div>
+            </div>
+            <div class="step step--ok">
+              <div class="step__marker">✓</div>
+              <div class="step__body">
+                <div class="step__title">Deduplication <span class="badge b-success"><span class="dot"></span>Done</span></div>
+                <div class="step__meta">87 duplicates removed · 22s</div>
+              </div>
+            </div>
+            <div class="step step--running">
+              <div class="step__marker">●</div>
+              <div class="step__body">
+                <div class="step__title" style="color:var(--brand);">Vendor harmonization <span class="badge b-info"><span class="dot"></span>Running</span></div>
+                <div class="step__meta">Matching 432 vendor variants → canonical names · 271 of 432 done</div>
+                <div class="step__progress"><span style="width:63%"></span></div>
+              </div>
+            </div>
+            <div class="step step--pending">
+              <div class="step__marker">5</div>
+              <div class="step__body">
+                <div class="step__title" style="color:var(--text-tertiary)">Cross-reference contracts</div>
+                <div class="step__meta">Pending step 4</div>
+              </div>
+            </div>
+            <div class="step step--pending">
+              <div class="step__marker">6</div>
+              <div class="step__body">
+                <div class="step__title" style="color:var(--text-tertiary)">Final validation &amp; handoff</div>
+                <div class="step__meta">Pending step 5</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live log -->
+        <div class="panel">
+          <div class="panel__head"><div><div class="panel__title">Live activity</div><div class="panel__sub">Streaming · last 8 events</div></div><span class="badge b-ai"><span class="dot"></span>Live</span></div>
+          <div style="font-family:var(--font-mono); font-size:11px; color:var(--text-secondary); display:flex; flex-direction:column; gap:5px;">
+            <div><span style="color:var(--text-tertiary)">10:43:42</span> · ✦ Vendor "Globex Frt" → "Globex Freight"</div>
+            <div><span style="color:var(--text-tertiary)">10:43:41</span> · ✦ Vendor "Acme Log" → "Acme Logistics"</div>
+            <div><span style="color:var(--text-tertiary)">10:43:39</span> · ✦ Vendor "NorthW Sup" → "Northwind Supply"</div>
+            <div><span style="color:var(--text-tertiary)">10:43:36</span> · → Step 4 started · vendor harmonization</div>
+            <div><span style="color:var(--text-tertiary)">10:43:35</span> · ✓ Step 3 complete · 87 dedups removed</div>
+            <div><span style="color:var(--text-tertiary)">10:43:13</span> · → Step 3 started · deduplication</div>
+            <div><span style="color:var(--text-tertiary)">10:43:05</span> · ✓ Step 2 complete · 3 currencies normalized</div>
+            <div><span style="color:var(--text-tertiary)">10:42:57</span> · → Step 2 started · currency normalization</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</section>
+
+<div style="text-align:center; padding:40px 0; color:#5C6473; font-size:12px;">
+  4 state variants · NovaCorp Design System v1.0 · Yossi P.
+</div>
+
+</body>
+</html>

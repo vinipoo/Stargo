@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 130" width="130" height="130" font-family="IBM Plex Sans, -apple-system, sans-serif">
+  <!--
+    Reusable gauge template.
+    To change the score: update stroke-dasharray on .fill circle.
+      circumference = 2 × π × 52 ≈ 326.7
+      fill-length = (score / 100) × 326.7
+      e.g. score 67  → 218.9
+           score 94  → 307.1
+           score 50  → 163.4
+    To change color: update stroke on .fill circle.
+      Brand:   #003DA5     Warning: #D97706
+      Success: #16A34A     Danger:  #DC2626
+  -->
+
+  <!-- track -->
+  <circle class="track" cx="65" cy="65" r="52"
+          fill="none" stroke="#F3F4F7" stroke-width="11"/>
+
+  <!-- fill (currently 94%) -->
+  <circle class="fill" cx="65" cy="65" r="52"
+          fill="none" stroke="#16A34A" stroke-width="11"
+          stroke-linecap="round"
+          stroke-dasharray="307.1 326.7"
+          transform="rotate(-90 65 65)"/>
+
+  <!-- number -->
+  <text x="65" y="67" text-anchor="middle" dominant-baseline="middle"
+        font-size="32" font-weight="600" fill="#0F172A"
+        font-family="IBM Plex Mono, ui-monospace, monospace">94</text>
+
+  <!-- label -->
+  <text x="65" y="87" text-anchor="middle"
+        font-size="11" font-weight="600" letter-spacing="1.2"
+        fill="#64748B">AFTER</text>
+</svg>

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NovaCorp · Designer Home Assignment · Yossi P.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --brand: #003DA5; --brand-dark: #001F54; --brand-tint: #E5EBF6;
+    --ai: #6D28D9; --ai-tint: #F1ECFB;
+    --success: #16A34A; --warning: #D97706; --danger: #DC2626;
+    --bg-page: #F0F2F5; --bg-surface: #FFFFFF; --bg-subtle: #F8F9FB; --bg-hover: #F3F4F7;
+    --text-primary: #0F172A; --text-secondary: #475569; --text-tertiary: #64748B; --text-disabled: #94A3B8;
+    --border-subtle: #E5E7EB; --border-default: #D1D5DB;
+    --r-md: 6px; --r-lg: 10px; --r-xl: 16px; --r-pill: 999px;
+    --shadow-sm: 0 1px 2px rgba(15,23,42,.06);
+    --shadow-md: 0 2px 8px rgba(15,23,42,.08), 0 1px 2px rgba(15,23,42,.04);
+    --shadow-lg: 0 16px 40px rgba(0,0,0,.12);
+    --font-sans: 'IBM Plex Sans', -apple-system, sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: var(--bg-page); font-family: var(--font-sans); color: var(--text-primary); font-size: 14px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  a { color: var(--brand); text-decoration: none; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    background: linear-gradient(135deg, #001F54 0%, #003DA5 70%, #6D28D9 130%);
+    color: #fff; padding: 72px 32px 56px;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(800px 400px at 20% 20%, rgba(255,255,255,.08), transparent 60%),
+                radial-gradient(600px 300px at 80% 80%, rgba(109,40,217,.18), transparent 60%);
+    pointer-events: none;
+  }
+  .hero__inner { max-width: 880px; margin: 0 auto; position: relative; }
+  .hero__pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22);
+    padding: 6px 14px; border-radius: var(--r-pill);
+    font-size: 12px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase;
+    margin-bottom: 22px;
+  }
+  .hero__pill .dot { width: 8px; height: 8px; background: var(--ai); border-radius: 50%; box-shadow: 0 0 0 3px rgba(109,40,217,.3); }
+  .hero h1 { font-size: 46px; font-weight: 700; letter-spacing: -.025em; margin: 0 0 14px; line-height: 1.05; }
+  .hero h1 em { font-style: normal; background: linear-gradient(120deg, #fff 0%, #C7D5EC 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero__lead { font-size: 17px; opacity: .9; max-width: 640px; margin: 0 auto 28px; line-height: 1.55; }
+  .hero__principle {
+    display: inline-block; font-style: italic; font-size: 14px; color: rgba(255,255,255,.85);
+    border-left: 2px solid rgba(255,255,255,.4); padding: 4px 14px; margin-bottom: 36px;
+  }
+  .hero__cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 20px; border-radius: var(--r-md);
+    font-family: var(--font-sans); font-size: 14px; font-weight: 500; line-height: 1;
+    cursor: pointer; border: 1px solid transparent; text-decoration: none;
+    transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn--figma { background: #fff; color: var(--brand); }
+  .btn--figma:hover { box-shadow: var(--shadow-md); }
+  .btn--demo { background: var(--ai); color: #fff; }
+  .btn--demo:hover { background: #5B21B6; }
+  .btn--ghost { background: rgba(255,255,255,.12); color: #fff; border-color: rgba(255,255,255,.24); }
+  .btn--ghost:hover { background: rgba(255,255,255,.2); }
+
+  /* ---------- Stats strip ---------- */
+  .stats {
+    max-width: 1080px; margin: -32px auto 56px; padding: 0 24px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+    position: relative; z-index: 2;
+  }
+  .stat {
+    background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--r-lg);
+    padding: 18px 20px; box-shadow: var(--shadow-md);
+  }
+  .stat__value { font-family: var(--font-mono); font-size: 26px; font-weight: 600; color: var(--text-primary); line-height: 1; }
+  .stat__label { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .06em; margin-top: 6px; font-weight: 500; }
+
+  /* ---------- Sections ---------- */
+  main { max-width: 1180px; margin: 0 auto; padding: 0 24px 80px; }
+  section.group { margin-bottom: 56px; }
+  .group__head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 6px; }
+  .group__num { font-family: var(--font-mono); font-size: 12px; color: var(--text-tertiary); font-weight: 600; }
+  .group__title { font-size: 22px; font-weight: 700; letter-spacing: -.01em; }
+  .group__title::after { content: ''; display: inline-block; width: 32px; height: 3px; background: var(--brand); border-radius: 2px; vertical-align: middle; margin-left: 14px; }
+  .group__desc { color: var(--text-secondary); font-size: 14px; max-width: 720px; margin: 0 0 22px; }
+
+  /* ---------- Cards grid ---------- */
+  .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+  .grid--3 { grid-template-columns: repeat(3, 1fr); }
+  .grid--2 { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 840px) { .grid--3, .grid--2 { grid-template-columns: 1fr; } .stats { grid-template-columns: repeat(2, 1fr); } .hero h1 { font-size: 34px; } }
+
+  .card {
+    background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--r-lg);
+    padding: 20px 22px; display: flex; flex-direction: column; gap: 8px;
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    color: inherit;
+    position: relative; overflow: hidden;
+  }
+  .card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--border-default); }
+  .card__type {
+    font-family: var(--font-mono); font-size: 10px; font-weight: 600;
+    color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .08em;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .card__type::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--text-disabled); }
+  .card__type.html::before { background: var(--brand); }
+  .card__type.pdf::before { background: var(--danger); }
+  .card__type.docx::before { background: var(--info, #2563EB); }
+  .card__type.md::before { background: var(--text-secondary); }
+  .card__type.svg::before { background: var(--ai); }
+  .card__type.figma::before { background: linear-gradient(180deg, #F24E1E 0%, #A259FF 100%); }
+  .card__title { font-size: 16px; font-weight: 600; color: var(--text-primary); letter-spacing: -.005em; }
+  .card__desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; flex: 1; }
+  .card__meta { display: flex; gap: 12px; font-size: 11px; color: var(--text-tertiary); margin-top: 4px; font-family: var(--font-mono); }
+  .card__arrow { position: absolute; top: 18px; right: 22px; opacity: .4; transition: opacity .15s ease, transform .15s ease; }
+  .card:hover .card__arrow { opacity: 1; transform: translate(2px, -2px); }
+  .card--featured { border: 0; background: linear-gradient(180deg, var(--brand-tint) 0%, #fff 100%); border: 1px solid #C7D5EC; }
+  .card--ai { background: linear-gradient(180deg, var(--ai-tint) 0%, #fff 100%); border: 1px solid #DDD6FE; }
+  .card--figma { background: linear-gradient(135deg, #FFE7DC 0%, #E2D4FF 100%); border: 0; }
+  .card--figma .card__type::before { background: linear-gradient(180deg, #F24E1E 0%, #A259FF 100%); }
+  .card__star { position: absolute; top: 14px; right: 14px; background: var(--ai); color: #fff; font-size: 9px; padding: 2px 7px; border-radius: var(--r-pill); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+
+  /* ---------- Footer ---------- */
+  footer { text-align: center; padding: 32px 24px 56px; color: var(--text-tertiary); font-size: 12px; border-top: 1px solid var(--border-subtle); margin-top: 24px; }
+  footer .row { display: flex; gap: 18px; justify-content: center; margin-top: 10px; }
+  footer .row a { color: var(--text-secondary); }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero__inner">
+    <span class="hero__pill"><span class="dot"></span>Designer Home Assignment · Yossi P.</span>
+    <h1>NovaCorp · Data Analytics &amp;<br/><em>Invoice Audit Platform</em></h1>
+    <p class="hero__lead">Four hi-fi screens, eight Figma frames, a 19-section design system, and a clickable prototype — all anchored to a single guiding idea.</p>
+    <div class="hero__principle">"Benchmarking starts with data cleaning."</div>
+    <div class="hero__cta">
+      <a class="btn btn--figma" href="https://www.figma.com/design/RH8X5O0BwKhHJY3nFIo0F8/Stargo?node-id=0-1&t=0CLkdCvLYOtLZf6T-1" target="_blank" rel="noopener">
+        ◆ Open Figma file →
+      </a>
+      <a class="btn btn--demo" href="NovaCorp_Demo.html">▶ Launch interactive demo</a>
+      <a class="btn btn--ghost" href="NovaCorp_DesignSystem.pdf" target="_blank">View design system PDF</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="stat__value">8</div><div class="stat__label">Figma frames</div></div>
+  <div class="stat"><div class="stat__value">19</div><div class="stat__label">Design-system sections</div></div>
+  <div class="stat"><div class="stat__value">9</div><div class="stat__label">User stories · 3 personas</div></div>
+  <div class="stat"><div class="stat__value">100%</div><div class="stat__label">Brief MUSTs covered</div></div>
+</div>
+
+<main>
+
+  <!-- 1. PRIMARY DELIVERABLES -->
+  <section class="group">
+    <div class="group__head"><span class="group__num">01</span><h2 class="group__title">Primary deliverables</h2></div>
+    <p class="group__desc">The four artifacts a reviewer should look at first. The Figma file is the canonical design; the demo is the click-through experience; the AllFrames file is a single-page snapshot of every frame; the design system PDF documents the components.</p>
+    <div class="grid">
+      <a class="card card--figma" href="https://www.figma.com/design/RH8X5O0BwKhHJY3nFIo0F8/Stargo?node-id=0-1&t=0CLkdCvLYOtLZf6T-1" target="_blank" rel="noopener">
+        <span class="card__star">PRIMARY</span>
+        <span class="card__type figma">Figma file</span>
+        <h3 class="card__title">Stargo Figma file</h3>
+        <p class="card__desc">All 8 frames (4 main screens + 4 state variants) with auto-layout, design tokens as styles, and prototype connections.</p>
+        <span class="card__meta">External · view-only link</span>
+        <span class="card__arrow">↗</span>
+      </a>
+      <a class="card card--ai" href="NovaCorp_Demo.html">
+        <span class="card__star">INTERACTIVE</span>
+        <span class="card__type html">Interactive prototype</span>
+        <h3 class="card__title">Click-through demo</h3>
+        <p class="card__desc">Functional sortable + filterable table, animated agent pipeline, autoplay 7-step story. Best demonstration of the platform in motion.</p>
+        <span class="card__meta">HTML · 70 KB</span>
+        <span class="card__arrow">↗</span>
+      </a>
+      <a class="card card--featured" href="NovaCorp_AllFrames.html">
+        <span class="card__type html">All frames</span>
+        <h3 class="card__title">All 8 frames · single page</h3>
+        <p class="card__desc">Static stack of every frame at 1280px wide. Source for the html.to.design Figma import; also useful as a print-ready overview.</p>
+        <span class="card__meta">HTML · 62 KB</span>
+        <span class="card__arrow">↗</span>
+      </a>
+      <a class="card card--featured" href="NovaCorp_DesignSystem.pdf" target="_blank">
+        <span class="card__type pdf">Design system</span>
+        <h3 class="card__title">Design System v1.1 (PDF)</h3>
+        <p class="card__desc">17 pages covering 19 sections — tokens, typography, components, AI patterns, sortable/filterable, score gauge, full state library.</p>
+        <span class="card__meta">PDF · 17 pages · 98 KB</span>
+        <span class="card__arrow">↗</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- 2. SUPPORTING DOCS -->
+  <section class="group">
+    <div class="group__head"><span class="group__num">02</span><h2 class="group__title">Walkthrough &amp; rationale</h2></div>
+    <p class="group__desc">The thinking behind the design. Read these to understand the why, not just the what. The agentic-flow and process one-pagers answer Sona's added requirement directly.</p>
+    <div class="grid grid--3">
+      <a class="card" href="Design_Walkthrough_NovaCorp.md">
+        <span class="card__type md">Walkthrough</span>
+        <h3 class="card__title">Design walkthrough</h3>
+        <p class="card__desc">Full design rationale. Principles, screen-by-screen logic, agentic flow decisions, what I'd build next.</p>
+        <span class="card__meta">Markdown · ~7 KB</span>
+        <span class="card__arrow">↗</span>
+      </a>
+      <a class="card card--ai" href="NovaCorp_AgenticFlowStory.docx">
+        <span class="card__type docx">One-pager</span>
+        <h3 class="card__title">Agentic flow story</h3>
+        <p class="card__desc">How the AI agent identifies, flags, and resolves problems on every screen. Direct answer to Sona's added requirement.</p>
+        <span class="card__meta">DOCX · 1 page</span>
+        <span class="card__arrow">↗</span>
+      </a>
+      <a class="card card--ai" href="NovaCorp_Process.docx">
+        <span class="card__type docx">One-pager</span>
+        <h3 class="card__title">Designer's process</h3>
+        <p class="card__desc">How I built this submission with AI agents — same identify/flag/resolve loop turned inward on the workflow.</p>
+        <span class="card__meta">DOCX · 1 page</span>
+        <span class="card__arrow">↗</span>
+      </a>
+      <a class="card" href="NovaCorp_UserStories.docx">
+        <span class="card__type docx">Research</span>
+        <h3 class="card__title">User stories</h3>
+        <p class="card__desc">9 user stories across 3 personas (Procurement Manager / Finance Controller / Operations Analyst) with acceptance criteria + screen coverage matrix.</p>
+        <span class="card__meta">DOCX · 4 pages</span>
+        <span class="card__arrow">↗</span>
+      </a>
+      <a class="card" href="NovaCorp_SprintPlan.docx">
+        <span class="card__type docx">Plan</span>
+        <h3 class="card__title">5-day sprint plan</h3>
+        <p class="card__desc">Day-by-day execution plan with deliverable checklists, watch-outs, risks/mitigations, and a final QA rubric.</p>
+        <span class="card__meta">DOCX · 6 pages</span>
+        <span class="card__arrow">↗</span>
+      </a>
+      <a class="card" href="NovaCorp_SprintTracker.html">
+        <span class="card__type html">Live tool</span>
+        <h3 class="card__title">Sprint tracker</h3>
+        <p class="card__desc">Interactive companion to the sprint plan. Gantt timeline, checkboxes, progress ring. State persists in localStorage.</p>
+        <span class="card__meta">HTML · 30 KB</span>
+        <span class="card__arrow">↗</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- 3. DESIGN SYSTEM FORMATS -->
+  <section class="group">
+    <div class="group__head"><span class="group__num">03</span><h2 class="group__title">Design system · all formats</h2></div>
+    <p class="group__desc">Same v1.1 source content in four formats. The PDF is the canonical submission asset; the HTML is the interactive source; the MD is the text spec; the DOCX is the Word version for traditional handoff.</p>
+    <div class="grid grid--2">
+      <a class="card" href="NovaCorp_DesignSystem.html">
+        <span class="card__type html">Interactive</span>
+        <h3 class="card__title">Live styleguide (HTML)</h3>
+        <p class="card__desc">Renders every component live — color swatches, type specimens, button states, badges, gauges, AI panels.</p>
+        <span class="card__meta">HTML · 64 KB · 19 sections</span>
+        <span class="card__arrow">↗</span>
+      </a>
+      <a class="card" href="NovaCorp_DesignSystem.md">
+        <span class="card__type md">Spec</span>
+        <h3 class="card__title">Markdown spec</h3>
+        <p class="card__desc">Source of truth for all token values and component contracts. Versionable, copy-pasteable.</p>
+        <span class="card__meta">Markdown · 15 KB</span>
+        <span class="card__arrow">↗</span>
+      </a>
+      <a class="card" href="NovaCorp_DesignSystem.pdf" target="_blank">
+        <span class="card__type pdf">Print</span>
+        <h3 class="card__title">PDF (recommended for submission)</h3>
+        <p class="card__desc">17-page A4 export rendered from HTML. Best visual fidelity. Matches the brief's "Figma / PDF" format requirement.</p>
+        <span class="card__meta">PDF · 17 pages</span>
+        <span class="card__arrow">↗</span>
+      </a>
+      <a class="card" href="NovaCorp_DesignSystem.docx">
+        <span class="card__type docx">Word</span>
+        <h3 class="card__title">Word document (DOCX)</h3>
+        <p class="card__desc">Classic Word version. Useful when reviewers prefer to comment inline.</p>
+        <span class="card__meta">DOCX · 21 KB</span>
+        <span class="card__arrow">↗</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- 4. WORKING FILES -->
+  <section class="group">
+    <div class="group__head"><span class="group__num">04</span><h2 class="group__title">Working files &amp; sources</h2></div>
+    <p class="group__desc">The HTML files used as inputs to the html.to.design Figma plugin. Useful if you want to inspect or re-import.</p>
+    <div class="grid grid--3">
+      <a class="card" href="NovaCorp_Wireframes.html">
+        <span class="card__type html">Source</span>
+        <h3 class="card__title">4 main screens</h3>
+        <p class="card__desc">Wireframes file containing the 4 default screens at 1280px wide.</p>
+        <span class="card__meta">HTML · 62 KB</span>
+        <span class="card__arrow">↗</span>
+      </a>
+      <a class="card" href="NovaCorp_States.html">
+        <span class="card__type html">Source</span>
+        <h3 class="card__title">4 state variants</h3>
+        <p class="card__desc">Empty, loading, error, and agent-running states for the bonus criterion.</p>
+        <span class="card__meta">HTML · 43 KB</span>
+        <span class="card__arrow">↗</span>
+      </a>
+      <a class="card" href="NovaCorp_AllFrames.html">
+        <span class="card__type html">Combined</span>
+        <h3 class="card__title">All 8 frames combined</h3>
+        <p class="card__desc">Merged file with both main screens and states — single import target for Figma.</p>
+        <span class="card__meta">HTML · 62 KB</span>
+        <span class="card__arrow">↗</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- 5. ASSETS -->
+  <section class="group">
+    <div class="group__head"><span class="group__num">05</span><h2 class="group__title">Assets</h2></div>
+    <p class="group__desc">Standalone components for direct use.</p>
+    <div class="grid grid--2">
+      <a class="card" href="Gauge_BeforeAfter.svg" target="_blank">
+        <span class="card__type svg">Asset</span>
+        <h3 class="card__title">Before / After gauge pair</h3>
+        <p class="card__desc">SVG showing the 67 → 94 data-quality gauge pair. Drop into Figma directly or use as a static image.</p>
+        <span class="card__meta">SVG · 2 KB</span>
+        <span class="card__arrow">↗</span>
+      </a>
+      <a class="card" href="Gauge_Single_Template.svg" target="_blank">
+        <span class="card__type svg">Asset</span>
+        <h3 class="card__title">Single gauge template</h3>
+        <p class="card__desc">Reusable single-gauge SVG with inline comments showing how to change score and color.</p>
+        <span class="card__meta">SVG · 1 KB</span>
+        <span class="card__arrow">↗</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- 6. BRIEF -->
+  <section class="group">
+    <div class="group__head"><span class="group__num">06</span><h2 class="group__title">Brief</h2></div>
+    <p class="group__desc">The original assignment brief, kept here for reference.</p>
+    <div class="grid grid--2">
+      <a class="card" href="Designer_Brief_ABC_Corp.docx">
+        <span class="card__type docx">Reference</span>
+        <h3 class="card__title">Designer brief · ABC Corp</h3>
+        <p class="card__desc">The original home-assignment brief with screen requirements, design guidelines, and evaluation criteria.</p>
+        <span class="card__meta">DOCX · 15 KB</span>
+        <span class="card__arrow">↗</span>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  NovaCorp · Designer Home Assignment · Yossi P. · May 2026
+  <div class="row">
+    <a href="https://www.figma.com/design/RH8X5O0BwKhHJY3nFIo0F8/Stargo?node-id=0-1&t=0CLkdCvLYOtLZf6T-1" target="_blank" rel="noopener">Figma</a>
+    <a href="NovaCorp_Demo.html">Demo</a>
+    <a href="NovaCorp_DesignSystem.pdf" target="_blank">Design System</a>
+    <a href="Design_Walkthrough_NovaCorp.md">Walkthrough</a>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>NovaCorp · All Frames (4 Screens + 4 States)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --brand: #003DA5; --brand-hover: #002F80; --brand-tint: #E5EBF6;
+    --ai: #6D28D9; --ai-tint: #F1ECFB;
+    --success: #16A34A; --success-tint: #DCFCE7; --success-text: #065F46;
+    --warning: #D97706; --warning-tint: #FEF3C7; --warning-text: #92400E;
+    --danger: #DC2626; --danger-tint: #FEE2E2; --danger-text: #991B1B;
+    --info: #2563EB; --info-tint: #DBEAFE;
+    --sidebar-bg: #0D1117; --sidebar-border: #1C232E; --sidebar-text: #C9D1D9; --sidebar-muted: #8B949E;
+    --bg-page: #F0F2F5; --bg-surface: #FFFFFF; --bg-subtle: #F8F9FB; --bg-hover: #F3F4F7;
+    --text-primary: #0F172A; --text-secondary: #475569; --text-tertiary: #64748B; --text-disabled: #94A3B8;
+    --border-subtle: #E5E7EB; --border-default: #D1D5DB;
+    --r-sm: 4px; --r-md: 6px; --r-lg: 8px; --r-pill: 999px;
+    --shadow-sm: 0 1px 2px rgba(15,23,42,.06);
+    --shadow-md: 0 2px 6px rgba(15,23,42,.08), 0 1px 2px rgba(15,23,42,.04);
+    --font-sans: 'IBM Plex Sans', -apple-system, sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 0; background: #DCDFE3; font-family: var(--font-sans); color: var(--text-primary); font-size: 13px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+
+  .doc-header { background: linear-gradient(135deg, #001F54 0%, #003DA5 100%); color: #fff; padding: 32px 40px; max-width: 1280px; margin: 24px auto 0; border-radius: 12px; }
+  .doc-header h1 { margin: 0 0 6px; font-size: 28px; font-weight: 700; letter-spacing: -.02em; }
+  .doc-header p { margin: 0; opacity: .9; font-size: 14px; max-width: 760px; }
+  .doc-header .index { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+  .doc-header .index a { color: #fff; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.2); padding: 6px 12px; border-radius: var(--r-pill); text-decoration: none; font-size: 12px; }
+
+  .screen-marker { max-width: 1280px; margin: 32px auto 8px; padding: 0 40px; display: flex; align-items: center; gap: 12px; }
+  .screen-marker .pill { background: var(--brand); padding: 4px 10px; border-radius: var(--r-pill); font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #fff; font-weight: 600; }
+  .screen-marker .pill--ai { background: var(--ai); }
+  .screen-marker .pill--danger { background: var(--danger); }
+  .screen-marker .name { color: #1B2632; font-weight: 600; font-size: 13px; }
+  .screen-marker .meta { margin-left: auto; color: #5C6473; font-family: var(--font-mono); font-size: 11px; }
+
+  .screen { width: 1280px; margin: 0 auto 48px; background: var(--bg-page); border-radius: 12px; overflow: hidden; box-shadow: 0 12px 32px rgba(0,0,0,.12); display: grid; grid-template-columns: 240px 1fr; min-height: 760px; }
+
+  .sb { background: var(--sidebar-bg); color: var(--sidebar-text); padding: 20px 14px; font-size: 13px; }
+  .sb__logo { color: #fff; font-weight: 700; font-size: 16px; padding: 0 8px 18px; border-bottom: 1px solid var(--sidebar-border); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .sb__logo-mark { width: 22px; height: 22px; background: var(--brand); border-radius: 5px; display: grid; place-items: center; color: #fff; font-size: 13px; }
+  .sb__group { color: var(--sidebar-muted); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; padding: 14px 8px 4px; }
+  .sb__item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--r-md); color: var(--sidebar-text); margin-bottom: 2px; }
+  .sb__item.active { background: rgba(0,61,165,.18); color: #fff; border-left: 2px solid var(--brand); padding-left: 8px; }
+  .sb__icon { width: 16px; display: inline-block; text-align: center; opacity: .8; font-size: 14px; }
+  .sb__phase { margin-left: auto; font-family: var(--font-mono); font-size: 10px; background: rgba(255,255,255,.08); padding: 2px 6px; border-radius: var(--r-sm); color: var(--sidebar-muted); }
+  .sb__user { margin-top: 32px; padding: 12px 8px; border-top: 1px solid var(--sidebar-border); display: flex; align-items: center; gap: 10px; }
+  .sb__avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #003DA5, #6D28D9); display: grid; place-items: center; color: #fff; font-weight: 600; font-size: 12px; }
+  .sb__user-name { color: #fff; font-size: 13px; font-weight: 500; }
+  .sb__user-role { color: var(--sidebar-muted); font-size: 11px; }
+
+  .tb { background: var(--bg-surface); border-bottom: 1px solid var(--border-subtle); padding: 16px 28px; }
+  .tb__row1 { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
+  .breadcrumb { display: flex; gap: 6px; align-items: center; font-size: 12px; color: var(--text-tertiary); }
+  .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+  .breadcrumb .current { color: var(--text-primary); font-weight: 500; }
+  .breadcrumb .sep { color: var(--text-disabled); }
+  .tb__title { font-size: 22px; font-weight: 700; color: var(--text-primary); letter-spacing: -.01em; }
+  .tb__subtitle { font-size: 13px; color: var(--text-tertiary); margin-top: 2px; }
+  .tb__actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+  .tb__row2 { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding-top: 12px; border-top: 1px dashed var(--border-subtle); margin-top: 10px; }
+
+  .btn { display: inline-flex; align-items: center; gap: 6px; border-radius: var(--r-md); font-family: var(--font-sans); font-weight: 500; cursor: pointer; border: 1px solid transparent; padding: 7px 12px; font-size: 12px; line-height: 1; }
+  .btn--primary { background: var(--brand); color: #fff; }
+  .btn--secondary { background: #fff; color: var(--brand); border-color: var(--brand); }
+  .btn--ghost { background: transparent; color: var(--text-secondary); }
+  .btn--danger { background: var(--danger); color: #fff; }
+  .btn--ai { background: var(--ai); color: #fff; }
+  .btn--lg { padding: 10px 18px; font-size: 13px; }
+
+  .filter-btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; border: 1px solid var(--border-default); border-radius: var(--r-md); background: #fff; font-size: 12px; color: var(--text-secondary); cursor: pointer; font-family: var(--font-sans); }
+  .filter-btn:hover { border-color: var(--brand); color: var(--brand); }
+  .filter-btn--applied { background: var(--brand-tint); border-color: var(--brand); color: var(--brand); font-weight: 500; }
+  .filter-btn .caret { font-size: 10px; opacity: .8; }
+
+  .search { position: relative; }
+  .search input { height: 32px; padding: 0 12px 0 30px; border: 1px solid var(--border-default); border-radius: var(--r-md); background: #fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='8'/><path d='m21 21-4.3-4.3'/></svg>") no-repeat 8px center; background-size: 14px; font-size: 12px; min-width: 240px; outline: none; font-family: var(--font-sans); }
+
+  .body { padding: 24px 28px 28px; }
+
+  .kpis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .kpi { background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--r-lg); padding: 14px 16px; }
+  .kpi__label { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .04em; font-weight: 500; }
+  .kpi__value { font-family: var(--font-mono); font-size: 24px; font-weight: 600; color: var(--text-primary); margin-top: 4px; }
+  .kpi__delta { font-family: var(--font-mono); font-size: 11px; margin-top: 3px; }
+  .kpi__delta--up { color: var(--success); }
+  .kpi__delta--down { color: var(--danger); }
+  .kpi__bar { height: 4px; background: var(--bg-hover); border-radius: 2px; margin-top: 10px; overflow: hidden; }
+  .kpi__bar > span { display: block; height: 100%; background: var(--brand); }
+
+  .panel { background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--r-lg); padding: 18px; }
+  .panel__head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .panel__title { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+  .panel__sub { font-size: 11px; color: var(--text-tertiary); }
+  .panel__actions { margin-left: auto; display: flex; gap: 8px; }
+
+  .badge { display: inline-flex; align-items: center; gap: 5px; padding: 2px 8px; border-radius: var(--r-pill); font-size: 11px; font-weight: 600; }
+  .badge .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .b-success { background: var(--success-tint); color: var(--success-text); }
+  .b-success .dot { background: var(--success); }
+  .b-warning { background: var(--warning-tint); color: var(--warning-text); }
+  .b-warning .dot { background: var(--warning); }
+  .b-danger { background: var(--danger-tint); color: var(--danger-text); }
+  .b-danger .dot { background: var(--danger); }
+  .b-ai { background: var(--ai-tint); color: var(--ai); }
+  .b-ai .dot { background: var(--ai); }
+  .b-info { background: var(--info-tint); color: #1E40AF; }
+  .b-info .dot { background: var(--info); }
+  .b-neutral { background: var(--bg-hover); color: var(--text-secondary); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th, td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--border-subtle); }
+  th { background: var(--bg-subtle); font-size: 10px; font-weight: 600; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .05em; }
+  th.sortable { cursor: pointer; user-select: none; }
+  th.sortable:hover { color: var(--text-primary); }
+  th.sortable.sorted { color: var(--brand); }
+  th .sort-arrow { color: var(--brand); font-size: 9px; margin-left: 4px; }
+  th .sort-arrow-inactive { color: var(--text-disabled); font-size: 10px; margin-left: 4px; opacity: .5; }
+  td.num, th.num { font-family: var(--font-mono); text-align: right; }
+  tbody tr:hover { background: var(--bg-hover); cursor: pointer; }
+  tbody tr.selected { background: var(--brand-tint); }
+  .ratio { display: inline-flex; align-items: center; gap: 8px; }
+  .ratio__track { width: 70px; height: 5px; background: var(--bg-hover); border-radius: 3px; overflow: hidden; }
+  .ratio__fill { height: 100%; background: var(--brand); }
+
+  .ai-card { background: linear-gradient(180deg, var(--ai-tint) 0%, #fff 100%); border: 1px solid #DDD6FE; border-left: 3px solid var(--ai); border-radius: var(--r-lg); padding: 16px 20px; }
+  .ai-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .ai-icon { width: 28px; height: 28px; border-radius: 50%; background: var(--ai); color: #fff; display: grid; place-items: center; font-weight: 700; }
+  .ai-title { font-weight: 600; font-size: 14px; }
+  .ai-conf { margin-left: auto; font-family: var(--font-mono); font-size: 11px; color: var(--ai); background: #fff; padding: 3px 8px; border-radius: var(--r-pill); border: 1px solid #DDD6FE; }
+  .ai-body { color: var(--text-secondary); font-size: 13px; line-height: 1.55; }
+  .ai-evidence { font-size: 11px; color: var(--text-tertiary); margin-top: 8px; }
+  .ai-actions { display: flex; gap: 8px; margin-top: 14px; }
+
+  .pipeline { display: flex; flex-direction: column; gap: 0; }
+  .step { display: flex; gap: 12px; padding: 10px 0; position: relative; }
+  .step:not(:last-child)::before { content: ''; position: absolute; left: 13px; top: 38px; bottom: -10px; width: 2px; background: var(--border-subtle); }
+  .step__marker { width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 12px; z-index: 1; }
+  .step--ok .step__marker { background: var(--success); }
+  .step--warn .step__marker { background: var(--warning); }
+  .step--running .step__marker { background: var(--brand); animation: pulse-bg 1.6s ease-in-out infinite; }
+  @keyframes pulse-bg { 0%, 100% { box-shadow: 0 0 0 0 rgba(0,61,165,.5); } 50% { box-shadow: 0 0 0 8px rgba(0,61,165,0); } }
+  .step--pending .step__marker { background: var(--border-default); }
+  .step__body { flex: 1; padding-top: 3px; }
+  .step__title { font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+  .step__meta { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+  .step__progress { height: 4px; background: var(--bg-hover); border-radius: 2px; margin-top: 8px; overflow: hidden; max-width: 320px; }
+  .step__progress > span { display: block; height: 100%; background: var(--brand); border-radius: 2px; }
+
+  .gauge-row { display: flex; gap: 28px; align-items: center; }
+  .gauge { width: 130px; height: 130px; position: relative; flex-shrink: 0; }
+  .gauge svg { transform: rotate(-90deg); }
+  .gauge__track { fill: none; stroke: var(--bg-hover); stroke-width: 11; }
+  .gauge__fill { fill: none; stroke-width: 11; stroke-linecap: round; }
+  .gauge__inner { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; }
+  .gauge__num { font-family: var(--font-mono); font-size: 28px; font-weight: 600; }
+  .gauge__lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-tertiary); margin-top: 2px; }
+
+  .pareto-wrap { position: relative; padding: 10px 0 28px; }
+  .pareto-bars { display: grid; grid-template-columns: repeat(8, 1fr); align-items: end; gap: 12px; height: 200px; }
+  .pareto-bar { background: var(--brand); border-radius: 3px 3px 0 0; position: relative; }
+  .pareto-bar.dim { opacity: .4; }
+  .pareto-bar > .v { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-family: var(--font-mono); font-size: 10px; color: var(--text-secondary); }
+  .pareto-bar > .lbl { position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%); font-size: 10px; color: var(--text-tertiary); white-space: nowrap; }
+  .pareto-line { position: absolute; inset: 10px 0 28px; pointer-events: none; }
+
+  .cat { background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--r-lg); padding: 14px 16px; }
+  .cat__top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+  .cat__name { font-weight: 600; font-size: 13px; max-width: 70%; }
+  .cat__impact { font-family: var(--font-mono); font-size: 16px; font-weight: 600; }
+  .cat__sub { display: flex; gap: 14px; font-size: 11px; color: var(--text-tertiary); margin-top: 8px; }
+  .cat__sub strong { color: var(--text-primary); font-family: var(--font-mono); font-weight: 500; }
+
+  .tabs { display: flex; border-bottom: 1px solid var(--border-subtle); gap: 4px; margin-bottom: 18px; }
+  .tab { padding: 9px 14px; font-size: 12px; color: var(--text-secondary); cursor: pointer; border-bottom: 2px solid transparent; }
+  .tab.active { color: var(--brand); border-bottom-color: var(--brand); font-weight: 600; }
+
+  .exc { background: #fff; border: 1px solid var(--border-subtle); border-left: 3px solid var(--danger); border-radius: var(--r-md); padding: 14px 16px; }
+  .exc__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .exc__title { font-weight: 600; font-size: 13px; }
+  .exc__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px; }
+  .exc__k { color: var(--text-tertiary); text-transform: uppercase; font-size: 10px; letter-spacing: .05em; }
+  .exc__v { color: var(--text-primary); margin-top: 2px; }
+
+  .delta-pos { color: var(--danger); font-weight: 600; }
+  .delta-zero { color: var(--success); }
+
+  .seg { display: inline-flex; background: var(--bg-subtle); border: 1px solid var(--border-subtle); border-radius: var(--r-md); padding: 2px; }
+  .seg button { background: none; border: 0; padding: 5px 12px; font-size: 12px; cursor: pointer; color: var(--text-secondary); border-radius: var(--r-sm); font-family: var(--font-sans); }
+  .seg button.active { background: #fff; color: var(--brand); font-weight: 600; box-shadow: var(--shadow-sm); }
+
+  .spark { stroke: var(--brand); stroke-width: 2.5; fill: none; }
+
+  .empty-hero { background: #fff; border: 2px dashed var(--border-default); border-radius: 12px; padding: 56px 40px; text-align: center; margin-top: 32px; }
+  .empty-hero__icon { width: 80px; height: 80px; margin: 0 auto 20px; border-radius: 50%; background: var(--brand-tint); color: var(--brand); display: grid; place-items: center; }
+  .empty-hero__icon svg { width: 38px; height: 38px; }
+  .empty-hero__title { font-size: 22px; font-weight: 700; color: var(--text-primary); margin: 0 0 10px; letter-spacing: -.01em; }
+  .empty-hero__sub { font-size: 14px; color: var(--text-secondary); max-width: 480px; margin: 0 auto 24px; line-height: 1.55; }
+  .empty-hero__ctas { display: flex; gap: 10px; justify-content: center; margin-bottom: 28px; }
+  .formats { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .format { display: inline-flex; gap: 6px; background: var(--bg-subtle); border: 1px solid var(--border-subtle); border-radius: var(--r-pill); padding: 5px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary); }
+  .next-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }
+  .step-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--r-lg); padding: 16px 18px; display: flex; gap: 12px; align-items: flex-start; }
+  .step-num { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: var(--brand-tint); color: var(--brand); font-weight: 700; font-size: 13px; display: grid; place-items: center; font-family: var(--font-mono); }
+  .step-card h4 { margin: 0 0 4px; font-size: 13px; font-weight: 600; }
+  .step-card p { margin: 0; font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+
+  .skel { background: linear-gradient(90deg, #EEF1F4 0%, #F7F8FA 50%, #EEF1F4 100%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: var(--r-sm); }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+  .progress-banner { background: var(--brand-tint); border: 1px solid #C7D5EC; border-left: 3px solid var(--brand); border-radius: var(--r-lg); padding: 14px 18px; display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+  .progress-banner .pulse { width: 10px; height: 10px; border-radius: 50%; background: var(--brand); flex-shrink: 0; animation: pulse-d 1.2s ease-in-out infinite; }
+  @keyframes pulse-d { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.6); opacity: .4; } }
+  .progress-bar { flex: 1; background: #fff; border-radius: var(--r-pill); height: 8px; overflow: hidden; }
+  .progress-bar > span { display: block; height: 100%; background: var(--brand); border-radius: var(--r-pill); width: 47%; }
+  .progress-meta { font-family: var(--font-mono); font-size: 12px; color: var(--brand); font-weight: 500; flex-shrink: 0; }
+  .kpi-skel { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px; }
+  .kpi-skel-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--r-lg); padding: 14px 16px; }
+
+  .error-banner { background: #FFF5F5; border: 1px solid #FECACA; border-left: 3px solid var(--danger); border-radius: var(--r-lg); padding: 14px 18px; display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px; }
+  .error-banner__icon { width: 32px; height: 32px; border-radius: 50%; background: var(--danger-tint); color: var(--danger); display: grid; place-items: center; flex-shrink: 0; font-weight: 700; }
+  .error-banner__title { font-weight: 600; font-size: 14px; color: var(--danger-text); }
+  .error-banner__body { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+  .error-banner__actions { margin-left: auto; display: flex; gap: 8px; flex-shrink: 0; }
+  .stale-tag { display: inline-flex; align-items: center; background: var(--warning-tint); color: var(--warning-text); padding: 2px 7px; border-radius: var(--r-sm); font-size: 10px; font-weight: 600; margin-left: 6px; vertical-align: middle; }
+  .affected-list { display: flex; flex-direction: column; gap: 6px; font-family: var(--font-mono); font-size: 12px; }
+  .affected-row { display: flex; gap: 10px; align-items: center; padding: 8px 12px; background: var(--bg-subtle); border-radius: var(--r-sm); }
+
+  .grid-2-3 { display: grid; grid-template-columns: 3fr 2fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .row { display: flex; gap: 12px; align-items: center; }
+  .mt-20 { margin-top: 20px; }
+</style>
+</head>
+<body>
+
+<header class="doc-header">
+  <h1>NovaCorp · All Frames</h1>
+  <p>4 main screens (per the brief) plus 4 state variants (bonus criterion). Each frame is a self-contained 1280px wide artboard, ready for Figma import via html.to.design.</p>
+  <div class="index">
+    <a href="#s1">1 · Compliance Overview</a>
+    <a href="#s2">2 · Data Quality Report</a>
+    <a href="#s3">3 · Invoice Detail</a>
+    <a href="#s4">4 · Root Cause Analysis</a>
+    <a href="#empty">+ Empty</a>
+    <a href="#loading">+ Loading</a>
+    <a href="#error">+ Error</a>
+    <a href="#agent">+ Agent running</a>
+  </div>
+</header>
+
+<!-- SCREEN 1 -->
+<div class="screen-marker"><span class="pill">SCREEN 1</span><span class="name">Compliance Overview · Main Dashboard</span><span class="meta">1280 × auto</span></div>
+<section class="screen" id="s1">
+  <aside class="sb">
+    <div class="sb__logo"><span class="sb__logo-mark">◆</span>NovaCorp</div>
+    <div class="sb__group">Phase 1 · Cleaning</div>
+    <div class="sb__item"><span class="sb__icon">📥</span>Ingest data<span class="sb__phase">P1</span></div>
+    <div class="sb__item"><span class="sb__icon">📊</span>Data quality<span class="sb__phase">P1</span></div>
+    <div class="sb__group">Phase 2 · Audit</div>
+    <div class="sb__item active"><span class="sb__icon">📋</span>Compliance overview<span class="sb__phase">P2</span></div>
+    <div class="sb__item"><span class="sb__icon">🧾</span>Invoices<span class="sb__phase">P2</span></div>
+    <div class="sb__item"><span class="sb__icon">⚠</span>Exceptions<span class="sb__phase">P2</span></div>
+    <div class="sb__group">Phase 3 · Benchmarking</div>
+    <div class="sb__item"><span class="sb__icon">📈</span>Indicators<span class="sb__phase">P3</span></div>
+    <div class="sb__user"><div class="sb__avatar">YP</div><div><div class="sb__user-name">Yossi P.</div><div class="sb__user-role">Procurement Manager</div></div></div>
+  </aside>
+  <main>
+    <div class="tb">
+      <div class="tb__row1">
+        <div>
+          <div class="breadcrumb"><a>Audit</a><span class="sep">/</span><span class="current">Compliance Overview</span></div>
+          <div class="tb__title">Compliance Overview · Q1 2026</div>
+          <div class="tb__subtitle">87.4% fully compliant · last sync 4 minutes ago</div>
+        </div>
+        <div class="tb__actions">
+          <div class="search"><input placeholder="Search invoices, vendors, contracts…"/></div>
+          <button class="btn btn--secondary">Export CSV</button>
+          <button class="btn btn--primary">Run audit</button>
+        </div>
+      </div>
+      <div class="tb__row2">
+        <button class="filter-btn">Vendor <span class="caret">▾</span></button>
+        <button class="filter-btn filter-btn--applied">Date: Q1 2026 <span class="caret">▾</span></button>
+        <button class="filter-btn">Geography <span class="caret">▾</span></button>
+        <button class="filter-btn filter-btn--applied">Contract: All <span class="caret">▾</span></button>
+        <button class="filter-btn">Service Level <span class="caret">▾</span></button>
+        <button class="btn btn--ghost" style="margin-left:auto">Clear all</button>
+      </div>
+    </div>
+    <div class="body">
+      <div class="kpis">
+        <div class="kpi"><div class="kpi__label">Fully compliant</div><div class="kpi__value">87.4%</div><div class="kpi__delta kpi__delta--up">▲ 2.1pp vs Q4</div><div class="kpi__bar"><span style="width:87%"></span></div></div>
+        <div class="kpi"><div class="kpi__label">Partially compliant</div><div class="kpi__value">9.2%</div><div class="kpi__delta kpi__delta--down">▼ 1.4pp</div><div class="kpi__bar"><span style="width:9.2%; background:var(--warning)"></span></div></div>
+        <div class="kpi"><div class="kpi__label">Non-compliant</div><div class="kpi__value">3.4%</div><div class="kpi__delta kpi__delta--down">▼ 0.7pp</div><div class="kpi__bar"><span style="width:3.4%; background:var(--danger)"></span></div></div>
+        <div class="kpi"><div class="kpi__label">Total exposure</div><div class="kpi__value">$1.28M</div><div class="kpi__delta">across 247 invoices</div></div>
+        <div class="kpi"><div class="kpi__label">Net leakage</div><div class="kpi__value">$184K</div><div class="kpi__delta kpi__delta--down">▼ 14% vs Q4</div></div>
+      </div>
+      <div class="ai-card mt-20">
+        <div class="ai-head"><div class="ai-icon">✦</div><div class="ai-title">Pattern detected · Globex Freight surcharge miscalculation</div><div class="ai-conf">Confidence 84%</div></div>
+        <div class="ai-body">17 invoices in the last 90 days show the same surcharge tier error. Estimated recoverable: <strong>$48,210</strong>. Pattern correlates with rate-card v2.3 ingested on Mar 12.</div>
+        <div class="ai-evidence">Evidence: 17 invoices · 3 contracts · 1 rate card · Source: ingestion-log-7841</div>
+        <div class="ai-actions"><button class="btn btn--ai">Open batch recovery (17)</button><button class="btn btn--secondary">Review one-by-one</button><button class="btn btn--ghost">Dismiss</button></div>
+      </div>
+      <div class="grid-2-3 mt-20">
+        <div class="panel">
+          <div class="panel__head"><div><div class="panel__title">Financial impact</div><div class="panel__sub">Overcharges vs undercharges → net leakage</div></div></div>
+          <svg viewBox="0 0 600 240" width="100%" height="220" font-family="IBM Plex Sans" font-size="11">
+            <line x1="40" y1="200" x2="580" y2="200" stroke="#E5E7EB"/>
+            <rect x="60" y="40" width="80" height="160" fill="#DC2626" rx="2"/>
+            <text x="100" y="32" text-anchor="middle" fill="#0F172A" font-weight="600">+$430K</text>
+            <text x="100" y="218" text-anchor="middle" fill="#64748B">Gross overcharges</text>
+            <line x1="140" y1="40" x2="200" y2="40" stroke="#9CA3AF" stroke-dasharray="3,3"/>
+            <rect x="200" y="40" width="80" height="92" fill="#16A34A" rx="2"/>
+            <text x="240" y="32" text-anchor="middle" fill="#0F172A" font-weight="600">−$228K</text>
+            <text x="240" y="218" text-anchor="middle" fill="#64748B">Undercharges</text>
+            <line x1="280" y1="132" x2="340" y2="132" stroke="#9CA3AF" stroke-dasharray="3,3"/>
+            <rect x="340" y="132" width="80" height="40" fill="#6D28D9" rx="2"/>
+            <text x="380" y="124" text-anchor="middle" fill="#0F172A" font-weight="600">−$18K AI</text>
+            <text x="380" y="218" text-anchor="middle" fill="#64748B">Auto-resolved</text>
+            <line x1="420" y1="172" x2="480" y2="172" stroke="#9CA3AF" stroke-dasharray="3,3"/>
+            <rect x="480" y="40" width="80" height="132" fill="#003DA5" rx="2"/>
+            <text x="520" y="32" text-anchor="middle" fill="#003DA5" font-weight="700">$184K</text>
+            <text x="520" y="218" text-anchor="middle" fill="#0F172A" font-weight="600">Net leakage</text>
+          </svg>
+        </div>
+        <div class="panel">
+          <div class="panel__head"><div><div class="panel__title">Vendor compliance ranking</div><div class="panel__sub">Top &amp; bottom by % compliant</div></div></div>
+          <div style="display:flex; flex-direction:column; gap:6px; font-size:12px;">
+            <div style="display:grid; grid-template-columns:140px 1fr 50px; gap:8px; align-items:center;"><span>Acme Logistics</span><div class="ratio__track" style="width:auto"><div class="ratio__fill" style="width:96%"></div></div><span style="font-family:var(--font-mono); text-align:right">96%</span></div>
+            <div style="display:grid; grid-template-columns:140px 1fr 50px; gap:8px; align-items:center;"><span>Initech Carriers</span><div class="ratio__track" style="width:auto"><div class="ratio__fill" style="width:91%"></div></div><span style="font-family:var(--font-mono); text-align:right">91%</span></div>
+            <div style="display:grid; grid-template-columns:140px 1fr 50px; gap:8px; align-items:center;"><span>Stark Shipping</span><div class="ratio__track" style="width:auto"><div class="ratio__fill" style="width:88%"></div></div><span style="font-family:var(--font-mono); text-align:right">88%</span></div>
+            <div style="height:1px; background:var(--border-subtle); margin:8px 0;"></div>
+            <div style="display:grid; grid-template-columns:140px 1fr 50px; gap:8px; align-items:center;"><span>Northwind Supply</span><div class="ratio__track" style="width:auto"><div class="ratio__fill" style="width:74%; background:var(--warning)"></div></div><span style="font-family:var(--font-mono); text-align:right">74%</span></div>
+            <div style="display:grid; grid-template-columns:140px 1fr 50px; gap:8px; align-items:center;"><span>Wayne Freight</span><div class="ratio__track" style="width:auto"><div class="ratio__fill" style="width:58%; background:var(--warning)"></div></div><span style="font-family:var(--font-mono); text-align:right">58%</span></div>
+            <div style="display:grid; grid-template-columns:140px 1fr 50px; gap:8px; align-items:center;"><span>Globex Freight</span><div class="ratio__track" style="width:auto"><div class="ratio__fill" style="width:42%; background:var(--danger)"></div></div><span style="font-family:var(--font-mono); text-align:right">42%</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel mt-20" style="padding:0; overflow:hidden;">
+        <div class="panel__head" style="padding:16px 18px 8px; margin-bottom:0;"><div><div class="panel__title">All vendors · 5 of 5 shown</div></div></div>
+        <table>
+          <thead><tr>
+            <th class="sortable">Vendor <span class="sort-arrow-inactive">↕</span></th>
+            <th>Status</th>
+            <th class="sortable">Compliance <span class="sort-arrow-inactive">↕</span></th>
+            <th class="num sortable">Invoices <span class="sort-arrow-inactive">↕</span></th>
+            <th class="num sortable sorted">Exposure <span class="sort-arrow">▼</span></th>
+            <th>AI flags</th>
+            <th>Trend (30d)</th>
+          </tr></thead>
+          <tbody>
+            <tr class="selected"><td><strong>Globex Freight</strong><div style="font-family:var(--font-mono);font-size:10px;color:var(--text-tertiary)">VEN-0204 · APAC</div></td><td><span class="badge b-danger"><span class="dot"></span>Non-compliant</span></td><td><div class="ratio"><div class="ratio__track"><div class="ratio__fill" style="width:42%; background:var(--danger)"></div></div><span style="font-family:var(--font-mono);">42%</span></div></td><td class="num">412</td><td class="num">$284,008</td><td><span class="badge b-ai"><span class="dot"></span>17</span></td><td><svg width="80" height="20"><polyline class="spark" stroke="#DC2626" points="0,5 10,7 20,6 30,9 40,11 50,10 60,13 70,15 80,16"/></svg></td></tr>
+            <tr><td><strong>Northwind Supply</strong><div style="font-family:var(--font-mono);font-size:10px;color:var(--text-tertiary)">VEN-0118 · NA</div></td><td><span class="badge b-warning"><span class="dot"></span>Partial</span></td><td><div class="ratio"><div class="ratio__track"><div class="ratio__fill" style="width:74%; background:var(--warning)"></div></div><span style="font-family:var(--font-mono);">74%</span></div></td><td class="num">894</td><td class="num">$112,440</td><td><span class="badge b-ai"><span class="dot"></span>9</span></td><td><svg width="80" height="20"><polyline class="spark" stroke="#D97706" points="0,8 10,10 20,9 30,12 40,11 50,13 60,12 70,14 80,13"/></svg></td></tr>
+            <tr><td><strong>Wayne Freight</strong><div style="font-family:var(--font-mono);font-size:10px;color:var(--text-tertiary)">VEN-0089 · NA</div></td><td><span class="badge b-warning"><span class="dot"></span>Partial</span></td><td><div class="ratio"><div class="ratio__track"><div class="ratio__fill" style="width:58%; background:var(--warning)"></div></div><span style="font-family:var(--font-mono);">58%</span></div></td><td class="num">523</td><td class="num">$67,890</td><td><span class="badge b-ai"><span class="dot"></span>4</span></td><td><svg width="80" height="20"><polyline class="spark" stroke="#D97706" points="0,11 10,12 20,10 30,11 40,12 50,11 60,13 70,12 80,11"/></svg></td></tr>
+            <tr><td><strong>Acme Logistics</strong><div style="font-family:var(--font-mono);font-size:10px;color:var(--text-tertiary)">VEN-0042 · EMEA</div></td><td><span class="badge b-success"><span class="dot"></span>Compliant</span></td><td><div class="ratio"><div class="ratio__track"><div class="ratio__fill" style="width:96%"></div></div><span style="font-family:var(--font-mono);">96%</span></div></td><td class="num">1,247</td><td class="num">$48,210</td><td><span class="badge b-ai"><span class="dot"></span>2</span></td><td><svg width="80" height="20"><polyline class="spark" points="0,15 10,12 20,14 30,10 40,8 50,11 60,7 70,5 80,3"/></svg></td></tr>
+            <tr><td><strong>Initech Carriers</strong><div style="font-family:var(--font-mono);font-size:10px;color:var(--text-tertiary)">VEN-0367 · EMEA</div></td><td><span class="badge b-success"><span class="dot"></span>Compliant</span></td><td><div class="ratio"><div class="ratio__track"><div class="ratio__fill" style="width:91%"></div></div><span style="font-family:var(--font-mono);">91%</span></div></td><td class="num">680</td><td class="num">$22,180</td><td>—</td><td><svg width="80" height="20"><polyline class="spark" points="0,12 10,10 20,11 30,8 40,9 50,7 60,8 70,6 80,5"/></svg></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- SCREEN 2 -->
+<div class="screen-marker"><span class="pill">SCREEN 2</span><span class="name">Data Quality Report · Phase 1</span><span class="meta">1280 × auto</span></div>
+<section class="screen" id="s2">
+  <aside class="sb">
+    <div class="sb__logo"><span class="sb__logo-mark">◆</span>NovaCorp</div>
+    <div class="sb__group">Phase 1 · Cleaning</div>
+    <div class="sb__item"><span class="sb__icon">📥</span>Ingest data<span class="sb__phase">P1</span></div>
+    <div class="sb__item active"><span class="sb__icon">📊</span>Data quality<span class="sb__phase">P1</span></div>
+    <div class="sb__group">Phase 2 · Audit</div>
+    <div class="sb__item"><span class="sb__icon">📋</span>Compliance overview<span class="sb__phase">P2</span></div>
+    <div class="sb__item"><span class="sb__icon">🧾</span>Invoices<span class="sb__phase">P2</span></div>
+    <div class="sb__item"><span class="sb__icon">⚠</span>Exceptions<span class="sb__phase">P2</span></div>
+    <div class="sb__group">Phase 3 · Benchmarking</div>
+    <div class="sb__item"><span class="sb__icon">📈</span>Indicators<span class="sb__phase">P3</span></div>
+    <div class="sb__user"><div class="sb__avatar">YP</div><div><div class="sb__user-name">Yossi P.</div><div class="sb__user-role">Operations Analyst</div></div></div>
+  </aside>
+  <main>
+    <div class="tb">
+      <div class="tb__row1">
+        <div>
+          <div class="breadcrumb"><a>Cleaning</a><span class="sep">/</span><span class="current">Data Quality Report</span></div>
+          <div class="tb__title">Data Quality · Ingestion #7841</div>
+          <div class="tb__subtitle">12,430 rows ingested · 87 duplicates removed · 3 currencies normalized</div>
+        </div>
+        <div class="tb__actions"><button class="btn btn--secondary">Download log</button><button class="btn btn--primary">Continue to audit</button></div>
+      </div>
+    </div>
+    <div class="body">
+      <div class="panel">
+        <div class="panel__head"><div><div class="panel__title">Data quality score</div><div class="panel__sub">Before cleaning vs after AI-assisted pipeline</div></div><span class="badge b-success"><span class="dot"></span>+27 points</span></div>
+        <div class="gauge-row" style="justify-content:center;">
+          <div class="gauge"><svg width="130" height="130" viewBox="0 0 130 130"><circle class="gauge__track" cx="65" cy="65" r="52"/><circle class="gauge__fill" cx="65" cy="65" r="52" stroke="#D97706" stroke-dasharray="219 327"/></svg><div class="gauge__inner"><div><div class="gauge__num">67</div><div class="gauge__lbl">Before</div></div></div></div>
+          <div style="font-size:36px;color:var(--text-disabled);align-self:center">→</div>
+          <div class="gauge"><svg width="130" height="130" viewBox="0 0 130 130"><circle class="gauge__track" cx="65" cy="65" r="52"/><circle class="gauge__fill" cx="65" cy="65" r="52" stroke="#16A34A" stroke-dasharray="307 327"/></svg><div class="gauge__inner"><div><div class="gauge__num">94</div><div class="gauge__lbl">After</div></div></div></div>
+          <div style="margin-left:24px; max-width:280px;"><div style="font-size:12px; color:var(--text-tertiary); text-transform:uppercase; letter-spacing:.05em; margin-bottom:6px;">Issues resolved by AI</div><div style="font-family:var(--font-mono); font-size:24px; font-weight:600; color:var(--ai)">706</div><div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">Across 5 categories. 6 vendors flagged for human confirmation.</div></div>
+        </div>
+      </div>
+      <div class="grid-2-3 mt-20">
+        <div class="panel">
+          <div class="panel__head"><div><div class="panel__title">AI cleaning pipeline</div><div class="panel__sub">Step-by-step status. Agent paused for human review.</div></div><span class="badge b-ai"><span class="dot"></span>Agent active</span></div>
+          <div class="pipeline">
+            <div class="step step--ok"><div class="step__marker">✓</div><div class="step__body"><div class="step__title">Schema validation <span class="badge b-success"><span class="dot"></span>Passed</span></div><div class="step__meta">12,430 rows · 0 schema errors · 14s</div></div></div>
+            <div class="step step--ok"><div class="step__marker">✓</div><div class="step__body"><div class="step__title">Currency normalization <span class="badge b-success"><span class="dot"></span>Passed</span></div><div class="step__meta">3 currencies → USD · 8s</div></div></div>
+            <div class="step step--ok"><div class="step__marker">✓</div><div class="step__body"><div class="step__title">Deduplication <span class="badge b-success"><span class="dot"></span>Passed</span></div><div class="step__meta">87 duplicates removed</div></div></div>
+            <div class="step step--warn"><div class="step__marker">!</div><div class="step__body"><div class="step__title">Vendor harmonization <span class="badge b-warning"><span class="dot"></span>Needs review</span></div><div class="step__meta">6 vendors flagged for human confirmation · agent paused</div><div style="margin-top:8px; display:flex; gap:6px;"><button class="btn btn--ai">Review 6 vendors</button><button class="btn btn--ghost">Skip step</button></div></div></div>
+            <div class="step step--pending"><div class="step__marker">5</div><div class="step__body"><div class="step__title" style="color:var(--text-tertiary)">Cross-reference contracts</div><div class="step__meta">Pending step 4</div></div></div>
+            <div class="step step--pending"><div class="step__marker">6</div><div class="step__body"><div class="step__title" style="color:var(--text-tertiary)">Final validation &amp; handoff</div><div class="step__meta">Pending step 5</div></div></div>
+          </div>
+        </div>
+        <div>
+          <div class="panel" style="margin-bottom:16px;">
+            <div class="panel__head"><div><div class="panel__title">Issues by type</div><div class="panel__sub">Before / after</div></div></div>
+            <div style="display:flex; flex-direction:column; gap:14px; font-size:12px;">
+              <div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>Missing values</span><span style="font-family:var(--font-mono);"><span style="color:var(--danger)">412</span> → <span style="color:var(--success)">8</span></span></div><div style="display:flex; gap:2px; height:8px;"><div style="flex:412; background:var(--danger); border-radius:2px;"></div><div style="flex:600; background:var(--bg-hover); border-radius:2px;"></div></div></div>
+              <div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>Duplicates</span><span style="font-family:var(--font-mono);"><span style="color:var(--danger)">87</span> → <span style="color:var(--success)">0</span></span></div><div style="display:flex; gap:2px; height:8px;"><div style="flex:87; background:var(--danger); border-radius:2px;"></div><div style="flex:925; background:var(--bg-hover); border-radius:2px;"></div></div></div>
+              <div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>Schema mismatch</span><span style="font-family:var(--font-mono);"><span style="color:var(--danger)">23</span> → <span style="color:var(--success)">0</span></span></div><div style="display:flex; gap:2px; height:8px;"><div style="flex:23; background:var(--danger); border-radius:2px;"></div><div style="flex:989; background:var(--bg-hover); border-radius:2px;"></div></div></div>
+              <div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>Currency mismatch</span><span style="font-family:var(--font-mono);"><span style="color:var(--danger)">156</span> → <span style="color:var(--success)">0</span></span></div><div style="display:flex; gap:2px; height:8px;"><div style="flex:156; background:var(--danger); border-radius:2px;"></div><div style="flex:856; background:var(--bg-hover); border-radius:2px;"></div></div></div>
+              <div><div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>Invalid references</span><span style="font-family:var(--font-mono);"><span style="color:var(--danger)">42</span> → <span style="color:var(--warning)">6</span></span></div><div style="display:flex; gap:2px; height:8px;"><div style="flex:42; background:var(--danger); border-radius:2px;"></div><div style="flex:6; background:var(--warning); border-radius:2px;"></div><div style="flex:964; background:var(--bg-hover); border-radius:2px;"></div></div></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel__head"><div><div class="panel__title">Ingestion log</div><div class="panel__sub">Append-only · last 6 events</div></div></div>
+            <div style="font-family:var(--font-mono); font-size:11px; color:var(--text-secondary); display:flex; flex-direction:column; gap:5px;">
+              <div><span style="color:var(--text-tertiary)">10:42:14</span> · ✓ Schema validated · 12,430 rows</div>
+              <div><span style="color:var(--text-tertiary)">10:42:22</span> · ✓ Currency: 3 → USD</div>
+              <div><span style="color:var(--text-tertiary)">10:42:44</span> · ✓ Deduped 87 rows</div>
+              <div><span style="color:var(--text-tertiary)">10:43:10</span> · ⚠ Vendor harmonization paused (6)</div>
+              <div><span style="color:var(--text-tertiary)">10:43:11</span> · → Awaiting human input</div>
+              <div><span style="color:var(--text-tertiary)">10:44:02</span> · ✦ AI suggested mappings ready</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- SCREEN 3 -->
+<div class="screen-marker"><span class="pill">SCREEN 3</span><span class="name">Invoice Detail · Exception View</span><span class="meta">1280 × auto</span></div>
+<section class="screen" id="s3">
+  <aside class="sb">
+    <div class="sb__logo"><span class="sb__logo-mark">◆</span>NovaCorp</div>
+    <div class="sb__group">Phase 1 · Cleaning</div>
+    <div class="sb__item"><span class="sb__icon">📥</span>Ingest data<span class="sb__phase">P1</span></div>
+    <div class="sb__item"><span class="sb__icon">📊</span>Data quality<span class="sb__phase">P1</span></div>
+    <div class="sb__group">Phase 2 · Audit</div>
+    <div class="sb__item"><span class="sb__icon">📋</span>Compliance overview<span class="sb__phase">P2</span></div>
+    <div class="sb__item active"><span class="sb__icon">🧾</span>Invoices<span class="sb__phase">P2</span></div>
+    <div class="sb__item"><span class="sb__icon">⚠</span>Exceptions<span class="sb__phase">P2</span></div>
+    <div class="sb__group">Phase 3 · Benchmarking</div>
+    <div class="sb__item"><span class="sb__icon">📈</span>Indicators<span class="sb__phase">P3</span></div>
+    <div class="sb__user"><div class="sb__avatar">YP</div><div><div class="sb__user-name">Yossi P.</div><div class="sb__user-role">Finance Controller</div></div></div>
+  </aside>
+  <main>
+    <div class="tb">
+      <div class="tb__row1">
+        <div>
+          <div class="breadcrumb"><a>Audit</a><span class="sep">/</span><a>Invoices</a><span class="sep">/</span><span class="current">INV-2024-08812</span></div>
+          <div class="tb__title">INV-2024-08812 · Globex Freight</div>
+          <div class="tb__subtitle">Issued 2026-04-22 · Contract CTR-NV-0427 · 2 exceptions detected</div>
+        </div>
+        <div class="tb__actions"><button class="btn btn--ghost">‹ Prev</button><button class="btn btn--ghost">Next ›</button><button class="btn btn--secondary">Export</button><button class="btn btn--ai">✦ AI batch recovery (17)</button></div>
+      </div>
+    </div>
+    <div class="body">
+      <div class="panel" style="display:flex; gap:24px; align-items:center; padding:16px 20px;">
+        <div><div style="font-size:10px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.04em;">Invoice</div><div style="font-family:var(--font-mono); font-weight:600; font-size:16px;">INV-2024-08812</div></div>
+        <div><div style="font-size:10px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.04em;">Vendor</div><div style="font-weight:500">Globex Freight</div></div>
+        <div><div style="font-size:10px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.04em;">Amount</div><div style="font-family:var(--font-mono); font-weight:600;">$6,262.00 <span style="color:var(--danger); font-size:12px; font-weight:500;">(+$4,185)</span></div></div>
+        <div><div style="font-size:10px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.04em;">Contract</div><div style="font-family:var(--font-mono); font-size:13px;">CTR-NV-0427</div></div>
+        <div><div style="font-size:10px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.04em;">Service Level</div><div>Express · EMEA</div></div>
+        <div style="margin-left:auto"><span class="badge b-danger" style="font-size:12px; padding:4px 10px;"><span class="dot"></span>Non-Compliant</span></div>
+      </div>
+      <div class="mt-20">
+        <div class="tabs"><div class="tab">Audit Trail</div><div class="tab active">Line Items <span class="badge b-danger" style="margin-left:6px;"><span class="dot"></span>2</span></div><div class="tab">Exceptions <span class="badge b-danger" style="margin-left:6px;"><span class="dot"></span>2</span></div><div class="tab">Contract Reference</div></div>
+        <div class="grid-2-3">
+          <div class="panel" style="padding:0; overflow:hidden;">
+            <div class="panel__head" style="padding:14px 18px 6px; margin-bottom:0;"><div><div class="panel__title">Invoiced vs Expected</div><div class="panel__sub">2 deviations detected · $4,185 total impact</div></div></div>
+            <table>
+              <thead><tr><th>#</th><th>Description</th><th class="num">Invoiced</th><th class="num">Expected</th><th class="num">Deviation</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>Express freight · LON→AMS</td><td class="num">$1,240.00</td><td class="num">$1,240.00</td><td class="num delta-zero">$0.00</td></tr>
+                <tr><td>2</td><td>Surcharge · fuel</td><td class="num">$ 412.00</td><td class="num">$ 385.00</td><td class="num delta-pos">+$27.00</td></tr>
+                <tr style="background:#FEF2F2"><td>3</td><td>Customs handling <span class="badge b-danger" style="margin-left:6px;"><span class="dot"></span>Tier mismatch</span></td><td class="num">$4,500.00</td><td class="num">$ 342.00</td><td class="num delta-pos">+$4,158.00</td></tr>
+                <tr><td>4</td><td>Documentation fee</td><td class="num">$ 25.00</td><td class="num">$ 25.00</td><td class="num delta-zero">$0.00</td></tr>
+                <tr><td>5</td><td>Insurance</td><td class="num">$ 85.00</td><td class="num">$ 85.00</td><td class="num delta-zero">$0.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div class="exc">
+              <div class="exc__head"><div class="exc__title">Surcharge miscalculation</div><span class="badge b-danger"><span class="dot"></span>+$4,158</span></div>
+              <div class="exc__grid">
+                <div><div class="exc__k">Deviation type</div><div class="exc__v">Rate-card tier mismatch</div></div>
+                <div><div class="exc__k">Financial impact</div><div class="exc__v" style="color:var(--danger); font-weight:600; font-family:var(--font-mono);">+$4,158.00</div></div>
+                <div><div class="exc__k">Root cause</div><div class="exc__v">Tier 3 surcharge applied; contract requires tier 1.</div></div>
+                <div><div class="exc__k">Recommended action</div><div class="exc__v">Recover $4,158 from vendor.</div></div>
+              </div>
+            </div>
+            <div class="exc">
+              <div class="exc__head"><div class="exc__title">Fuel surcharge variance</div><span class="badge b-warning"><span class="dot"></span>+$27</span></div>
+              <div class="exc__grid"><div><div class="exc__k">Deviation type</div><div class="exc__v">Index drift</div></div><div><div class="exc__k">Financial impact</div><div class="exc__v" style="color:var(--warning); font-weight:600; font-family:var(--font-mono);">+$27.00</div></div></div>
+            </div>
+            <div class="ai-card">
+              <div class="ai-head"><div class="ai-icon">✦</div><div class="ai-title">17 invoices like this</div><div class="ai-conf">84%</div></div>
+              <div class="ai-body" style="font-size:12px;">Same surcharge tier error across 17 invoices. Total recoverable: <strong>$48,210</strong>. All from rate-card v2.3 (Mar 12).</div>
+              <div class="ai-actions"><button class="btn btn--ai">Open batch recovery</button></div>
+            </div>
+          </div>
+        </div>
+        <div class="panel mt-20">
+          <div class="panel__head"><div><div class="panel__title">Activity</div><div class="panel__sub">All actions on this invoice</div></div></div>
+          <div style="font-family:var(--font-mono); font-size:11px; color:var(--text-secondary); display:flex; flex-direction:column; gap:5px;">
+            <div><span style="color:var(--text-tertiary)">2026-05-04 09:12</span> · ✦ AI flagged tier mismatch (confidence 84%)</div>
+            <div><span style="color:var(--text-tertiary)">2026-05-04 09:12</span> · ✦ AI linked to 16 sibling invoices</div>
+            <div><span style="color:var(--text-tertiary)">2026-04-23 14:02</span> · ✓ Invoice ingested · ingest-7841</div>
+            <div><span style="color:var(--text-tertiary)">2026-04-22 17:30</span> · ✓ Invoice received from vendor</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- SCREEN 4 -->
+<div class="screen-marker"><span class="pill">SCREEN 4</span><span class="name">Root Cause Analysis</span><span class="meta">1280 × auto</span></div>
+<section class="screen" id="s4">
+  <aside class="sb">
+    <div class="sb__logo"><span class="sb__logo-mark">◆</span>NovaCorp</div>
+    <div class="sb__group">Phase 1 · Cleaning</div>
+    <div class="sb__item"><span class="sb__icon">📥</span>Ingest data<span class="sb__phase">P1</span></div>
+    <div class="sb__item"><span class="sb__icon">📊</span>Data quality<span class="sb__phase">P1</span></div>
+    <div class="sb__group">Phase 2 · Audit</div>
+    <div class="sb__item"><span class="sb__icon">📋</span>Compliance overview<span class="sb__phase">P2</span></div>
+    <div class="sb__item"><span class="sb__icon">🧾</span>Invoices<span class="sb__phase">P2</span></div>
+    <div class="sb__item active"><span class="sb__icon">⚠</span>Exceptions<span class="sb__phase">P2</span></div>
+    <div class="sb__group">Phase 3 · Benchmarking</div>
+    <div class="sb__item"><span class="sb__icon">📈</span>Indicators<span class="sb__phase">P3</span></div>
+    <div class="sb__user"><div class="sb__avatar">YP</div><div><div class="sb__user-name">Yossi P.</div><div class="sb__user-role">Procurement Manager</div></div></div>
+  </aside>
+  <main>
+    <div class="tb">
+      <div class="tb__row1">
+        <div>
+          <div class="breadcrumb"><a>Audit</a><span class="sep">/</span><span class="current">Root Cause Analysis</span></div>
+          <div class="tb__title">Root Cause Analysis</div>
+          <div class="tb__subtitle">8 categories · 247 exceptions · $1.262M total exposure</div>
+        </div>
+        <div class="tb__actions"><div class="seg"><button class="active">Financial impact</button><button>Frequency</button></div><button class="btn btn--secondary">Export</button></div>
+      </div>
+    </div>
+    <div class="body">
+      <div class="panel">
+        <div class="panel__head"><div><div class="panel__title">Exceptions by financial impact</div><div class="panel__sub">Pareto · top 4 categories drive 81% of leakage</div></div><span class="badge b-info"><span class="dot"></span>80/20 break at category 4</span></div>
+        <div class="pareto-wrap">
+          <div class="pareto-bars">
+            <div class="pareto-bar" style="height:90%"><div class="v">$412K</div><div class="lbl">Surcharge</div></div>
+            <div class="pareto-bar" style="height:72%"><div class="v">$298K</div><div class="lbl">Rate</div></div>
+            <div class="pareto-bar" style="height:48%"><div class="v">$184K</div><div class="lbl">Currency</div></div>
+            <div class="pareto-bar" style="height:34%"><div class="v">$148K</div><div class="lbl">Volume</div></div>
+            <div class="pareto-bar dim" style="height:22%"><div class="v">$92K</div><div class="lbl">Mapping</div></div>
+            <div class="pareto-bar dim" style="height:14%"><div class="v">$58K</div><div class="lbl">Override</div></div>
+            <div class="pareto-bar dim" style="height:10%"><div class="v">$42K</div><div class="lbl">Outdated</div></div>
+            <div class="pareto-bar dim" style="height:6%"><div class="v">$28K</div><div class="lbl">Missing</div></div>
+          </div>
+          <svg class="pareto-line" viewBox="0 0 800 200" preserveAspectRatio="none"><polyline points="50,180 150,140 250,108 350,90 450,75 550,65 650,60 750,55" stroke="#6D28D9" stroke-width="2" fill="none" stroke-dasharray="4,3"/><circle cx="350" cy="90" r="5" fill="#6D28D9"/><text x="360" y="86" font-family="IBM Plex Mono" font-size="11" fill="#6D28D9" font-weight="600">81%</text></svg>
+        </div>
+      </div>
+      <div class="grid-4 mt-20">
+        <div class="cat" style="border-left:3px solid var(--danger)"><div class="cat__top"><div class="cat__name">Surcharge miscalculation</div><div class="cat__impact">$412K</div></div><span class="badge b-danger"><span class="dot"></span>Severe</span><div class="cat__sub"><span><strong>89</strong> invoices</span><span><strong>$4,629</strong> avg</span></div></div>
+        <div class="cat" style="border-left:3px solid var(--danger)"><div class="cat__top"><div class="cat__name">Incorrect rate</div><div class="cat__impact">$298K</div></div><span class="badge b-danger"><span class="dot"></span>Severe</span><div class="cat__sub"><span><strong>54</strong> invoices</span><span><strong>$5,518</strong> avg</span></div></div>
+        <div class="cat" style="border-left:3px solid var(--warning)"><div class="cat__top"><div class="cat__name">Currency mismatch</div><div class="cat__impact">$184K</div></div><span class="badge b-warning"><span class="dot"></span>High</span><div class="cat__sub"><span><strong>32</strong> invoices</span><span><strong>$5,750</strong> avg</span></div></div>
+        <div class="cat" style="border-left:3px solid var(--warning)"><div class="cat__top"><div class="cat__name">Volume tier error</div><div class="cat__impact">$148K</div></div><span class="badge b-warning"><span class="dot"></span>High</span><div class="cat__sub"><span><strong>27</strong> invoices</span><span><strong>$5,481</strong> avg</span></div></div>
+        <div class="cat"><div class="cat__top"><div class="cat__name">Data mapping errors</div><div class="cat__impact">$92K</div></div><span class="badge b-info"><span class="dot"></span>Medium</span><div class="cat__sub"><span><strong>18</strong> invoices</span><span><strong>$5,111</strong> avg</span></div></div>
+        <div class="cat"><div class="cat__top"><div class="cat__name">Manual overrides</div><div class="cat__impact">$58K</div></div><span class="badge b-info"><span class="dot"></span>Medium</span><div class="cat__sub"><span><strong>14</strong> invoices</span><span><strong>$4,143</strong> avg</span></div></div>
+        <div class="cat"><div class="cat__top"><div class="cat__name">Outdated rate card</div><div class="cat__impact">$42K</div></div><span class="badge b-neutral">Low</span><div class="cat__sub"><span><strong>9</strong> invoices</span><span><strong>$4,667</strong> avg</span></div></div>
+        <div class="cat"><div class="cat__top"><div class="cat__name">Missing contract ref</div><div class="cat__impact">$28K</div></div><span class="badge b-neutral">Low</span><div class="cat__sub"><span><strong>4</strong> invoices</span><span><strong>$7,000</strong> avg</span></div></div>
+      </div>
+      <div class="grid-3 mt-20">
+        <div class="ai-card" style="border-left:3px solid var(--danger)"><div class="ai-head"><div class="ai-icon" style="background:var(--danger)">!</div><div class="ai-title">Systemic issue</div><div class="ai-conf">91%</div></div><div class="ai-body" style="font-size:12px;">Rate-card v2.3 ingestion drove 73% of surcharge errors. Roll back recommended for 3 affected contracts.</div><div class="ai-actions"><button class="btn btn--ai">Initiate rollback</button></div></div>
+        <div class="ai-card" style="border-left:3px solid var(--warning)"><div class="ai-head"><div class="ai-icon" style="background:var(--warning)">⌁</div><div class="ai-title">Predictive alert</div><div class="ai-conf">76%</div></div><div class="ai-body" style="font-size:12px;">Globex Freight pattern likely to repeat in Q2. Estimated future leakage: $52K. Suggest preemptive rate-card audit.</div><div class="ai-actions"><button class="btn btn--ai">Schedule audit</button></div></div>
+        <div class="ai-card" style="border-left:3px solid var(--success)"><div class="ai-head"><div class="ai-icon" style="background:var(--success)">✦</div><div class="ai-title">Quick-win opportunity</div><div class="ai-conf">98%</div></div><div class="ai-body" style="font-size:12px;">9 outdated rate-card matches can be auto-resolved. $42K recoverable with no human review needed.</div><div class="ai-actions"><button class="btn btn--ai">Auto-resolve all</button></div></div>
+      </div>
+      <div class="panel mt-20" style="display:flex; align-items:center; gap:24px;">
+        <div style="flex-shrink:0;"><div style="font-size:10px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.04em;">Compliance trend · 4 quarters</div><div style="font-family:var(--font-mono); font-size:24px; font-weight:600; color:var(--success); margin-top:4px;">87.4%</div><div style="font-size:12px; color:var(--success);">▲ +6.3pp YoY</div></div>
+        <svg width="100%" height="80" viewBox="0 0 600 80" style="flex:1">
+          <defs><linearGradient id="grad-trend" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#16A34A" stop-opacity=".3"/><stop offset="100%" stop-color="#16A34A" stop-opacity="0"/></linearGradient></defs>
+          <polyline points="40,60 200,52 360,38 520,18" stroke="#16A34A" stroke-width="2.5" fill="none"/>
+          <polygon points="40,60 200,52 360,38 520,18 520,80 40,80" fill="url(#grad-trend)"/>
+          <circle cx="40" cy="60" r="4" fill="#16A34A"/><circle cx="200" cy="52" r="4" fill="#16A34A"/><circle cx="360" cy="38" r="4" fill="#16A34A"/><circle cx="520" cy="18" r="5" fill="#16A34A" stroke="#fff" stroke-width="2"/>
+          <text x="40" y="78" text-anchor="middle" font-family="IBM Plex Sans" font-size="10" fill="#64748B">Q2 25</text>
+          <text x="200" y="78" text-anchor="middle" font-family="IBM Plex Sans" font-size="10" fill="#64748B">Q3 25</text>
+          <text x="360" y="78" text-anchor="middle" font-family="IBM Plex Sans" font-size="10" fill="#64748B">Q4 25</text>
+          <text x="520" y="78" text-anchor="middle" font-family="IBM Plex Sans" font-size="10" fill="#64748B" font-weight="600">Q1 26</text>
+        </svg>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- STATE 1 - EMPTY -->
+<div class="screen-marker"><span class="pill">STATE 1</span><span class="name">Compliance Overview · Empty state</span><span class="meta">1280 × auto</span></div>
+<section class="screen" id="empty">
+  <aside class="sb">
+    <div class="sb__logo"><span class="sb__logo-mark">◆</span>NovaCorp</div>
+    <div class="sb__group">Phase 1 · Cleaning</div>
+    <div class="sb__item"><span class="sb__icon">📥</span>Ingest data<span class="sb__phase">P1</span></div>
+    <div class="sb__item"><span class="sb__icon">📊</span>Data quality<span class="sb__phase">P1</span></div>
+    <div class="sb__group">Phase 2 · Audit</div>
+    <div class="sb__item active"><span class="sb__icon">📋</span>Compliance overview<span class="sb__phase">P2</span></div>
+    <div class="sb__item"><span class="sb__icon">🧾</span>Invoices<span class="sb__phase">P2</span></div>
+    <div class="sb__item"><span class="sb__icon">⚠</span>Exceptions<span class="sb__phase">P2</span></div>
+    <div class="sb__group">Phase 3 · Benchmarking</div>
+    <div class="sb__item"><span class="sb__icon">📈</span>Indicators<span class="sb__phase">P3</span></div>
+    <div class="sb__user"><div class="sb__avatar">YP</div><div><div class="sb__user-name">Yossi P.</div><div class="sb__user-role">Procurement Manager</div></div></div>
+  </aside>
+  <main>
+    <div class="tb">
+      <div class="tb__row1">
+        <div><div class="breadcrumb"><a>Audit</a><span class="sep">/</span><span class="current">Compliance Overview</span></div><div class="tb__title">Compliance Overview</div><div class="tb__subtitle">No data ingested yet</div></div>
+        <div class="tb__actions"><button class="btn btn--ghost">View documentation</button><button class="btn btn--primary">+ Upload file</button></div>
+      </div>
+    </div>
+    <div class="body">
+      <div class="empty-hero">
+        <div class="empty-hero__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+        <h2 class="empty-hero__title">No invoices to audit yet</h2>
+        <p class="empty-hero__sub">Upload your first invoice file to start. We'll clean the data, match it against your contracts, and flag anything that needs attention — usually within 90 seconds.</p>
+        <div class="empty-hero__ctas"><button class="btn btn--primary btn--lg">📥 Upload file</button><button class="btn btn--secondary btn--lg">Connect a data source</button></div>
+        <div class="formats"><span class="format">.csv</span><span class="format">.xlsx</span><span class="format">.json</span><span class="format">SAP Concur</span><span class="format">Coupa</span><span class="format">+ 8 more</span></div>
+      </div>
+      <div class="next-steps">
+        <div class="step-card"><div class="step-num">1</div><div><h4>Ingest &amp; clean</h4><p>The agent normalizes currencies, dedups rows, and validates schema automatically.</p></div></div>
+        <div class="step-card"><div class="step-num">2</div><div><h4>Match against contracts</h4><p>Every line item is checked against your active contracts and rate cards.</p></div></div>
+        <div class="step-card"><div class="step-num">3</div><div><h4>Surface exceptions</h4><p>You'll see a ranked list of vendors and a clear path to recover any leakage.</p></div></div>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- STATE 2 - LOADING -->
+<div class="screen-marker"><span class="pill pill--ai">STATE 2</span><span class="name">Compliance Overview · Loading / syncing</span><span class="meta">1280 × auto</span></div>
+<section class="screen" id="loading">
+  <aside class="sb">
+    <div class="sb__logo"><span class="sb__logo-mark">◆</span>NovaCorp</div>
+    <div class="sb__group">Phase 1 · Cleaning</div>
+    <div class="sb__item"><span class="sb__icon">📥</span>Ingest data<span class="sb__phase">P1</span></div>
+    <div class="sb__item"><span class="sb__icon">📊</span>Data quality<span class="sb__phase">P1</span></div>
+    <div class="sb__group">Phase 2 · Audit</div>
+    <div class="sb__item active"><span class="sb__icon">📋</span>Compliance overview<span class="sb__phase">P2</span></div>
+    <div class="sb__item"><span class="sb__icon">🧾</span>Invoices<span class="sb__phase">P2</span></div>
+    <div class="sb__item"><span class="sb__icon">⚠</span>Exceptions<span class="sb__phase">P2</span></div>
+    <div class="sb__group">Phase 3 · Benchmarking</div>
+    <div class="sb__item"><span class="sb__icon">📈</span>Indicators<span class="sb__phase">P3</span></div>
+    <div class="sb__user"><div class="sb__avatar">YP</div><div><div class="sb__user-name">Yossi P.</div><div class="sb__user-role">Procurement Manager</div></div></div>
+  </aside>
+  <main>
+    <div class="tb">
+      <div class="tb__row1">
+        <div><div class="breadcrumb"><a>Audit</a><span class="sep">/</span><span class="current">Compliance Overview</span></div><div class="tb__title">Compliance Overview · Q1 2026</div><div class="tb__subtitle">Syncing data — agent will analyze once complete</div></div>
+        <div class="tb__actions"><button class="btn btn--ghost">Cancel sync</button></div>
+      </div>
+    </div>
+    <div class="body">
+      <div class="progress-banner">
+        <span class="pulse"></span>
+        <div style="flex-shrink:0;"><div style="font-size:13px; font-weight:600; color:var(--brand);">Syncing data sources</div><div style="font-size:11px; color:var(--text-tertiary); margin-top:2px;">22 of 47 sources processed · ETA 1m 30s</div></div>
+        <div class="progress-bar"><span></span></div><div class="progress-meta">47%</div>
+      </div>
+      <div class="kpi-skel">
+        <div class="kpi-skel-card"><div class="skel" style="height:11px;width:60%"></div><div class="skel" style="height:24px;width:55%;margin-top:8px"></div><div class="skel" style="height:4px;width:100%;margin-top:14px"></div></div>
+        <div class="kpi-skel-card"><div class="skel" style="height:11px;width:65%"></div><div class="skel" style="height:24px;width:45%;margin-top:8px"></div><div class="skel" style="height:4px;width:100%;margin-top:14px"></div></div>
+        <div class="kpi-skel-card"><div class="skel" style="height:11px;width:55%"></div><div class="skel" style="height:24px;width:40%;margin-top:8px"></div><div class="skel" style="height:4px;width:100%;margin-top:14px"></div></div>
+        <div class="kpi-skel-card"><div class="skel" style="height:11px;width:60%"></div><div class="skel" style="height:24px;width:50%;margin-top:8px"></div><div class="skel" style="height:11px;width:35%;margin-top:6px"></div></div>
+        <div class="kpi-skel-card"><div class="skel" style="height:11px;width:55%"></div><div class="skel" style="height:24px;width:48%;margin-top:8px"></div><div class="skel" style="height:11px;width:40%;margin-top:6px"></div></div>
+      </div>
+      <div class="panel" style="background:linear-gradient(180deg,var(--ai-tint) 0%,#fff 80%); border-color:#DDD6FE; border-left:3px solid var(--ai); margin-bottom:20px;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+          <div style="width:28px; height:28px; border-radius:50%; background:var(--ai); color:#fff; display:grid; place-items:center; font-weight:700; opacity:.6;">✦</div>
+          <div class="skel" style="height:14px; width:240px;"></div>
+          <div class="skel" style="height:18px; width:90px; border-radius:999px; margin-left:auto;"></div>
+        </div>
+        <div class="skel" style="height:10px; width:100%; margin-bottom:6px;"></div>
+        <div class="skel" style="height:10px; width:88%; margin-bottom:6px;"></div>
+        <div class="skel" style="height:10px; width:64%;"></div>
+        <div style="font-size:11px; color:var(--ai); margin-top:14px; font-style:italic;">✦ Agent will surface insights once data sync completes…</div>
+      </div>
+      <div class="grid-2-3">
+        <div class="panel">
+          <div class="skel" style="height:14px; width:160px; margin-bottom:6px;"></div>
+          <div class="skel" style="height:10px; width:240px; margin-bottom:18px;"></div>
+          <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:24px; align-items:end; height:180px;">
+            <div class="skel" style="height:75%; border-radius:3px 3px 0 0"></div>
+            <div class="skel" style="height:48%; border-radius:3px 3px 0 0"></div>
+            <div class="skel" style="height:22%; border-radius:3px 3px 0 0"></div>
+            <div class="skel" style="height:60%; border-radius:3px 3px 0 0"></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="skel" style="height:14px; width:200px; margin-bottom:6px;"></div>
+          <div class="skel" style="height:10px; width:140px; margin-bottom:16px;"></div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <div style="display:flex; gap:10px; align-items:center;"><div class="skel" style="height:10px; width:120px;"></div><div class="skel" style="height:6px; flex:1;"></div></div>
+            <div style="display:flex; gap:10px; align-items:center;"><div class="skel" style="height:10px; width:120px;"></div><div class="skel" style="height:6px; flex:1;"></div></div>
+            <div style="display:flex; gap:10px; align-items:center;"><div class="skel" style="height:10px; width:120px;"></div><div class="skel" style="height:6px; flex:1;"></div></div>
+            <div style="display:flex; gap:10px; align-items:center;"><div class="skel" style="height:10px; width:120px;"></div><div class="skel" style="height:6px; flex:1;"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- STATE 3 - ERROR -->
+<div class="screen-marker"><span class="pill pill--danger">STATE 3</span><span class="name">Compliance Overview · Error / partial data</span><span class="meta">1280 × auto</span></div>
+<section class="screen" id="error">
+  <aside class="sb">
+    <div class="sb__logo"><span class="sb__logo-mark">◆</span>NovaCorp</div>
+    <div class="sb__group">Phase 1 · Cleaning</div>
+    <div class="sb__item"><span class="sb__icon">📥</span>Ingest data<span class="sb__phase">P1</span></div>
+    <div class="sb__item"><span class="sb__icon">📊</span>Data quality<span class="sb__phase">P1</span></div>
+    <div class="sb__group">Phase 2 · Audit</div>
+    <div class="sb__item active"><span class="sb__icon">📋</span>Compliance overview<span class="sb__phase">P2</span></div>
+    <div class="sb__item"><span class="sb__icon">🧾</span>Invoices<span class="sb__phase">P2</span></div>
+    <div class="sb__item"><span class="sb__icon">⚠</span>Exceptions<span class="sb__phase">P2</span></div>
+    <div class="sb__group">Phase 3 · Benchmarking</div>
+    <div class="sb__item"><span class="sb__icon">📈</span>Indicators<span class="sb__phase">P3</span></div>
+    <div class="sb__user"><div class="sb__avatar">YP</div><div><div class="sb__user-name">Yossi P.</div><div class="sb__user-role">Procurement Manager</div></div></div>
+  </aside>
+  <main>
+    <div class="tb">
+      <div class="tb__row1">
+        <div><div class="breadcrumb"><a>Audit</a><span class="sep">/</span><span class="current">Compliance Overview</span></div><div class="tb__title">Compliance Overview · Q1 2026 <span class="stale-tag">PARTIAL DATA</span></div><div class="tb__subtitle">Last successful sync: 2026-04-22 09:14 · 2 sources unavailable</div></div>
+        <div class="tb__actions"><button class="btn btn--ghost">View error log</button><button class="btn btn--primary">↻ Retry sync</button></div>
+      </div>
+    </div>
+    <div class="body">
+      <div class="error-banner">
+        <div class="error-banner__icon">!</div>
+        <div style="flex:1;"><div class="error-banner__title">Sync failed · 2 of 47 data sources unavailable</div><div class="error-banner__body">Showing partial results from 45 sources. Compliance figures may not reflect the latest data. The AI agent has paused new analysis until sync recovers.</div></div>
+        <div class="error-banner__actions"><button class="btn btn--ghost">Dismiss</button><button class="btn btn--danger">↻ Retry sync</button></div>
+      </div>
+      <div class="panel" style="margin-bottom:20px;">
+        <div class="panel__head"><div><div class="panel__title">Affected sources</div><div class="panel__sub">Click any source to view its error log</div></div></div>
+        <div class="affected-list">
+          <div class="affected-row"><span style="color:var(--text-secondary);">SAP Concur · EU instance</span><span style="color:var(--text-tertiary); font-size:11px;">Connection timeout · 503 after 30s</span><span class="badge b-danger" style="margin-left:auto"><span class="dot"></span>Failed</span></div>
+          <div class="affected-row"><span style="color:var(--text-secondary);">Coupa · APAC instance</span><span style="color:var(--text-tertiary); font-size:11px;">Authentication expired · token refresh required</span><span class="badge b-warning" style="margin-left:auto"><span class="dot"></span>Auth required</span></div>
+        </div>
+      </div>
+      <div class="kpis">
+        <div class="kpi" style="opacity:.7"><div class="kpi__label">Fully compliant <span class="stale-tag">stale</span></div><div class="kpi__value">87.4%</div><div class="kpi__delta">as of Apr 22</div><div class="kpi__bar"><span style="width:87%"></span></div></div>
+        <div class="kpi" style="opacity:.7"><div class="kpi__label">Partially compliant <span class="stale-tag">stale</span></div><div class="kpi__value">9.2%</div><div class="kpi__delta">as of Apr 22</div><div class="kpi__bar"><span style="width:9.2%; background:var(--warning)"></span></div></div>
+        <div class="kpi" style="opacity:.7"><div class="kpi__label">Non-compliant <span class="stale-tag">stale</span></div><div class="kpi__value">3.4%</div><div class="kpi__delta">as of Apr 22</div><div class="kpi__bar"><span style="width:3.4%; background:var(--danger)"></span></div></div>
+        <div class="kpi" style="opacity:.7"><div class="kpi__label">Total exposure <span class="stale-tag">partial</span></div><div class="kpi__value">$1.21M</div><div class="kpi__delta">45 of 47 sources</div></div>
+        <div class="kpi" style="opacity:.7"><div class="kpi__label">Net leakage <span class="stale-tag">partial</span></div><div class="kpi__value">$172K</div><div class="kpi__delta">may be incomplete</div></div>
+      </div>
+      <div class="panel mt-20" style="background:#FFF8F8; border-left:3px solid var(--danger);">
+        <div class="panel__head">
+          <div><div class="panel__title" style="display:flex; align-items:center; gap:8px;"><span class="badge b-danger"><span class="dot"></span>Paused</span>AI agent has paused new analysis</div><div class="panel__sub" style="margin-top:6px;">Working with incomplete data could surface false patterns. The agent will resume automatically once all sources reconnect, or you can let it run on the partial data.</div></div>
+          <div class="panel__actions"><button class="btn btn--secondary">Continue with partial data</button><button class="btn btn--primary">↻ Retry sync</button></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- STATE 4 - AGENT IN PROGRESS -->
+<div class="screen-marker"><span class="pill pill--ai">STATE 4</span><span class="name">Data Quality Report · Agent in progress</span><span class="meta">1280 × auto</span></div>
+<section class="screen" id="agent">
+  <aside class="sb">
+    <div class="sb__logo"><span class="sb__logo-mark">◆</span>NovaCorp</div>
+    <div class="sb__group">Phase 1 · Cleaning</div>
+    <div class="sb__item"><span class="sb__icon">📥</span>Ingest data<span class="sb__phase">P1</span></div>
+    <div class="sb__item active"><span class="sb__icon">📊</span>Data quality<span class="sb__phase">P1</span></div>
+    <div class="sb__group">Phase 2 · Audit</div>
+    <div class="sb__item"><span class="sb__icon">📋</span>Compliance overview<span class="sb__phase">P2</span></div>
+    <div class="sb__item"><span class="sb__icon">🧾</span>Invoices<span class="sb__phase">P2</span></div>
+    <div class="sb__item"><span class="sb__icon">⚠</span>Exceptions<span class="sb__phase">P2</span></div>
+    <div class="sb__group">Phase 3 · Benchmarking</div>
+    <div class="sb__item"><span class="sb__icon">📈</span>Indicators<span class="sb__phase">P3</span></div>
+    <div class="sb__user"><div class="sb__avatar">YP</div><div><div class="sb__user-name">Yossi P.</div><div class="sb__user-role">Operations Analyst</div></div></div>
+  </aside>
+  <main>
+    <div class="tb">
+      <div class="tb__row1">
+        <div><div class="breadcrumb"><a>Cleaning</a><span class="sep">/</span><span class="current">Data Quality Report</span></div><div class="tb__title">Data Quality · Ingestion #7841</div><div class="tb__subtitle">Agent is cleaning · step 4 of 6 · ETA 42 seconds</div></div>
+        <div class="tb__actions"><button class="btn btn--ghost">Cancel run</button></div>
+      </div>
+    </div>
+    <div class="body">
+      <div class="progress-banner" style="background:var(--ai-tint); border-color:#DDD6FE; border-left-color:var(--ai);">
+        <span class="pulse" style="background:var(--ai);"></span>
+        <div style="flex-shrink:0;"><div style="font-size:13px; font-weight:600; color:var(--ai);">✦ AI agent active · Cleaning your data</div><div style="font-size:11px; color:var(--text-tertiary); margin-top:2px;">Step 4 of 6 · ETA 42s</div></div>
+        <div class="progress-bar"><span style="width:67%; background:var(--ai);"></span></div><div class="progress-meta" style="color:var(--ai);">67%</div>
+      </div>
+      <div class="panel">
+        <div class="panel__head"><div><div class="panel__title">Data quality score</div><div class="panel__sub">Live · updating as the pipeline runs</div></div><span class="badge b-ai"><span class="dot"></span>In progress</span></div>
+        <div class="gauge-row" style="justify-content:center;">
+          <div class="gauge"><svg width="130" height="130" viewBox="0 0 130 130"><circle class="gauge__track" cx="65" cy="65" r="52"/><circle class="gauge__fill" cx="65" cy="65" r="52" stroke="#D97706" stroke-dasharray="219 327"/></svg><div class="gauge__inner"><div><div class="gauge__num">67</div><div class="gauge__lbl">Before</div></div></div></div>
+          <div style="font-size:36px; color:var(--text-disabled); align-self:center">→</div>
+          <div class="gauge"><svg width="130" height="130" viewBox="0 0 130 130"><circle class="gauge__track" cx="65" cy="65" r="52"/><circle class="gauge__fill" cx="65" cy="65" r="52" stroke="#003DA5" stroke-dasharray="265 327"/></svg><div class="gauge__inner"><div><div class="gauge__num" style="color:var(--brand);">81</div><div class="gauge__lbl">Live</div></div></div></div>
+          <div style="margin-left:24px; max-width:280px;"><div style="font-size:12px; color:var(--text-tertiary); text-transform:uppercase; letter-spacing:.05em; margin-bottom:6px;">Issues resolved so far</div><div style="font-family:var(--font-mono); font-size:24px; font-weight:600; color:var(--ai)">534</div><div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">~172 more expected by end of run.</div></div>
+        </div>
+      </div>
+      <div class="grid-2-3 mt-20">
+        <div class="panel">
+          <div class="panel__head"><div><div class="panel__title">AI cleaning pipeline</div><div class="panel__sub">Live status · the agent is working through each step.</div></div><span class="badge b-ai"><span class="dot"></span>Agent active</span></div>
+          <div class="pipeline">
+            <div class="step step--ok"><div class="step__marker">✓</div><div class="step__body"><div class="step__title">Schema validation <span class="badge b-success"><span class="dot"></span>Done</span></div><div class="step__meta">12,430 rows · 0 errors · completed in 14s</div></div></div>
+            <div class="step step--ok"><div class="step__marker">✓</div><div class="step__body"><div class="step__title">Currency normalization <span class="badge b-success"><span class="dot"></span>Done</span></div><div class="step__meta">3 currencies → USD · 8s</div></div></div>
+            <div class="step step--ok"><div class="step__marker">✓</div><div class="step__body"><div class="step__title">Deduplication <span class="badge b-success"><span class="dot"></span>Done</span></div><div class="step__meta">87 duplicates removed · 22s</div></div></div>
+            <div class="step step--running"><div class="step__marker">●</div><div class="step__body"><div class="step__title" style="color:var(--brand);">Vendor harmonization <span class="badge b-info"><span class="dot"></span>Running</span></div><div class="step__meta">Matching 432 vendor variants → canonical names · 271 of 432 done</div><div class="step__progress"><span style="width:63%"></span></div></div></div>
+            <div class="step step--pending"><div class="step__marker">5</div><div class="step__body"><div class="step__title" style="color:var(--text-tertiary)">Cross-reference contracts</div><div class="step__meta">Pending step 4</div></div></div>
+            <div class="step step--pending"><div class="step__marker">6</div><div class="step__body"><div class="step__title" style="color:var(--text-tertiary)">Final validation &amp; handoff</div><div class="step__meta">Pending step 5</div></div></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel__head"><div><div class="panel__title">Live activity</div><div class="panel__sub">Streaming · last 8 events</div></div><span class="badge b-ai"><span class="dot"></span>Live</span></div>
+          <div style="font-family:var(--font-mono); font-size:11px; color:var(--text-secondary); display:flex; flex-direction:column; gap:5px;">
+            <div><span style="color:var(--text-tertiary)">10:43:42</span> · ✦ Vendor "Globex Frt" → "Globex Freight"</div>
+            <div><span style="color:var(--text-tertiary)">10:43:41</span> · ✦ Vendor "Acme Log" → "Acme Logistics"</div>
+            <div><span style="color:var(--text-tertiary)">10:43:39</span> · ✦ Vendor "NorthW Sup" → "Northwind Supply"</div>
+            <div><span style="color:var(--text-tertiary)">10:43:36</span> · → Step 4 started · vendor harmonization</div>
+            <div><span style="color:var(--text-tertiary)">10:43:35</span> · ✓ Step 3 complete · 87 dedups removed</div>
+            <div><span style="color:var(--text-tertiary)">10:43:13</span> · → Step 3 started · deduplication</div>
+            <div><span style="color:var(--text-tertiary)">10:43:05</span> · ✓ Step 2 complete · 3 currencies normalized</div>
+            <div><span style="color:var(--text-tertiary)">10:42:57</span> · → Step 2 started · currency normalization</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</section>
+
+<div style="text-align:center; padding:40px 0; color:#5C6473; font-size:12px;">
+  8 frames (4 screens + 4 states) · NovaCorp Design System v1.0 · Yossi P.
+</div>
+
+</body>
+</html>
