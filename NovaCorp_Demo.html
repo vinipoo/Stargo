@@ -256,13 +256,13 @@
   tr:hover .click-hint { opacity: 1; }
 
   /* Pareto */
-  .pareto-wrap { position: relative; padding: 10px 0 28px; }
-  .pareto-bars { display: grid; grid-template-columns: repeat(8, 1fr); align-items: end; gap: 12px; height: 200px; }
-  .pareto-bar { background: var(--brand); border-radius: 3px 3px 0 0; position: relative; transition: opacity .15s ease; }
+  .pareto-wrap { position: relative; padding: 14px 0 30px; }
+  .pareto-bars { display: grid; grid-template-columns: repeat(8, 1fr); align-items: end; gap: 12px; height: 198px; }
+  .pareto-bar { background: #1246a8; border-radius: 4px 4px 0 0; position: relative; transition: opacity .15s ease; }
   .pareto-bar.dim { opacity: .35; }
-  .pareto-bar > .v { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-family: var(--font-mono); font-size: 10px; color: var(--text-secondary); }
-  .pareto-bar > .lbl { position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%); font-size: 10px; color: var(--text-tertiary); white-space: nowrap; }
-  .pareto-line { position: absolute; inset: 10px 0 28px; pointer-events: none; }
+  .pareto-bar > .v { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-family: var(--font-mono); font-size: 11px; color: #5c6f89; }
+  .pareto-bar > .lbl { position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); font-size: 12px; color: #63748b; white-space: nowrap; }
+  .pareto-line { position: absolute; inset: -72px 0 44px; pointer-events: none; }
 
   .cat { background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--r-lg); padding: 14px 16px; cursor: pointer; transition: all .12s ease; }
   .cat:hover { border-color: var(--border-default); box-shadow: var(--shadow-md); transform: translateY(-1px); }
@@ -713,19 +713,19 @@
       </div>
       <div class="body">
         <div class="panel">
-          <div class="panel__head"><div><div class="panel__title">Exceptions by financial impact</div><div class="panel__sub">Pareto · top 4 categories drive 81% of leakage</div></div><span class="badge b-info"><span class="dot"></span>80/20 break at category 4</span></div>
+          <div class="panel__head"><div><div class="panel__title">Exceptions by financial impact</div><div class="panel__sub">Pareto · top 4 categories drive 81% of leakage</div></div><div class="panel__actions"><span class="badge b-info"><span class="dot"></span>80/20 break at category 4</span></div></div>
           <div class="pareto-wrap">
             <div class="pareto-bars">
               <div class="pareto-bar" style="height:90%"><div class="v">$412K</div><div class="lbl">Surcharge</div></div>
               <div class="pareto-bar" style="height:72%"><div class="v">$298K</div><div class="lbl">Rate</div></div>
               <div class="pareto-bar" style="height:48%"><div class="v">$184K</div><div class="lbl">Currency</div></div>
               <div class="pareto-bar" style="height:34%"><div class="v">$148K</div><div class="lbl">Volume</div></div>
-              <div class="pareto-bar dim" style="height:22%"><div class="v">$92K</div><div class="lbl">Mapping</div></div>
-              <div class="pareto-bar dim" style="height:14%"><div class="v">$58K</div><div class="lbl">Override</div></div>
-              <div class="pareto-bar dim" style="height:10%"><div class="v">$42K</div><div class="lbl">Outdated</div></div>
-              <div class="pareto-bar dim" style="height:6%"><div class="v">$28K</div><div class="lbl">Missing</div></div>
+              <div class="pareto-bar" style="height:22%"><div class="v">$92K</div><div class="lbl">Mapping</div></div>
+              <div class="pareto-bar" style="height:14%"><div class="v">$58K</div><div class="lbl">Override</div></div>
+              <div class="pareto-bar" style="height:10%"><div class="v">$42K</div><div class="lbl">Outdated</div></div>
+              <div class="pareto-bar" style="height:6%"><div class="v">$28K</div><div class="lbl">Missing</div></div>
             </div>
-            <svg class="pareto-line" viewBox="0 0 800 200" preserveAspectRatio="none"><polyline points="50,180 150,140 250,108 350,90 450,75 550,65 650,60 750,55" stroke="#6D28D9" stroke-width="2" fill="none" stroke-dasharray="4,3"/><circle cx="350" cy="90" r="5" fill="#6D28D9"/><text x="360" y="86" font-family="IBM Plex Mono" font-size="11" fill="#6D28D9" font-weight="600">81%</text></svg>
+            <svg class="pareto-line" viewBox="0 0 800 200" preserveAspectRatio="none"><polyline points="50,174 150,142 250,118 350,101 450,89 550,82 650,78 750,74" stroke="#7C3AED" stroke-width="2.2" fill="none" stroke-dasharray="5,4"/><circle cx="350" cy="101" r="6" fill="#7C3AED"/><text x="352" y="91" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="14" fill="#5B21B6" font-weight="700">81%</text></svg>
           </div>
         </div>
         <div class="grid-4 mt-20">

@@ -15,7 +15,7 @@
     --bg-page: #F0F2F5; --bg-surface: #FFFFFF; --bg-subtle: #F8F9FB; --bg-hover: #F3F4F7;
     --text-primary: #0F172A; --text-secondary: #475569; --text-tertiary: #64748B; --text-disabled: #94A3B8;
     --border-subtle: #E5E7EB; --border-default: #D1D5DB;
-    --r-md: 6px; --r-lg: 10px; --r-xl: 16px; --r-pill: 999px;
+    --r-md: 6px; --r-lg: 12px; --r-xl: 16px; --r-pill: 999px;
     --shadow-sm: 0 1px 2px rgba(15,23,42,.06);
     --shadow-md: 0 2px 8px rgba(15,23,42,.08), 0 1px 2px rgba(15,23,42,.04);
     --shadow-lg: 0 16px 40px rgba(0,0,0,.12);
@@ -30,13 +30,13 @@
   /* ---------- Hero ---------- */
   .hero {
     background: linear-gradient(135deg, #001F54 0%, #003DA5 70%, #6D28D9 130%);
-    color: #fff; padding: 72px 32px 56px;
+    color: #fff; padding: 80px 32px 64px;
     text-align: center; position: relative; overflow: hidden;
   }
   .hero::before {
     content: ''; position: absolute; inset: 0;
     background: radial-gradient(800px 400px at 20% 20%, rgba(255,255,255,.08), transparent 60%),
-                radial-gradient(600px 300px at 80% 80%, rgba(109,40,217,.18), transparent 60%);
+                radial-gradient(600px 300px at 80% 80%, rgba(109,40,217,.22), transparent 60%);
     pointer-events: none;
   }
   .hero__inner { max-width: 880px; margin: 0 auto; position: relative; }
@@ -44,121 +44,134 @@
     display: inline-flex; align-items: center; gap: 8px;
     background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22);
     padding: 6px 14px; border-radius: var(--r-pill);
-    font-size: 12px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase;
+    font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
     margin-bottom: 22px;
   }
   .hero__pill .dot { width: 8px; height: 8px; background: var(--ai); border-radius: 50%; box-shadow: 0 0 0 3px rgba(109,40,217,.3); }
-  .hero h1 { font-size: 46px; font-weight: 700; letter-spacing: -.025em; margin: 0 0 14px; line-height: 1.05; }
+  .hero h1 { font-size: 48px; font-weight: 700; letter-spacing: -.025em; margin: 0 0 14px; line-height: 1.05; }
   .hero h1 em { font-style: normal; background: linear-gradient(120deg, #fff 0%, #C7D5EC 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .hero__lead { font-size: 17px; opacity: .9; max-width: 640px; margin: 0 auto 28px; line-height: 1.55; }
+  .hero__lead { font-size: 17px; opacity: .9; max-width: 640px; margin: 0 auto 26px; }
   .hero__principle {
     display: inline-block; font-style: italic; font-size: 14px; color: rgba(255,255,255,.85);
-    border-left: 2px solid rgba(255,255,255,.4); padding: 4px 14px; margin-bottom: 36px;
+    border-left: 2px solid rgba(255,255,255,.4); padding: 4px 14px;
   }
-  .hero__cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-
-  .btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 12px 20px; border-radius: var(--r-md);
-    font-family: var(--font-sans); font-size: 14px; font-weight: 500; line-height: 1;
-    cursor: pointer; border: 1px solid transparent; text-decoration: none;
-    transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
-  }
-  .btn:hover { transform: translateY(-1px); }
-  .btn--figma { background: #fff; color: var(--brand); }
-  .btn--figma:hover { box-shadow: var(--shadow-md); }
-  .btn--demo { background: var(--ai); color: #fff; }
-  .btn--demo:hover { background: #5B21B6; }
-  .btn--ghost { background: rgba(255,255,255,.12); color: #fff; border-color: rgba(255,255,255,.24); }
-  .btn--ghost:hover { background: rgba(255,255,255,.2); }
-
-  /* ---------- Stats strip ---------- */
-  .stats {
-    max-width: 1080px; margin: -32px auto 56px; padding: 0 24px;
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
-    position: relative; z-index: 2;
-  }
-  .stat {
-    background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--r-lg);
-    padding: 18px 20px; box-shadow: var(--shadow-md);
-  }
-  .stat__value { font-family: var(--font-mono); font-size: 26px; font-weight: 600; color: var(--text-primary); line-height: 1; }
-  .stat__label { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .06em; margin-top: 6px; font-weight: 500; }
 
   /* ---------- Sections ---------- */
   main { max-width: 1180px; margin: 0 auto; padding: 0 24px 80px; }
-  section.group { margin-bottom: 56px; }
-  .group__head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 6px; }
+  section.group { margin-top: -32px; margin-bottom: 64px; position: relative; z-index: 2; }
+  section.group:not(.group--primary) { margin-top: 0; }
+  .group__head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 8px; padding-top: 12px; }
   .group__num { font-family: var(--font-mono); font-size: 12px; color: var(--text-tertiary); font-weight: 600; }
   .group__title { font-size: 22px; font-weight: 700; letter-spacing: -.01em; }
   .group__title::after { content: ''; display: inline-block; width: 32px; height: 3px; background: var(--brand); border-radius: 2px; vertical-align: middle; margin-left: 14px; }
-  .group__desc { color: var(--text-secondary); font-size: 14px; max-width: 720px; margin: 0 0 22px; }
+  .group__desc { color: var(--text-secondary); font-size: 14px; max-width: 760px; margin: 0 0 22px; }
+  section.group--primary .group__head { padding-top: 0; }
 
-  /* ---------- Cards grid ---------- */
-  .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+  /* ---------- Card ---------- */
+  .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
   .grid--3 { grid-template-columns: repeat(3, 1fr); }
   .grid--2 { grid-template-columns: repeat(2, 1fr); }
-  @media (max-width: 840px) { .grid--3, .grid--2 { grid-template-columns: 1fr; } .stats { grid-template-columns: repeat(2, 1fr); } .hero h1 { font-size: 34px; } }
+  @media (max-width: 920px) { .grid--3, .grid--2 { grid-template-columns: 1fr; } .hero h1 { font-size: 34px; } }
 
   .card {
     background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--r-lg);
-    padding: 20px 22px; display: flex; flex-direction: column; gap: 8px;
+    padding: 22px 24px 20px; display: flex; flex-direction: column;
     transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
-    color: inherit;
-    position: relative; overflow: hidden;
+    color: inherit; position: relative; overflow: hidden;
   }
   .card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--border-default); }
-  .card__type {
-    font-family: var(--font-mono); font-size: 10px; font-weight: 600;
-    color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .08em;
-    display: inline-flex; align-items: center; gap: 6px;
+
+  .card__num {
+    font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+    color: var(--brand); letter-spacing: .12em; text-transform: uppercase;
+    margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
   }
-  .card__type::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--text-disabled); }
-  .card__type.html::before { background: var(--brand); }
-  .card__type.pdf::before { background: var(--danger); }
-  .card__type.docx::before { background: var(--info, #2563EB); }
-  .card__type.md::before { background: var(--text-secondary); }
-  .card__type.svg::before { background: var(--ai); }
-  .card__type.figma::before { background: linear-gradient(180deg, #F24E1E 0%, #A259FF 100%); }
-  .card__title { font-size: 16px; font-weight: 600; color: var(--text-primary); letter-spacing: -.005em; }
-  .card__desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; flex: 1; }
-  .card__meta { display: flex; gap: 12px; font-size: 11px; color: var(--text-tertiary); margin-top: 4px; font-family: var(--font-mono); }
-  .card__arrow { position: absolute; top: 18px; right: 22px; opacity: .4; transition: opacity .15s ease, transform .15s ease; }
-  .card:hover .card__arrow { opacity: 1; transform: translate(2px, -2px); }
-  .card--featured { border: 0; background: linear-gradient(180deg, var(--brand-tint) 0%, #fff 100%); border: 1px solid #C7D5EC; }
-  .card--ai { background: linear-gradient(180deg, var(--ai-tint) 0%, #fff 100%); border: 1px solid #DDD6FE; }
-  .card--figma { background: linear-gradient(135deg, #FFE7DC 0%, #E2D4FF 100%); border: 0; }
-  .card--figma .card__type::before { background: linear-gradient(180deg, #F24E1E 0%, #A259FF 100%); }
-  .card__star { position: absolute; top: 14px; right: 14px; background: var(--ai); color: #fff; font-size: 9px; padding: 2px 7px; border-radius: var(--r-pill); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+  .card__num::after { content: ''; flex: 1; height: 1px; background: var(--border-subtle); }
+
+  .card__icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 14px; flex-shrink: 0;
+  }
+  .card__icon svg { width: 26px; height: 26px; }
+  .card__icon.icon--figma { background: rgba(242,78,30,.06); border: 1px solid rgba(242,78,30,.18); }
+  .card__icon.icon--brand { background: var(--brand-tint); border: 1px solid #C7D5EC; color: var(--brand); }
+  .card__icon.icon--ai { background: var(--ai-tint); border: 1px solid #DDD6FE; color: var(--ai); }
+  .card__icon.icon--success { background: #DCFCE7; border: 1px solid #BBF7D0; color: var(--success); }
+  .card__icon.icon--warning { background: #FEF3C7; border: 1px solid #FDE68A; color: var(--warning); }
+  .card__icon.icon--neutral { background: var(--bg-subtle); border: 1px solid var(--border-subtle); color: var(--text-secondary); }
+
+  .card__title { font-size: 17px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; line-height: 1.3; letter-spacing: -.005em; }
+  .card__desc { font-size: 13px; color: var(--text-secondary); line-height: 1.55; flex: 1; margin-bottom: 16px; }
+  .card__meta { font-size: 11px; color: var(--text-tertiary); margin-bottom: 14px; font-family: var(--font-mono); }
+
+  .card__actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .card__btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 14px; border-radius: var(--r-md);
+    font-size: 12.5px; font-weight: 600;
+    transition: all .12s ease; cursor: pointer; text-decoration: none;
+    border: 1px solid transparent;
+  }
+  .card__btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+  .card__btn--primary { background: var(--brand); color: #fff; }
+  .card__btn--primary:hover { background: #002F80; }
+  .card__btn--ai { background: var(--ai); color: #fff; }
+  .card__btn--ai:hover { background: #5B21B6; }
+  .card__btn--ghost { background: transparent; color: var(--text-secondary); border-color: var(--border-default); }
+  .card__btn--ghost:hover { background: var(--bg-hover); color: var(--text-primary); border-color: var(--border-strong); }
+  .card__btn--figma { background: #1E1E1E; color: #fff; }
+  .card__btn--figma:hover { background: #2D2D2D; }
+
+  /* Primary cards (brief deliverables) — bigger */
+  .card--primary { padding: 28px 28px 24px; min-height: 280px; }
+  .card--primary .card__icon { width: 56px; height: 56px; border-radius: 14px; margin-bottom: 18px; }
+  .card--primary .card__icon svg { width: 30px; height: 30px; }
+  .card--primary .card__title { font-size: 19px; }
+  .card--primary .card__desc { font-size: 13.5px; }
+  .card--primary .card__num { color: var(--ai); }
+
+  .card--required-badge::before {
+    content: 'BRIEF REQUIRED'; position: absolute; top: 14px; right: 14px;
+    background: var(--ai); color: #fff; font-size: 9px; font-weight: 700;
+    padding: 3px 8px; border-radius: var(--r-pill); letter-spacing: .06em;
+  }
+
+  /* ---------- Stats strip ---------- */
+  .stats {
+    max-width: 1080px; margin: -36px auto 56px; padding: 0 24px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+    position: relative; z-index: 3;
+  }
+  .stat {
+    background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--r-lg);
+    padding: 16px 18px; box-shadow: var(--shadow-md);
+  }
+  .stat__value { font-family: var(--font-mono); font-size: 24px; font-weight: 600; color: var(--text-primary); line-height: 1; }
+  .stat__label { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .06em; margin-top: 6px; font-weight: 500; }
+  @media (max-width: 720px) { .stats { grid-template-columns: repeat(2, 1fr); } }
 
   /* ---------- Footer ---------- */
-  footer { text-align: center; padding: 32px 24px 56px; color: var(--text-tertiary); font-size: 12px; border-top: 1px solid var(--border-subtle); margin-top: 24px; }
-  footer .row { display: flex; gap: 18px; justify-content: center; margin-top: 10px; }
+  footer { text-align: center; padding: 32px 24px 48px; color: var(--text-tertiary); font-size: 12px; border-top: 1px solid var(--border-subtle); margin-top: 24px; }
+  footer .row { display: flex; gap: 18px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
   footer .row a { color: var(--text-secondary); }
 </style>
 </head>
 <body>
 
-<!-- HERO -->
+<!-- ============ HERO ============ -->
 <section class="hero">
   <div class="hero__inner">
     <span class="hero__pill"><span class="dot"></span>Designer Home Assignment · Yossi P.</span>
     <h1>NovaCorp · Data Analytics &amp;<br/><em>Invoice Audit Platform</em></h1>
-    <p class="hero__lead">Four hi-fi screens, eight Figma frames, a 19-section design system, and a clickable prototype — all anchored to a single guiding idea.</p>
+    <p class="hero__lead">Internal enterprise tool for procurement &amp; finance — designed around AI agents that proactively identify, flag, and resolve compliance issues.</p>
     <div class="hero__principle">"Benchmarking starts with data cleaning."</div>
-    <div class="hero__cta">
-      <a class="btn btn--figma" href="https://www.figma.com/design/RH8X5O0BwKhHJY3nFIo0F8/Stargo?node-id=0-1&t=0CLkdCvLYOtLZf6T-1" target="_blank" rel="noopener">
-        ◆ Open Figma file →
-      </a>
-      <a class="btn btn--demo" href="NovaCorp_Demo.html">▶ Launch interactive demo</a>
-      <a class="btn btn--ghost" href="NovaCorp_DesignSystem.pdf" target="_blank">View design system PDF</a>
-    </div>
   </div>
 </section>
 
-<!-- STATS -->
+<!-- ============ STATS ============ -->
 <div class="stats">
-  <div class="stat"><div class="stat__value">8</div><div class="stat__label">Figma frames</div></div>
+  <div class="stat"><div class="stat__value">4 + 4</div><div class="stat__label">Screens · State variants</div></div>
   <div class="stat"><div class="stat__value">19</div><div class="stat__label">Design-system sections</div></div>
   <div class="stat"><div class="stat__value">9</div><div class="stat__label">User stories · 3 personas</div></div>
   <div class="stat"><div class="stat__value">100%</div><div class="stat__label">Brief MUSTs covered</div></div>
@@ -166,193 +179,346 @@
 
 <main>
 
-  <!-- 1. PRIMARY DELIVERABLES -->
+  <!-- ============ 01. BRIEF DELIVERABLES (PRIMARY) ============ -->
+  <section class="group group--primary">
+    <div class="group__head"><span class="group__num">01</span><h2 class="group__title">Brief deliverables</h2></div>
+    <p class="group__desc">The three artifacts the brief explicitly asks for. Each opens in two ways — a rendered Preview, and the underlying File for download or inspection.</p>
+
+    <div class="grid grid--3">
+
+      <!-- 1. FIGMA -->
+      <div class="card card--primary card--required-badge">
+        <div class="card__num">01 · Required deliverable</div>
+        <div class="card__icon icon--figma">
+          <svg viewBox="0 0 38 56" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 28a9.5 9.5 0 1 1 19 0 9.5 9.5 0 0 1-19 0z" fill="#1ABCFE"/>
+            <path d="M0 47a9.5 9.5 0 0 1 9.5-9.5H19V47a9.5 9.5 0 0 1-19 0z" fill="#0ACF83"/>
+            <path d="M19 0v19h9.5a9.5 9.5 0 0 0 0-19H19z" fill="#FF7262"/>
+            <path d="M0 9.5a9.5 9.5 0 0 0 9.5 9.5H19V0H9.5A9.5 9.5 0 0 0 0 9.5z" fill="#F24E1E"/>
+            <path d="M0 28.5A9.5 9.5 0 0 0 9.5 38H19V19H9.5A9.5 9.5 0 0 0 0 28.5z" fill="#A259FF"/>
+          </svg>
+        </div>
+        <h3 class="card__title">4 Screen Designs in Figma</h3>
+        <p class="card__desc">All 8 frames at 1280px wide — the four main screens (Compliance Overview, Data Quality, Invoice Detail, Root Cause) plus four state variants (Empty, Loading, Error, Agent running). Auto-layout, design tokens linked as styles, prototype connections.</p>
+        <div class="card__meta">Figma · view-only link</div>
+        <div class="card__actions">
+          <a class="card__btn card__btn--figma" href="https://www.figma.com/design/RH8X5O0BwKhHJY3nFIo0F8/Stargo?node-id=0-1&t=0CLkdCvLYOtLZf6T-1" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Open in Figma
+          </a>
+          <a class="card__btn card__btn--ghost" href="NovaCorp_AllFrames.html" target="_blank">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            HTML preview
+          </a>
+        </div>
+      </div>
+
+      <!-- 2. DESIGN SYSTEM -->
+      <div class="card card--primary card--required-badge">
+        <div class="card__num">02 · Required deliverable</div>
+        <div class="card__icon icon--brand">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+            <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+            <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+            <circle cx="17.5" cy="17.5" r="3.5"/>
+          </svg>
+        </div>
+        <h3 class="card__title">Design System v1.1 (Snippet)</h3>
+        <p class="card__desc">19 sections — color &amp; typography tokens, spacing rhythm, buttons, badges, cards, KPIs, dense tables (sortable + filterable), sidebar navigation, AI patterns, score gauge, full state library, charts &amp; data viz mapping. Same source rendered in four formats below.</p>
+        <div class="card__meta">PDF · HTML · DOCX · MD · 19 sections</div>
+        <div class="card__actions">
+          <a class="card__btn card__btn--primary" href="NovaCorp_DesignSystem.pdf" target="_blank" title="17-page A4 PDF — recommended">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            View PDF
+          </a>
+          <a class="card__btn card__btn--ghost" href="NovaCorp_DesignSystem.html" target="_blank" title="Live styleguide with rendered components">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            HTML preview
+          </a>
+          <a class="card__btn card__btn--ghost" href="NovaCorp_DesignSystem.docx" target="_blank" title="Word document">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            DOCX
+          </a>
+          <a class="card__btn card__btn--ghost" href="NovaCorp_DesignSystem.md" target="_blank" title="Markdown source">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
+            Markdown
+          </a>
+        </div>
+      </div>
+
+      <!-- 3. WALKTHROUGH -->
+      <div class="card card--primary card--required-badge">
+        <div class="card__num">03 · Required deliverable</div>
+        <div class="card__icon icon--ai">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <line x1="10" y1="9" x2="8" y2="9"/>
+          </svg>
+        </div>
+        <h3 class="card__title">Walkthrough &amp; design rationale</h3>
+        <p class="card__desc">Full design narrative: principles, screen-by-screen logic, agentic flow decisions, what I'd build next. Includes a one-page agentic-flow story (Sona's added requirement) and a meta one-pager on the AI workflow used to produce this submission.</p>
+        <div class="card__meta">3 documents · DOCX + Markdown</div>
+        <div class="card__actions">
+          <a class="card__btn card__btn--primary" href="Design_Walkthrough_NovaCorp.pdf" target="_blank" title="Walkthrough as PDF">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Walkthrough (PDF)
+          </a>
+          <a class="card__btn card__btn--ai" href="NovaCorp_AgenticFlowStory.pdf" target="_blank">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Agentic flow (PDF)
+          </a>
+          <a class="card__btn card__btn--ghost" href="NovaCorp_Process.pdf" target="_blank">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Process (AI workflow)
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ 02. INTERACTIVE EXPLORATION ============ -->
   <section class="group">
-    <div class="group__head"><span class="group__num">01</span><h2 class="group__title">Primary deliverables</h2></div>
-    <p class="group__desc">The four artifacts a reviewer should look at first. The Figma file is the canonical design; the demo is the click-through experience; the AllFrames file is a single-page snapshot of every frame; the design system PDF documents the components.</p>
-    <div class="grid">
-      <a class="card card--figma" href="https://www.figma.com/design/RH8X5O0BwKhHJY3nFIo0F8/Stargo?node-id=0-1&t=0CLkdCvLYOtLZf6T-1" target="_blank" rel="noopener">
-        <span class="card__star">PRIMARY</span>
-        <span class="card__type figma">Figma file</span>
-        <h3 class="card__title">Stargo Figma file</h3>
-        <p class="card__desc">All 8 frames (4 main screens + 4 state variants) with auto-layout, design tokens as styles, and prototype connections.</p>
-        <span class="card__meta">External · view-only link</span>
-        <span class="card__arrow">↗</span>
-      </a>
-      <a class="card card--ai" href="NovaCorp_Demo.html">
-        <span class="card__star">INTERACTIVE</span>
-        <span class="card__type html">Interactive prototype</span>
-        <h3 class="card__title">Click-through demo</h3>
-        <p class="card__desc">Functional sortable + filterable table, animated agent pipeline, autoplay 7-step story. Best demonstration of the platform in motion.</p>
-        <span class="card__meta">HTML · 70 KB</span>
-        <span class="card__arrow">↗</span>
-      </a>
-      <a class="card card--featured" href="NovaCorp_AllFrames.html">
-        <span class="card__type html">All frames</span>
+    <div class="group__head"><span class="group__num">02</span><h2 class="group__title">Interactive exploration</h2></div>
+    <p class="group__desc">Click-through versions to experience the platform in motion. Best demonstration of the agentic flow Sona asked for.</p>
+
+    <div class="grid grid--2">
+
+      <!-- DEMO -->
+      <div class="card">
+        <div class="card__num">Best for live walkthrough</div>
+        <div class="card__icon icon--ai">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <line x1="12" y1="17" x2="12" y2="21"/>
+            <polygon points="10 8 16 11 10 14 10 8" fill="currentColor"/>
+          </svg>
+        </div>
+        <h3 class="card__title">Interactive demo · click-through prototype</h3>
+        <p class="card__desc">All 8 frames in one navigable file. Click vendor rows, sort by any column, filter by 5 dimensions, watch the agent pipeline animate. Includes a 7-step autoplay story showing the full user journey.</p>
+        <div class="card__meta">HTML · ~70 KB · vanilla JS, no build</div>
+        <div class="card__actions">
+          <a class="card__btn card__btn--ai" href="NovaCorp_Demo.html" target="_blank">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+            Launch demo
+          </a>
+        </div>
+      </div>
+
+      <!-- ALL FRAMES -->
+      <div class="card">
+        <div class="card__num">Static stack of every frame</div>
+        <div class="card__icon icon--brand">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="6" rx="1"/>
+            <rect x="3" y="11" width="18" height="6" rx="1"/>
+            <line x1="3" y1="20" x2="21" y2="20"/>
+          </svg>
+        </div>
         <h3 class="card__title">All 8 frames · single page</h3>
-        <p class="card__desc">Static stack of every frame at 1280px wide. Source for the html.to.design Figma import; also useful as a print-ready overview.</p>
-        <span class="card__meta">HTML · 62 KB</span>
-        <span class="card__arrow">↗</span>
-      </a>
-      <a class="card card--featured" href="NovaCorp_DesignSystem.pdf" target="_blank">
-        <span class="card__type pdf">Design system</span>
-        <h3 class="card__title">Design System v1.1 (PDF)</h3>
-        <p class="card__desc">17 pages covering 19 sections — tokens, typography, components, AI patterns, sortable/filterable, score gauge, full state library.</p>
-        <span class="card__meta">PDF · 17 pages · 98 KB</span>
-        <span class="card__arrow">↗</span>
-      </a>
+        <p class="card__desc">All four main screens plus four state variants stacked vertically at 1280px wide. A single static page for printing, scrolling, or sharing as a complete overview.</p>
+        <div class="card__meta">HTML · ~62 KB</div>
+        <div class="card__actions">
+          <a class="card__btn card__btn--primary" href="NovaCorp_AllFrames.pdf" target="_blank">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Live PDF view
+          </a>
+          <a class="card__btn card__btn--ghost" href="NovaCorp_AllFrames.html" target="_blank">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            HTML preview
+          </a>
+        </div>
+      </div>
+
     </div>
   </section>
 
-  <!-- 2. SUPPORTING DOCS -->
+  <!-- ============ 03. RESEARCH & PLANNING ============ -->
   <section class="group">
-    <div class="group__head"><span class="group__num">02</span><h2 class="group__title">Walkthrough &amp; rationale</h2></div>
-    <p class="group__desc">The thinking behind the design. Read these to understand the why, not just the what. The agentic-flow and process one-pagers answer Sona's added requirement directly.</p>
+    <div class="group__head"><span class="group__num">03</span><h2 class="group__title">Research &amp; planning</h2></div>
+    <p class="group__desc">Supporting documents that inform the design decisions and demonstrate process discipline.</p>
+
     <div class="grid grid--3">
-      <a class="card" href="Design_Walkthrough_NovaCorp.md">
-        <span class="card__type md">Walkthrough</span>
-        <h3 class="card__title">Design walkthrough</h3>
-        <p class="card__desc">Full design rationale. Principles, screen-by-screen logic, agentic flow decisions, what I'd build next.</p>
-        <span class="card__meta">Markdown · ~7 KB</span>
-        <span class="card__arrow">↗</span>
-      </a>
-      <a class="card card--ai" href="NovaCorp_AgenticFlowStory.docx">
-        <span class="card__type docx">One-pager</span>
-        <h3 class="card__title">Agentic flow story</h3>
-        <p class="card__desc">How the AI agent identifies, flags, and resolves problems on every screen. Direct answer to Sona's added requirement.</p>
-        <span class="card__meta">DOCX · 1 page</span>
-        <span class="card__arrow">↗</span>
-      </a>
-      <a class="card card--ai" href="NovaCorp_Process.docx">
-        <span class="card__type docx">One-pager</span>
-        <h3 class="card__title">Designer's process</h3>
-        <p class="card__desc">How I built this submission with AI agents — same identify/flag/resolve loop turned inward on the workflow.</p>
-        <span class="card__meta">DOCX · 1 page</span>
-        <span class="card__arrow">↗</span>
-      </a>
-      <a class="card" href="NovaCorp_UserStories.docx">
-        <span class="card__type docx">Research</span>
+
+      <div class="card">
+        <div class="card__num">User research</div>
+        <div class="card__icon icon--neutral">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
         <h3 class="card__title">User stories</h3>
-        <p class="card__desc">9 user stories across 3 personas (Procurement Manager / Finance Controller / Operations Analyst) with acceptance criteria + screen coverage matrix.</p>
-        <span class="card__meta">DOCX · 4 pages</span>
-        <span class="card__arrow">↗</span>
-      </a>
-      <a class="card" href="NovaCorp_SprintPlan.docx">
-        <span class="card__type docx">Plan</span>
+        <p class="card__desc">9 stories across 3 personas (Procurement Manager, Finance Controller, Operations Analyst) with acceptance criteria and a screen-coverage matrix.</p>
+        <div class="card__meta">DOCX · 4 pages</div>
+        <div class="card__actions">
+          <a class="card__btn card__btn--primary" href="NovaCorp_UserStories.pdf" target="_blank">View PDF</a>
+          <a class="card__btn card__btn--ghost" href="NovaCorp_UserStories.docx" target="_blank">DOCX</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card__num">Execution plan</div>
+        <div class="card__icon icon--brand">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+        </div>
         <h3 class="card__title">5-day sprint plan</h3>
-        <p class="card__desc">Day-by-day execution plan with deliverable checklists, watch-outs, risks/mitigations, and a final QA rubric.</p>
-        <span class="card__meta">DOCX · 6 pages</span>
-        <span class="card__arrow">↗</span>
-      </a>
-      <a class="card" href="NovaCorp_SprintTracker.html">
-        <span class="card__type html">Live tool</span>
+        <p class="card__desc">Day-by-day plan with deliverable checklist, watch-outs, risks/mitigations, and a final QA pass mapped to the brief's evaluation criteria.</p>
+        <div class="card__meta">DOCX · 6 pages</div>
+        <div class="card__actions">
+          <a class="card__btn card__btn--primary" href="NovaCorp_SprintPlan.pdf" target="_blank">View PDF</a>
+          <a class="card__btn card__btn--ghost" href="NovaCorp_SprintPlan.docx" target="_blank">DOCX</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card__num">Live tool</div>
+        <div class="card__icon icon--success">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 11 12 14 22 4"/>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+          </svg>
+        </div>
         <h3 class="card__title">Sprint tracker</h3>
-        <p class="card__desc">Interactive companion to the sprint plan. Gantt timeline, checkboxes, progress ring. State persists in localStorage.</p>
-        <span class="card__meta">HTML · 30 KB</span>
-        <span class="card__arrow">↗</span>
-      </a>
+        <p class="card__desc">Interactive companion to the sprint plan. Gantt timeline, persistent checkboxes, progress ring. Auto-detects today's focus from the day of the week.</p>
+        <div class="card__meta">HTML · ~30 KB</div>
+        <div class="card__actions">
+          <a class="card__btn card__btn--ghost" href="NovaCorp_SprintTracker.html" target="_blank">HTML preview</a>
+        </div>
+      </div>
+
     </div>
   </section>
 
-  <!-- 3. DESIGN SYSTEM FORMATS -->
+  <!-- ============ 04. WORKING FILES ============ -->
   <section class="group">
-    <div class="group__head"><span class="group__num">03</span><h2 class="group__title">Design system · all formats</h2></div>
-    <p class="group__desc">Same v1.1 source content in four formats. The PDF is the canonical submission asset; the HTML is the interactive source; the MD is the text spec; the DOCX is the Word version for traditional handoff.</p>
-    <div class="grid grid--2">
-      <a class="card" href="NovaCorp_DesignSystem.html">
-        <span class="card__type html">Interactive</span>
-        <h3 class="card__title">Live styleguide (HTML)</h3>
-        <p class="card__desc">Renders every component live — color swatches, type specimens, button states, badges, gauges, AI panels.</p>
-        <span class="card__meta">HTML · 64 KB · 19 sections</span>
-        <span class="card__arrow">↗</span>
-      </a>
-      <a class="card" href="NovaCorp_DesignSystem.md">
-        <span class="card__type md">Spec</span>
-        <h3 class="card__title">Markdown spec</h3>
-        <p class="card__desc">Source of truth for all token values and component contracts. Versionable, copy-pasteable.</p>
-        <span class="card__meta">Markdown · 15 KB</span>
-        <span class="card__arrow">↗</span>
-      </a>
-      <a class="card" href="NovaCorp_DesignSystem.pdf" target="_blank">
-        <span class="card__type pdf">Print</span>
-        <h3 class="card__title">PDF (recommended for submission)</h3>
-        <p class="card__desc">17-page A4 export rendered from HTML. Best visual fidelity. Matches the brief's "Figma / PDF" format requirement.</p>
-        <span class="card__meta">PDF · 17 pages</span>
-        <span class="card__arrow">↗</span>
-      </a>
-      <a class="card" href="NovaCorp_DesignSystem.docx">
-        <span class="card__type docx">Word</span>
-        <h3 class="card__title">Word document (DOCX)</h3>
-        <p class="card__desc">Classic Word version. Useful when reviewers prefer to comment inline.</p>
-        <span class="card__meta">DOCX · 21 KB</span>
-        <span class="card__arrow">↗</span>
-      </a>
-    </div>
-  </section>
+    <div class="group__head"><span class="group__num">04</span><h2 class="group__title">Source HTML files</h2></div>
+    <p class="group__desc">The HTML source files behind the Figma frames.</p>
 
-  <!-- 4. WORKING FILES -->
-  <section class="group">
-    <div class="group__head"><span class="group__num">04</span><h2 class="group__title">Working files &amp; sources</h2></div>
-    <p class="group__desc">The HTML files used as inputs to the html.to.design Figma plugin. Useful if you want to inspect or re-import.</p>
     <div class="grid grid--3">
-      <a class="card" href="NovaCorp_Wireframes.html">
-        <span class="card__type html">Source</span>
-        <h3 class="card__title">4 main screens</h3>
-        <p class="card__desc">Wireframes file containing the 4 default screens at 1280px wide.</p>
-        <span class="card__meta">HTML · 62 KB</span>
-        <span class="card__arrow">↗</span>
-      </a>
-      <a class="card" href="NovaCorp_States.html">
-        <span class="card__type html">Source</span>
-        <h3 class="card__title">4 state variants</h3>
-        <p class="card__desc">Empty, loading, error, and agent-running states for the bonus criterion.</p>
-        <span class="card__meta">HTML · 43 KB</span>
-        <span class="card__arrow">↗</span>
-      </a>
-      <a class="card" href="NovaCorp_AllFrames.html">
-        <span class="card__type html">Combined</span>
+
+      <div class="card">
+        <div class="card__num">4 main screens</div>
+        <div class="card__icon icon--brand">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <line x1="3" y1="9" x2="21" y2="9"/>
+            <line x1="9" y1="21" x2="9" y2="9"/>
+          </svg>
+        </div>
+        <h3 class="card__title">Wireframes</h3>
+        <p class="card__desc">The four default screens at 1280px wide.</p>
+        <div class="card__meta">HTML · 62 KB</div>
+        <div class="card__actions">
+          <a class="card__btn card__btn--ghost" href="NovaCorp_Wireframes.html" target="_blank">HTML preview</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card__num">4 state variants</div>
+        <div class="card__icon icon--ai">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+        </div>
+        <h3 class="card__title">State variants</h3>
+        <p class="card__desc">Empty, loading, error, and agent-running states (bonus criterion).</p>
+        <div class="card__meta">HTML · 43 KB</div>
+        <div class="card__actions">
+          <a class="card__btn card__btn--ghost" href="NovaCorp_States.html" target="_blank">HTML preview</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card__num">Combined source</div>
+        <div class="card__icon icon--success">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+            <line x1="12" y1="22.08" x2="12" y2="12"/>
+          </svg>
+        </div>
         <h3 class="card__title">All 8 frames combined</h3>
-        <p class="card__desc">Merged file with both main screens and states — single import target for Figma.</p>
-        <span class="card__meta">HTML · 62 KB</span>
-        <span class="card__arrow">↗</span>
-      </a>
+        <p class="card__desc">Single import target — wireframes + states baked into one file.</p>
+        <div class="card__meta">HTML · 62 KB</div>
+        <div class="card__actions">
+          <a class="card__btn card__btn--ghost" href="NovaCorp_AllFrames.html" target="_blank">HTML preview</a>
+        </div>
+      </div>
+
     </div>
   </section>
 
-  <!-- 5. ASSETS -->
+  <!-- ============ 06. ASSETS & BRIEF ============ -->
   <section class="group">
-    <div class="group__head"><span class="group__num">05</span><h2 class="group__title">Assets</h2></div>
-    <p class="group__desc">Standalone components for direct use.</p>
-    <div class="grid grid--2">
-      <a class="card" href="Gauge_BeforeAfter.svg" target="_blank">
-        <span class="card__type svg">Asset</span>
-        <h3 class="card__title">Before / After gauge pair</h3>
-        <p class="card__desc">SVG showing the 67 → 94 data-quality gauge pair. Drop into Figma directly or use as a static image.</p>
-        <span class="card__meta">SVG · 2 KB</span>
-        <span class="card__arrow">↗</span>
-      </a>
-      <a class="card" href="Gauge_Single_Template.svg" target="_blank">
-        <span class="card__type svg">Asset</span>
+    <div class="group__head"><span class="group__num">05</span><h2 class="group__title">Assets &amp; reference</h2></div>
+    <p class="group__desc">Standalone components and the original brief, kept here for reference.</p>
+
+    <div class="grid grid--3">
+
+      <div class="card">
+        <div class="card__num">SVG asset</div>
+        <div class="card__icon icon--ai">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 2 a10 10 0 0 1 10 10" stroke="#6D28D9" stroke-width="2.5"/>
+          </svg>
+        </div>
+        <h3 class="card__title">Score gauge SVG</h3>
+        <p class="card__desc">Before/after circular gauges (67 → 94). Drop into Figma directly.</p>
+        <div class="card__meta">SVG · 2 KB</div>
+        <div class="card__actions">
+          <a class="card__btn card__btn--primary" href="Gauge_BeforeAfter.svg" target="_blank">Preview</a>
+          <a class="card__btn card__btn--ghost" href="Gauge_BeforeAfter.svg" download>Download</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card__num">SVG template</div>
+        <div class="card__icon icon--neutral">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+          </svg>
+        </div>
         <h3 class="card__title">Single gauge template</h3>
-        <p class="card__desc">Reusable single-gauge SVG with inline comments showing how to change score and color.</p>
-        <span class="card__meta">SVG · 1 KB</span>
-        <span class="card__arrow">↗</span>
-      </a>
-    </div>
-  </section>
+        <p class="card__desc">Reusable single gauge with inline comments — change score and color in one line.</p>
+        <div class="card__meta">SVG · 1 KB</div>
+        <div class="card__actions">
+          <a class="card__btn card__btn--primary" href="Gauge_Single_Template.svg" target="_blank">Preview</a>
+          <a class="card__btn card__btn--ghost" href="Gauge_Single_Template.svg" download>Download</a>
+        </div>
+      </div>
 
-  <!-- 6. BRIEF -->
-  <section class="group">
-    <div class="group__head"><span class="group__num">06</span><h2 class="group__title">Brief</h2></div>
-    <p class="group__desc">The original assignment brief, kept here for reference.</p>
-    <div class="grid grid--2">
-      <a class="card" href="Designer_Brief_ABC_Corp.docx">
-        <span class="card__type docx">Reference</span>
-        <h3 class="card__title">Designer brief · ABC Corp</h3>
-        <p class="card__desc">The original home-assignment brief with screen requirements, design guidelines, and evaluation criteria.</p>
-        <span class="card__meta">DOCX · 15 KB</span>
-        <span class="card__arrow">↗</span>
-      </a>
+      <div class="card">
+        <div class="card__num">Reference</div>
+        <div class="card__icon icon--neutral">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+          </svg>
+        </div>
+        <h3 class="card__title">Original brief</h3>
+        <p class="card__desc">The home-assignment brief from ABC Corp · Sona Mailyan, Head of Engineering.</p>
+        <div class="card__meta">DOCX · 15 KB</div>
+        <div class="card__actions">
+          <a class="card__btn card__btn--primary" href="Designer_Brief_ABC_Corp.pdf" target="_blank">View PDF</a>
+          <a class="card__btn card__btn--ghost" href="Designer_Brief_ABC_Corp.docx" target="_blank">DOCX</a>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -362,9 +528,9 @@
   NovaCorp · Designer Home Assignment · Yossi P. · May 2026
   <div class="row">
     <a href="https://www.figma.com/design/RH8X5O0BwKhHJY3nFIo0F8/Stargo?node-id=0-1&t=0CLkdCvLYOtLZf6T-1" target="_blank" rel="noopener">Figma</a>
-    <a href="NovaCorp_Demo.html">Demo</a>
-    <a href="NovaCorp_DesignSystem.pdf" target="_blank">Design System</a>
-    <a href="Design_Walkthrough_NovaCorp.md">Walkthrough</a>
+    <a href="NovaCorp_Demo.html" target="_blank">Demo</a>
+    <a href="NovaCorp_DesignSystem.pdf" target="_blank">Design System PDF</a>
+    <a href="Design_Walkthrough_NovaCorp.md" target="_blank">Walkthrough</a>
   </div>
 </footer>
 
